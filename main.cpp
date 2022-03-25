@@ -2,6 +2,6 @@
 
 int main()
 {
-    int i=0;
-    return 0;//fuck
+    int i;//cool
+    return 0;
 }

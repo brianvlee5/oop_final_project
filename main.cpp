@@ -2,6 +2,5 @@
 
 int main()
 {
-    int i=0;
-    return 0;//fuck123123
+    printf("\n123123\n");
 }

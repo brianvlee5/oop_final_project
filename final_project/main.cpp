@@ -84,7 +84,7 @@ int main(int argc, char* args[])
 
 		window.clear();
 		kirby.move();
-		demo1.draw(window.getRenderer(), { ALLREGION }, { ALLREGION });
+		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(kirby));
 		kirby.draw(window.getRenderer(), { kirby.getX(),kirby.getY(),kirby.getWidth() / 5,kirby.getHeight() / 5}, {NULL});
 
 		window.display();

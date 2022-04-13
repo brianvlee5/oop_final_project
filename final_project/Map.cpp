@@ -37,8 +37,8 @@ Map::Map(const char* path, SDL_Renderer* renderer)
 		// Get rid of old loaded surface
 		SDL_FreeSurface(imgSurface);
 	}
-	camera.h = HEIGHT;
-	camera.w = WIDTH;
+	camera.h = CAMERAH;
+	camera.w = CAMERAW;
 }
 
 void Map::set(const char* path, SDL_Renderer* renderer)
@@ -72,10 +72,19 @@ void Map::set(const char* path, SDL_Renderer* renderer)
 	}
 }
 
-void Map::setcamera(int xx, int yy)
+SDL_Rect Map::getcamera(StaticObject mainch)
 {
-	camera.x = xx;
-	camera.y = yy;
+	camera.x = mainch.getX() - camera.w / 2;
+	camera.y = mainch.getY() - camera.h / 2;
+//if (camera.x > WIDTH - camera.w / 2)
+//	camera.x = WIDTH - camera.w / 2;
+//if (camera.y > HEIGHT - camera.h / 2)
+//	camera.y = HEIGHT - camera.h / 2;
+//if (camera.x < camera.w / 2)
+//	camera.x = camera.w / 2;
+//if (camera.y < camera.h / 2)
+//	camera.y = camera.h / 2;
+	return camera;
 }
 
 void Map::close()

@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "StaticObject.h"
 
 class Map
 {
@@ -11,7 +12,7 @@ class Map
 		void draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src);
 		int getWidth();
 		int getHeight();
-		void setcamera(int, int);
+		SDL_Rect getcamera(StaticObject );
 	
 	private:
 		char path[100];

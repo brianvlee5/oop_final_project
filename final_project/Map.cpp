@@ -88,6 +88,22 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 	return camera;
 }
 
+SDL_Rect Map::getcamera(AnimeObject mainch)
+{
+	camera.x = (mainch.getX() + mainch.getWidth() / 20 - camera.w);
+	camera.y = (mainch.getY() + mainch.getHeight() / 20 - camera.h);
+	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
+	if (camera.x > WIDTH - camera.w)
+		camera.x = WIDTH - camera.w;
+	if (camera.y > HEIGHT - camera.h)
+		camera.y = HEIGHT - camera.h;
+	if (camera.x < 0)
+		camera.x = 0;
+	if (camera.y < 0)
+		camera.y = 0;
+	return camera;
+}
+
 void Map::close()
 {
 	// Free loaded image	

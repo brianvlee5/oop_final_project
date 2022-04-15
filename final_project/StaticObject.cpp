@@ -80,9 +80,9 @@ int StaticObject::getY() {
 void StaticObject::move() {
 	x += velX;
 	y += velY;
-	if (x + width/10 >= WIDTH)
+	if (x + width/10 >= 2*WIDTH-CAMERAW)
 		x = WIDTH - width/10;
-	if (y + height/10 >= HEIGHT)
+	if (y + height/10 >= 2*HEIGHT+CAMERAH)
 		y = HEIGHT - height/10;
 	if (x < 0)
 		x = 0;

@@ -89,8 +89,9 @@ int main(int argc, char* args[])
 
 		window.clear();
 		kirby.move();
+		SDL_Rect test = demo1.getcamera(kirby);
 		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(kirby));
-		kirby.draw(window.getRenderer(), { kirby.getX(),kirby.getY(),kirby.getWidth()/10,kirby.getHeight()/10}, {NULL});
+		kirby.draw(window.getRenderer(), { kirby.getX()-test.x,kirby.getY()-test.y,kirby.getWidth()/10,kirby.getHeight()/10}, {NULL});
 
 		window.display();
 

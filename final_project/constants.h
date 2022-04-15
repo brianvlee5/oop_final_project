@@ -4,3 +4,4 @@
 #define ALLREGION -1
 #define CAMERAW WIDTH/6
 #define CAMERAH HEIGHT/6
+#define VELOCITY 5

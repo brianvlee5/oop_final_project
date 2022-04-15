@@ -27,10 +27,10 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	RenderWindow window("Elden's rOng", 20, 20, WIDTH, HEIGHT);
+	RenderWindow window("Elden's rOng", 300, 170, WIDTH, HEIGHT);
 
 	StaticObject kirby("../images/kirby.png", window.getRenderer());
-	kirby.setPosition(WIDTH / 2 - kirby.getWidth(), 370);
+	kirby.setPosition(WIDTH / 2 - kirby.getWidth()/10, 370);
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
 	SDL_Event e;
 
@@ -43,19 +43,23 @@ int main(int argc, char* args[])
 				quit = true;
 			if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 			{
+				system("CLS");
+				printf("x: %d\ny: %d\nw:%d\n", kirby.getX(), kirby.getY(), kirby.getWidth()/10);
+				printf("\ncamera X: %d\ncamera Y:%d\n", demo1.getcamera(kirby).x, demo1.getcamera(kirby).y);
+				printf("\ncamera W: %d\ncamera D:%d\n", demo1.getcamera(kirby).w, demo1.getcamera(kirby).h);
 				switch (e.key.keysym.sym)
 				{
 				case SDLK_LEFT:
-					kirby.setVX(kirby.getVX() - 5);
+					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
 				case SDLK_RIGHT:
-					kirby.setVX(kirby.getVX() + 5);
+					kirby.setVX(kirby.getVX() + VELOCITY);
 					break;
 				case SDLK_DOWN:
-					kirby.setVY(kirby.getVY() + 5);
+					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_UP:
-					kirby.setVY(kirby.getVY() - 5);
+					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				}
 			}
@@ -64,16 +68,16 @@ int main(int argc, char* args[])
 				switch (e.key.keysym.sym)
 				{
 				case SDLK_LEFT:
-					kirby.setVX(kirby.getVX() + 5);
+					kirby.setVX(kirby.getVX() + VELOCITY);
 					break;
 				case SDLK_RIGHT:
-					kirby.setVX(kirby.getVX() - 5);
+					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
 				case SDLK_UP:
-					kirby.setVY(kirby.getVY() + 5);
+					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_DOWN:
-					kirby.setVY(kirby.getVY() - 5);
+					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				}
 			}
@@ -86,13 +90,11 @@ int main(int argc, char* args[])
 		window.clear();
 		kirby.move();
 		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(kirby));
-		kirby.draw(window.getRenderer(), { kirby.getX(),kirby.getY(),kirby.getWidth() / 5,kirby.getHeight() / 5}, {NULL});
+		kirby.draw(window.getRenderer(), { kirby.getX(),kirby.getY(),kirby.getWidth()/10,kirby.getHeight()/10}, {NULL});
 
 		window.display();
 
 	}
-	
-
 	SDL_DestroyTexture(texture);
 	demo1.close();
 	kirby.close();

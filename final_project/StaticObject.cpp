@@ -1,5 +1,6 @@
 #include "StaticObject.h"
 #include "SDL_image.h" 
+#include "constants.h"
 #include <SDL.h>
 #include <stdio.h>
 
@@ -42,10 +43,10 @@ void StaticObject::close()
 void StaticObject::draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
 	        //
-	if (dst.x == NULL)
-	{
-		d = NULL;
-	}
+//	if (dst.x == NULL)
+//	{
+//		d = NULL;
+//	}
 	if (src.x == NULL)
 	{
 		s = NULL;
@@ -79,6 +80,14 @@ int StaticObject::getY() {
 void StaticObject::move() {
 	x += velX;
 	y += velY;
+	if (x + width/10 >= WIDTH)
+		x = WIDTH - width/10;
+	if (y + height/10 >= HEIGHT)
+		y = HEIGHT - height/10;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
 }
 int StaticObject::getVY() {
 	return velY;

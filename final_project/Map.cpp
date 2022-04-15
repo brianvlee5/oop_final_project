@@ -74,15 +74,16 @@ void Map::set(const char* path, SDL_Renderer* renderer)
 
 SDL_Rect Map::getcamera(StaticObject mainch)
 {
-	camera.x = mainch.getX() - camera.w / 2;
-	camera.y = mainch.getY() - camera.h / 2;
-	if (camera.x > WIDTH - camera.w / 2)
+	camera.x = (mainch.getX() - camera.w)*1;
+	camera.y = (mainch.getY() - camera.h)*1;
+	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
+	if (camera.x > WIDTH - camera.w )
 		camera.x = WIDTH - camera.w ;
-	if (camera.y > HEIGHT - camera.h / 2)
+	if (camera.y > HEIGHT - camera.h )
 		camera.y = HEIGHT - camera.h ;
-	if (camera.x < camera.w / 2)
+	if (camera.x < 0)
 		camera.x = 0;
-	if (camera.y < camera.h / 2)
+	if (camera.y < 0)
 		camera.y = 0;
 	return camera;
 }

@@ -12,7 +12,7 @@ class Map
 		void draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src);
 		int getWidth();
 		int getHeight();
-		SDL_Rect getcamera(StaticObject );
+		SDL_Rect getcamera(StaticObject);
 	
 	private:
 		char path[100];

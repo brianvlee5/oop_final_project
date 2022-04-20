@@ -1,5 +1,8 @@
 #pragma once
 #include <SDL.h>
+
+
+
 class AnimeObject
 {
 public:
@@ -20,6 +23,10 @@ public:
 	void startTimer(Uint32 t);//
 	void stopTimer();//
 	void move();//
+	void move(SDL_Rect);
+	void setdetectP(SDL_Rect);
+
+	
 
 private:
 	char path[100];//
@@ -35,5 +42,6 @@ private:
 	static Uint32 changeData(Uint32 interval, void* param);
 	int velX;//
 	int velY;//
+	int detectP[4][2];
 };
 

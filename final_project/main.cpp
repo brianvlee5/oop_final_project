@@ -14,6 +14,7 @@
 #include "Map.h"
 #include "StaticObject.h"
 #include "AnimeObject.h"
+#include "Collision.h"
 
 SDL_Texture* texture = NULL;
 
@@ -29,13 +30,14 @@ int main(int argc, char* args[])
 
 	RenderWindow window("Elden's rOng", 300, 170, WIDTH, HEIGHT);
 
+	SDL_Rect test1, test2;
 	StaticObject kirby("../images/kirby.png", window.getRenderer());
 	AnimeObject pooh("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	kirby.setPosition(WIDTH / 2 - kirby.getWidth()/10, 370);
-	pooh.setPosition(WIDTH / 2 - kirby.getWidth()/4 , 370);
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
 	SDL_Event e;
 
+	kirby.setPosition(WIDTH / 2 - kirby.getWidth() / 10, 370);
+	pooh.setPosition(WIDTH / 2 - kirby.getWidth() / 4, 370);
 	pooh.startTimer(50);
 
 	bool quit = false;
@@ -51,6 +53,7 @@ int main(int argc, char* args[])
 				printf("x: %d\ny: %d\nw:%d\n", pooh.getX(), pooh.getY(), pooh.getWidth()/4);
 				printf("\ncamera X: %d\ncamera Y:%d\n", demo1.getcamera(kirby).x, demo1.getcamera(kirby).y);
 				printf("\ncamera W: %d\ncamera D:%d\n", demo1.getcamera(kirby).w, demo1.getcamera(kirby).h);
+				
 				switch (e.key.keysym.sym)
 				{
 				case SDLK_LEFT:
@@ -70,7 +73,7 @@ int main(int argc, char* args[])
 					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				case SDLK_SPACE:
-					pooh.setVY(10);
+					pooh.setVY(-20);
 				}
 			}
 			else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -86,29 +89,29 @@ int main(int argc, char* args[])
 					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
 				case SDLK_UP:
-					//pooh.setVY(pooh.getVY() + VELOCITY);
+					pooh.setVY(pooh.getVY() + VELOCITY);
 					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_DOWN:
-					//pooh.setVY(pooh.getVY() - VELOCITY);
+					pooh.setVY(pooh.getVY() - VELOCITY);
 					kirby.setVY(kirby.getVY() - VELOCITY);
-					break;
-//				case SDLK_SPACE:
-//					pooh.setVY(20);
+		  			break;
+				case SDLK_SPACE:
+					pooh.setVY(-10);
 				}
 			}
 			
 		}
 		
 
-		
-		pooh.move();
+		test2 = demo1.getcamera(pooh);
+		pooh.move(test2);
 		window.clear();
 		//kirby.move();
-		SDL_Rect test = demo1.getcamera(pooh);
+		test1 = demo1.getcamera(pooh);
 		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(pooh));
 		//pooh.draw(window.getRenderer());
-		pooh.draw(window.getRenderer(), { pooh.getX()-test.x,pooh.getY()-test.y,pooh.getWidth()/4,pooh.getHeight()/4}, {NULL});
+		pooh.draw(window.getRenderer(), { pooh.getX()-test1.x,pooh.getY()-test1.y,pooh.getWidth()/4,pooh.getHeight()/4}, {NULL});
 
 		window.display();
 
@@ -121,3 +124,4 @@ int main(int argc, char* args[])
 
 	return 0;
 }
+

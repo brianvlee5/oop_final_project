@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "constants.h"
 #include "SDL_image.h"
+#include "tile.h"
+
 
 AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b)
 {
@@ -45,6 +47,7 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* renderer)
 {
 	num = n;
 	texture = new SDL_Texture * [num];
+
 	
 	for (int i = 0; i < num; i++) 
 	{
@@ -77,6 +80,8 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* renderer)
 	}
 
 }
+
+
 
 Uint32 AnimeObject::changeData(Uint32 interval, void* param)
 {
@@ -176,7 +181,7 @@ int AnimeObject::getY()
 }
 
 void AnimeObject::move() {
-	velY -= 1;
+	//velY -= 1;
 	x += velX;
 	y += velY;
 	if (x + width / 4 >= 2 * WIDTH - CAMERAW)
@@ -188,6 +193,72 @@ void AnimeObject::move() {
 	if (y < 0)
 		y = 0;
 }
+
+void AnimeObject::setdetectP(SDL_Rect mc)
+{
+	detectP[0][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up left
+	detectP[0][1] = (mc.y + (y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	detectP[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+	detectP[1][1] = (mc.y + (y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	detectP[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//down left
+	detectP[2][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	detectP[3][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//down right
+	detectP[3][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	printf("upleft: %d, %d\n", detectP[0][0], detectP[0][1]);
+	printf("downleft: %d, %d\n", detectP[2][0], detectP[2][1]);
+	printf("upright: %d, %d\n", detectP[1][0], detectP[1][1]);
+	printf("downright: %d, %d\n", detectP[3][0], detectP[3][1]);
+	printf("%d %d %d %d\n", tile[detectP[0][1]][detectP[0][0]], tile[detectP[2][1]][detectP[2][0]], tile[detectP[1][1]][detectP[1][0]], tile[detectP[3][1]][detectP[3][0]]);
+}
+
+void AnimeObject::move(SDL_Rect mc) {
+	
+	//velY += 1;
+	//y += velY;
+	
+	setdetectP(mc);
+
+	
+	if (velX > 0)
+	{
+		if (tile[detectP[1][1]][detectP[1][0]] == 0 && tile[detectP[3][1]][detectP[3][0]] == 0)
+		{
+			x += velX;
+		}
+	}
+	else if(velX<0)
+	{
+		if (tile[detectP[2][1]][detectP[2][0]] == 0 && tile[detectP[0][1]][detectP[0][0]] == 0)
+		{
+			x += velX;
+		}
+	}
+	
+	if (velY > 0)
+	{
+		if (tile[detectP[2][1]][detectP[2][0]] == 0 && tile[detectP[3][1]][detectP[3][0]] == 0)
+			y += velY;
+			
+	}
+
+	if (velY < 0)
+	{
+		if (tile[detectP[0][1]][detectP[0][0]] == 0 && tile[detectP[1][1]][detectP[1][0]] == 0)
+			y += velY;
+
+	}
+	//y += velY;
+
+	if (x + width / 4 >= 2 * WIDTH - CAMERAW)
+			x = WIDTH + width / 4;
+	if (y + height / 4 >= 2 * HEIGHT + CAMERAH)
+		y = HEIGHT + height / 4;
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+}
+
 int AnimeObject::getVY() {
 	return velY;
 }
@@ -200,3 +271,4 @@ int AnimeObject::getVX() {
 void AnimeObject::setVX(int xx) {
 	velX = xx;
 }
+

@@ -22,10 +22,11 @@ public:
 	void draw(SDL_Renderer* renderer, SDL_Rect, SDL_Rect);
 	void startTimer(Uint32 t);//
 	void stopTimer();//
-	void move();//
+//	void move();
 	void move(SDL_Rect);
 	void setdetectP(SDL_Rect);
-
+	void setdetectCorner(SDL_Rect);
+	void moveOrNot();
 	
 
 private:
@@ -43,5 +44,6 @@ private:
 	int velX;//
 	int velY;//
 	int detectP[4][2];
+	int detectCorner[4][2];
 };
 

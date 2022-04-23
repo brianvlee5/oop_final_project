@@ -27,6 +27,10 @@ public:
 	void setdetectP(SDL_Rect);
 	void setdetectCorner(SDL_Rect);
 	void moveOrNot();
+	bool dRight();
+	bool dLeft();
+	bool dUp();
+	bool dDown();
 	
 
 private:

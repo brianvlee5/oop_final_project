@@ -196,33 +196,71 @@ void AnimeObject::move() {
 */
 void AnimeObject::setdetectP(SDL_Rect mc)
 {
-	detectP[0][0] = (mc.x + (width / 8+x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up x
+	
+	detectP[0][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
 	detectP[0][1] = (mc.y + (y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
-	detectP[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//right
-	detectP[1][1] = (mc.y + (height / 8+y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
-	detectP[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//left
-	detectP[2][1] = (mc.y + (height / 8 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
-	detectP[3][0] = (mc.x + (width / 8 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//down 
+	detectP[1][0] = (mc.x + (width / 4 + x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+	detectP[1][1] = (mc.y + (y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	detectP[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
+	detectP[2][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	detectP[3][0] = (mc.x + (width / 4 + x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
 	detectP[3][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
 	
-	printf("up:    %d, %d\n", detectP[0][0], detectP[0][1]);
-	printf("left:  %d, %d\n", detectP[1][0], detectP[1][1]);
-	printf("right: %d, %d\n", detectP[2][0], detectP[2][1]);
-	printf("down:  %d, %d\n", detectP[3][0], detectP[3][1]);
+	printf("upleft:    %d, %d\n", detectP[0][0], detectP[0][1]);
+	printf("upright:  %d, %d\n", detectP[1][0], detectP[1][1]);
+	printf("botleft: %d, %d\n", detectP[2][0], detectP[2][1]);
+	printf("botright:  %d, %d\n", detectP[3][0], detectP[3][1]);
 	printf("%d %d %d %d\n", tile[detectP[0][1]][detectP[0][0]], tile[detectP[1][1]][detectP[1][0]], tile[detectP[2][1]][detectP[2][0]], tile[detectP[3][1]][detectP[3][0]]);
 	
 }
 
 void AnimeObject::setdetectCorner(SDL_Rect mc)
 {
-	detectCorner[0][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
-	detectCorner[0][1] = (mc.y + (y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
-	detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
-	detectCorner[1][1] = (mc.y + ( y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
-	detectCorner[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
-	detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
-	detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
-	detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	if (velX > 0)
+	{
+		detectCorner[0][0] = (mc.x + (x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
+		detectCorner[0][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
+		detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x + 2 * velX) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+		detectCorner[1][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[2][0] = (mc.x + (x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
+		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x + 2 * velX) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
+		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	}
+	else if (velX < 0)
+	{
+		detectCorner[0][0] = (mc.x + (x - mc.x + 2 * velX) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
+		detectCorner[0][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
+		detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+		detectCorner[1][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[2][0] = (mc.x + (x - mc.x + 2 * velX) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
+		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
+		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	}
+
+	if (velY < 0)
+	{
+		detectCorner[0][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
+		detectCorner[0][1] = (mc.y + (y - mc.y + 2 * velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
+		detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+		detectCorner[1][1] = (mc.y + (y - mc.y + 2 * velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
+		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
+		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	}
+	else if (velY > 0)
+	{
+		detectCorner[0][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
+		detectCorner[0][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;//      y
+		detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
+		detectCorner[1][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
+		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y + 2*velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
+		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y + 2*velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+	}
 }
 
 void AnimeObject::move(SDL_Rect mc) {
@@ -230,8 +268,9 @@ void AnimeObject::move(SDL_Rect mc) {
 //	if (tile[detectP[2][1]][detectP[2][0]] == 0 || tile[detectP[3][1]][detectP[3][0]] == 0)
 //		velY += 1;
 	//y += velY;
-	setdetectP(mc);
+	setdetectCorner(mc);
 	moveOrNot();
+	//setdetectP(mc);
 	//x += velX;
 	//y += velY;
 	printf("VX: %d\nVY: %d\n", velX, velY);
@@ -245,75 +284,99 @@ void AnimeObject::move(SDL_Rect mc) {
 		y = 0;
 }
 
+bool AnimeObject::dRight()
+{
+	if (tile[detectCorner[1][1]][detectCorner[1][0]] == 0 && tile[detectCorner[3][1]][detectCorner[3][0]] == 0)
+		return true;
+	return false;
+}
+
+bool AnimeObject::dLeft()
+{
+	if (tile[detectCorner[2][1]][detectCorner[2][0]] == 0 && tile[detectCorner[0][1]][detectCorner[0][0]]==0)
+		return true;
+	return false;
+}
+
+bool AnimeObject::dUp()
+{
+	if (tile[detectCorner[1][1]][detectCorner[1][0]] == 0 && tile[detectCorner[0][1]][detectCorner[0][0]] == 0)
+		return true;
+	return false;
+}
+
+bool AnimeObject::dDown()
+{
+	if (tile[detectCorner[2][1]][detectCorner[2][0]] == 0 && tile[detectCorner[3][1]][detectCorner[3][0]] == 0)
+		return true;
+	return false;
+}
+
 void AnimeObject::moveOrNot()
 {
 
-	int p[4][2];
-	//  [ 0  1 ] 
-	//  [ 2  3 ]  [0] for x , [1] for y
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 2; j++)
-			p[i][j] = detectCorner[i][j];
-	
-	if ( tile[ p[1][1] ][ p[1][0] ] == 1 && tile[ p[3][1] ][ p[3][0] ] == 1 )
+	if (velX > 0)
 	{
-		if (velX > 0)
+		if (dRight())
 		{
-			x+=velX;
+			x+=velX;			
 		}
 	}
-	if ( tile[ p[0][1] ][ p[0][0] ] == 1 && tile[ p[2][1] ][ p[2][0] ] == 1 )
+	else if (velX < 0)
 	{
-		if (velX < 0)
-		{
+		if (dLeft())
+		{	
 			x += velX;
 		}
 	}
-	if ( tile[ p[0][1] ][ p[0][0] ] == 1 && tile[ p[1][1] ][ p[1][0] ] == 1 )
+
+	if (velY < 0)
 	{
-		if (velY < 0)
-		{
-			y+=velY;
+		if (dUp())
+		{	
+			y += velY;	
 		}
 	}
-	if ( tile [p[2][1] ][ p[2][0] ] == 1 && tile[ p[3][1] ][ p[3][0] ] == 1 )
+	else if (velY > 0)
 	{
-		if (velY > 0)
-			y+=velY;
-	}
-
-
-	
-	if (tile[detectP[1][1]][detectP[1][0]] == 0 )
-	{
-		if (velX > 0)
-			x += velX;
-	}
-	
-	
-	
-	if (tile[detectP[2][1]][detectP[2][0]] == 0 )
-	{
-		if (velX < 0)
-			x += velX;
-	}
-	
-
-	
-	
-	if (tile[detectP[0][1]][detectP[0][0]] == 0 )
-	{
-		if (velY < 0)
+		if (dDown())
+		{
 			y += velY;
+		}
 	}
+
+
 	
-	
-	
-	if (tile[detectP[3][1]][detectP[3][0]] == 0)
-	{
-		if (velY > 0)
-			y += velY;
-	}
+//	if (tile[detectP[1][1]][detectP[1][0]] == 0 )
+//	{
+//		if (velX > 0)
+//			x += velX;
+//	}
+//	
+//	
+//	
+//	if (tile[detectP[2][1]][detectP[2][0]] == 0 )
+//	{
+//		if (velX < 0)
+//			x += velX;
+//	}
+//	
+//
+//	
+//	
+//	if (tile[detectP[0][1]][detectP[0][0]] == 0 )
+//	{
+//		if (velY < 0)
+//			y += velY;
+//	}
+//	
+//	
+//	
+//	if (tile[detectP[3][1]][detectP[3][0]] == 0)
+//	{
+//		if (velY > 0)
+//			y += velY;
+//	}
 	
 	
 }

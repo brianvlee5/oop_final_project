@@ -73,13 +73,15 @@ int main(int argc, char* args[])
 					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				case SDLK_SPACE:
-					pooh.setVY(-20);
+					pooh.setVY(-12);
+					break;
 				}
 			}
 			else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 			{
 				switch (e.key.keysym.sym)
 				{
+					
 				case SDLK_LEFT:
 					pooh.setVX(pooh.getVX() + VELOCITY);
 					kirby.setVX(kirby.getVX() + VELOCITY);
@@ -88,6 +90,7 @@ int main(int argc, char* args[])
 					pooh.setVX(pooh.getVX() - VELOCITY);
 					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
+					
 				case SDLK_UP:
 					pooh.setVY(pooh.getVY() + VELOCITY);
 					kirby.setVY(kirby.getVY() + VELOCITY);
@@ -97,7 +100,8 @@ int main(int argc, char* args[])
 					kirby.setVY(kirby.getVY() - VELOCITY);
 		  			break;
 				case SDLK_SPACE:
-					pooh.setVY(-10);
+					//pooh.setVY(4);
+					break;
 				}
 			}
 			

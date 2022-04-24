@@ -14,6 +14,7 @@
 #include "Map.h"
 #include "StaticObject.h"
 #include "AnimeObject.h"
+#include "Coordinate.h"
 
 SDL_Texture* texture = NULL;
 
@@ -28,7 +29,8 @@ int main(int argc, char* args[])
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WIDTH, HEIGHT);
 
-	SDL_Rect test1, test2;
+	Coordinate coord;
+	SDL_Rect forpooh;//for pooh's move
 	AnimeObject pooh("../images/pooh/", 12, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
 	SDL_Event e;
@@ -90,12 +92,12 @@ int main(int argc, char* args[])
 			
 		}
 
-		test2 = demo1.getcamera(pooh);
-		pooh.move(test2);
+		forpooh = demo1.getcamera(pooh);
+		pooh.move(forpooh);
 		window.clear();
-		test1 = demo1.getcamera(pooh);
+		coord.calMapCamera(demo1, pooh);
 		demo1.draw({ ALLREGION }, demo1.getcamera(pooh));
-		pooh.draw({ pooh.getX()-test1.x,pooh.getY()-test1.y,pooh.getWidth()/ SHRINK,pooh.getHeight()/ SHRINK }, {NULL});
+		pooh.draw({ coord.getpCX(), coord.getpCY(), pooh.getWidth() / SHRINK,pooh.getHeight() / SHRINK}, {NULL});
 		window.display();
 
 	}

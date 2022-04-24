@@ -155,7 +155,6 @@
     <ClInclude Include="AnimeObject.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Coordinate.h" />
-    <ClInclude Include="event.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />

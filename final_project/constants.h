@@ -5,3 +5,4 @@
 #define CAMERAW WIDTH/2
 #define CAMERAH HEIGHT/2
 #define VELOCITY 5
+#define SHRINK 8

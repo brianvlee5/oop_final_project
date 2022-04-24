@@ -14,7 +14,6 @@
 #include "Map.h"
 #include "StaticObject.h"
 #include "AnimeObject.h"
-#include "Collision.h"
 
 SDL_Texture* texture = NULL;
 
@@ -27,18 +26,15 @@ int main(int argc, char* args[])
 		printf("Failed to initialize SDL system!\n");
 		return -1;
 	}
-
 	RenderWindow window("Elden's rOng", 300, 170, WIDTH, HEIGHT);
 
 	SDL_Rect test1, test2;
-	StaticObject kirby("../images/kirby.png", window.getRenderer());
-	AnimeObject pooh("../images/pooh/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject pooh("../images/pooh/", 12, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
 	SDL_Event e;
 
-	kirby.setPosition(WIDTH / 2 - kirby.getWidth() / 10, 370);
-	pooh.setPosition(WIDTH / 2 - kirby.getWidth() / 4, 370);
-	pooh.startTimer(50);
+	pooh.setPosition(WIDTH / 2 - pooh.getWidth() / SHRINK, 370);
+	pooh.startTimer(40);
 
 	bool quit = false;
 	while (!quit)
@@ -49,30 +45,20 @@ int main(int argc, char* args[])
 				quit = true;
 			if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 			{
-//				system("CLS");
-//				printf("x: %d\ny: %d\nw:%d\n", pooh.getX(), pooh.getY(), pooh.getWidth()/4);
-//				printf("\ncamera X: %d\ncamera Y:%d\n", demo1.getcamera(kirby).x, demo1.getcamera(kirby).y);
-//				printf("\ncamera W: %d\ncamera D:%d\n", demo1.getcamera(kirby).w, demo1.getcamera(kirby).h);
 				
 				switch (e.key.keysym.sym)
 				{
 				case SDLK_LEFT:
 					pooh.setVX(pooh.getVX() - VELOCITY);
-					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
 				case SDLK_RIGHT:
 					pooh.setVX(pooh.getVX() + VELOCITY);
-					kirby.setVX(kirby.getVX() + VELOCITY);
 					break;
 				case SDLK_DOWN:
-//					break;
 					pooh.setVY(pooh.getVY() + VELOCITY);
-					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_UP:
-//					break;
 					pooh.setVY(pooh.getVY() - VELOCITY);
-					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				case SDLK_SPACE:
 					pooh.setJumpFlag(1);
@@ -86,22 +72,15 @@ int main(int argc, char* args[])
 					
 				case SDLK_LEFT:
 					pooh.setVX(pooh.getVX() + VELOCITY);
-					kirby.setVX(kirby.getVX() + VELOCITY);
 					break;
 				case SDLK_RIGHT:
 					pooh.setVX(pooh.getVX() - VELOCITY);
-					kirby.setVX(kirby.getVX() - VELOCITY);
 					break;
-					
 				case SDLK_UP:
-//					break;
 					pooh.setVY(pooh.getVY() + VELOCITY);
-					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_DOWN:
-//					break;
 					pooh.setVY(pooh.getVY() - VELOCITY);
-					kirby.setVY(kirby.getVY() - VELOCITY);
 		  			break;
 				case SDLK_SPACE:
 					pooh.setJumpFlag(0);
@@ -110,22 +89,18 @@ int main(int argc, char* args[])
 			}
 			
 		}
-		
 
 		test2 = demo1.getcamera(pooh);
 		pooh.move(test2);
 		window.clear();
-		//kirby.move();
 		test1 = demo1.getcamera(pooh);
-		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(pooh));
-		//pooh.draw(window.getRenderer());
-		pooh.draw(window.getRenderer(), { pooh.getX()-test1.x,pooh.getY()-test1.y,pooh.getWidth()/4,pooh.getHeight()/4}, {NULL});
+		demo1.draw({ ALLREGION }, demo1.getcamera(pooh));
+		pooh.draw({ pooh.getX()-test1.x,pooh.getY()-test1.y,pooh.getWidth()/ SHRINK,pooh.getHeight()/ SHRINK }, {NULL});
 		window.display();
 
 	}
 	SDL_DestroyTexture(texture);
 	demo1.close();
-	kirby.close();
 	window.close();
 	sdl.close();
 

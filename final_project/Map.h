@@ -7,10 +7,10 @@ class Map
 {
 	public:
 		Map();
-		Map(const char* path, SDL_Renderer* renderer);
-		void set(const char* path, SDL_Renderer* renderer);
+		Map(const char* path, SDL_Renderer* ren);
+		void set(const char* path, SDL_Renderer* ren);
 		void close();
-		void draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src);
+		void draw(SDL_Rect dst, SDL_Rect src);
 		int getWidth();
 		int getHeight();
 		SDL_Rect getcamera(StaticObject);
@@ -19,6 +19,7 @@ class Map
 	private:
 		char path[100];
 		SDL_Texture* texture;
+		SDL_Renderer* renderer;
 		int width;
 		int height;
 		SDL_Rect camera;

@@ -8,8 +8,9 @@ Map::Map()
 {
 }
 
-Map::Map(const char* path, SDL_Renderer* renderer)
+Map::Map(const char* path, SDL_Renderer* ren)
 {
+	renderer = ren;
 	// Load a surface from a PNG file.	
 	SDL_Surface* imgSurface = IMG_Load(path);
 	if (imgSurface == NULL)
@@ -41,8 +42,9 @@ Map::Map(const char* path, SDL_Renderer* renderer)
 	camera.w = CAMERAW;
 }
 
-void Map::set(const char* path, SDL_Renderer* renderer)
+void Map::set(const char* path, SDL_Renderer* ren)
 {
+	renderer = ren;
 	// Load a surface from a PNG file.	
 	SDL_Surface* imgSurface = IMG_Load(path);
 	if (imgSurface == NULL)
@@ -110,7 +112,7 @@ void Map::close()
 	SDL_DestroyTexture(texture);
 }
 
-void Map::draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src)
+void Map::draw(SDL_Rect dst, SDL_Rect src)
 {
 	SDL_Rect *d = &dst, *s = &src;
 	

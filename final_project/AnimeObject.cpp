@@ -275,7 +275,7 @@ void AnimeObject::move(SDL_Rect mc) {
 	{
 		velY = -10;
 	}
-	if (dDown())
+	else if (dDown())
 	{
 		velY += 1;
 	}

@@ -1,5 +1,6 @@
 #include "AnimeObject.h"
 #include <SDL.h>
+#include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
 #include "constants.h"
 #include "SDL_image.h"
@@ -47,7 +48,7 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* renderer)
 {
 	num = n;
 	texture = new SDL_Texture * [num];
-
+	
 	
 	for (int i = 0; i < num; i++) 
 	{
@@ -154,6 +155,8 @@ void AnimeObject::draw(SDL_Renderer* renderer)
 	SDL_RenderCopy(renderer, texture[frame], s, d);
 	
 }
+
+
 void AnimeObject::setPosition(int xx, int yy)
 {
 	x = xx;
@@ -216,6 +219,7 @@ void AnimeObject::setdetectP(SDL_Rect mc)
 
 void AnimeObject::setdetectCorner(SDL_Rect mc)
 {
+	//pixelColor(window.getRenderer(), );
 	if (velX > 0)
 	{
 		detectCorner[0][0] = (mc.x + (x - mc.x ) * CAMERAW / WIDTH) * 30 / WIDTH;//up leftx
@@ -257,23 +261,34 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 		detectCorner[1][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//up right
 		detectCorner[1][1] = (mc.y + (y - mc.y ) * CAMERAH / HEIGHT) * 20 / HEIGHT;
 		detectCorner[2][0] = (mc.x + (x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom left
-		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y + 2*velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[2][1] = (mc.y + (height / 4 + y - mc.y + 2 * velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
 		detectCorner[3][0] = (mc.x + (width / 4 + x - mc.x) * CAMERAW / WIDTH) * 30 / WIDTH;//bottom right 
-		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y + 2*velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
+		detectCorner[3][1] = (mc.y + (height / 4 + y - mc.y + 2 * velY) * CAMERAH / HEIGHT) * 20 / HEIGHT;
 	}
 }
 
 void AnimeObject::move(SDL_Rect mc) {
-	
-//	if (tile[detectP[2][1]][detectP[2][0]] == 0 || tile[detectP[3][1]][detectP[3][0]] == 0)
-//		velY += 1;
-	//y += velY;
+	if (1)
+		printf("%d\n", dDown());
+
+	if (jumpFlag)
+	{
+		velY = -10;
+	}
+	else if (dDown())
+	{
+		velY += 1;
+	}
+	else
+	{
+		velY = 0;
+	}
+
 	setdetectCorner(mc);
 	moveOrNot();
-	//setdetectP(mc);
-	//x += velX;
-	//y += velY;
-	printf("VX: %d\nVY: %d\n", velX, velY);
+//	setdetectP(mc);
+//	printf("VX: %d\n", velX);
+	printf("VY: %d\n", velY);
 	if (x + width / 4 >= 2 * WIDTH - CAMERAW)
 			x = WIDTH + width / 4;
 	if (y + height / 4 >= 2 * HEIGHT + CAMERAH)
@@ -286,6 +301,7 @@ void AnimeObject::move(SDL_Rect mc) {
 
 bool AnimeObject::dRight()
 {
+	
 	if (tile[detectCorner[1][1]][detectCorner[1][0]] == 0 && tile[detectCorner[3][1]][detectCorner[3][0]] == 0)
 		return true;
 	return false;
@@ -344,41 +360,29 @@ void AnimeObject::moveOrNot()
 			y += velY;
 		}
 	}
-
-
+/*
 	
-//	if (tile[detectP[1][1]][detectP[1][0]] == 0 )
-//	{
-//		if (velX > 0)
-//			x += velX;
-//	}
-//	
-//	
-//	
-//	if (tile[detectP[2][1]][detectP[2][0]] == 0 )
-//	{
-//		if (velX < 0)
-//			x += velX;
-//	}
-//	
-//
-//	
-//	
-//	if (tile[detectP[0][1]][detectP[0][0]] == 0 )
-//	{
-//		if (velY < 0)
-//			y += velY;
-//	}
-//	
-//	
-//	
-//	if (tile[detectP[3][1]][detectP[3][0]] == 0)
-//	{
-//		if (velY > 0)
-//			y += velY;
-//	}
-	
-	
+	if (tile[detectP[1][1]][detectP[1][0]] == 0 )
+	{
+		if (velX > 0)
+			x += velX;
+	}
+	if (tile[detectP[2][1]][detectP[2][0]] == 0 )
+	{
+		if (velX < 0)
+			x += velX;
+	}
+	if (tile[detectP[0][1]][detectP[0][0]] == 0 )
+	{
+		if (velY < 0)
+			y += velY;
+	}
+	if (tile[detectP[3][1]][detectP[3][0]] == 0)
+	{
+		if (velY > 0)
+			y += velY;
+	}
+*/
 }
 
 int AnimeObject::getVY() {
@@ -393,4 +397,7 @@ int AnimeObject::getVX() {
 void AnimeObject::setVX(int xx) {
 	velX = xx;
 }
-
+void AnimeObject::setJumpFlag(bool f)
+{
+	jumpFlag = f;
+}

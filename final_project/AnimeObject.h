@@ -31,7 +31,7 @@ public:
 	bool dLeft();
 	bool dUp();
 	bool dDown();
-	
+	void setJumpFlag(bool f);
 
 private:
 	char path[100];//
@@ -49,5 +49,6 @@ private:
 	int velY;//
 	int detectP[4][2];
 	int detectCorner[4][2];
+	bool jumpFlag;
 };
 

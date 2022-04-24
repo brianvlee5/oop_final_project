@@ -32,7 +32,7 @@ int main(int argc, char* args[])
 
 	SDL_Rect test1, test2;
 	StaticObject kirby("../images/kirby.png", window.getRenderer());
-	AnimeObject pooh("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject pooh("../images/pooh/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
 	SDL_Event e;
 
@@ -49,10 +49,10 @@ int main(int argc, char* args[])
 				quit = true;
 			if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 			{
-				system("CLS");
-				printf("x: %d\ny: %d\nw:%d\n", pooh.getX(), pooh.getY(), pooh.getWidth()/4);
-				printf("\ncamera X: %d\ncamera Y:%d\n", demo1.getcamera(kirby).x, demo1.getcamera(kirby).y);
-				printf("\ncamera W: %d\ncamera D:%d\n", demo1.getcamera(kirby).w, demo1.getcamera(kirby).h);
+//				system("CLS");
+//				printf("x: %d\ny: %d\nw:%d\n", pooh.getX(), pooh.getY(), pooh.getWidth()/4);
+//				printf("\ncamera X: %d\ncamera Y:%d\n", demo1.getcamera(kirby).x, demo1.getcamera(kirby).y);
+//				printf("\ncamera W: %d\ncamera D:%d\n", demo1.getcamera(kirby).w, demo1.getcamera(kirby).h);
 				
 				switch (e.key.keysym.sym)
 				{
@@ -65,15 +65,17 @@ int main(int argc, char* args[])
 					kirby.setVX(kirby.getVX() + VELOCITY);
 					break;
 				case SDLK_DOWN:
+//					break;
 					pooh.setVY(pooh.getVY() + VELOCITY);
 					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_UP:
+//					break;
 					pooh.setVY(pooh.getVY() - VELOCITY);
 					kirby.setVY(kirby.getVY() - VELOCITY);
 					break;
 				case SDLK_SPACE:
-					pooh.setVY(-12);
+					pooh.setJumpFlag(1);
 					break;
 				}
 			}
@@ -92,15 +94,17 @@ int main(int argc, char* args[])
 					break;
 					
 				case SDLK_UP:
+//					break;
 					pooh.setVY(pooh.getVY() + VELOCITY);
 					kirby.setVY(kirby.getVY() + VELOCITY);
 					break;
 				case SDLK_DOWN:
+//					break;
 					pooh.setVY(pooh.getVY() - VELOCITY);
 					kirby.setVY(kirby.getVY() - VELOCITY);
 		  			break;
 				case SDLK_SPACE:
-					//pooh.setVY(4);
+					pooh.setJumpFlag(0);
 					break;
 				}
 			}
@@ -116,7 +120,6 @@ int main(int argc, char* args[])
 		demo1.draw(window.getRenderer(), { ALLREGION }, demo1.getcamera(pooh));
 		//pooh.draw(window.getRenderer());
 		pooh.draw(window.getRenderer(), { pooh.getX()-test1.x,pooh.getY()-test1.y,pooh.getWidth()/4,pooh.getHeight()/4}, {NULL});
-
 		window.display();
 
 	}

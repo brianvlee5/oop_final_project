@@ -24,7 +24,6 @@ public:
 	void stopTimer();
 //	void move();
 	void move(SDL_Rect);
-	void setdetectP(SDL_Rect);
 	void setdetectCorner(SDL_Rect);
 	void moveOrNot();
 	bool xRight();

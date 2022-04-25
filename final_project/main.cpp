@@ -31,8 +31,8 @@ int main(int argc, char* args[])
 
 	Coordinate coord;
 	SDL_Rect forpooh;//for pooh's move
-	AnimeObject pooh("../images/pooh/", 12, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	pooh.setPosition(WIDTH / 2 - pooh.getWidth() / SHRINK, 370);
+	AnimeObject pooh("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	pooh.setPosition( WIDTH / 2 - pooh.getWidth() / SHRINK, 370);
 	pooh.startTimer(40);
 
 	Map demo1("../images/mapdemo1.png", window.getRenderer());
@@ -57,13 +57,12 @@ int main(int argc, char* args[])
 		demo1.draw({ ALLREGION }, demo1.getcamera(pooh));
 		pooh.draw({ coord.getpCX(), coord.getpCY(), pooh.getWidth() / SHRINK,pooh.getHeight() / SHRINK}, {NULL});
 		window.display();
-
 	}
 	SDL_DestroyTexture(texture);
+	pooh.close();
 	demo1.close();
 	window.close();
 	sdl.close();
 
 	return 0;
 }
-

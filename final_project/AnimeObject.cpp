@@ -235,25 +235,25 @@ void AnimeObject::move(SDL_Rect mc) {
 
 bool AnimeObject::xRight()
 {
-	if (tile[detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[detectCornerX[3][1]][detectCornerX[3][0]] == 0)
+	if (tile[1][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[1][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::xLeft()
 {
-	if (tile[detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[detectCornerX[0][1]][detectCornerX[0][0]]==0)
+	if (tile[1][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[1][detectCornerX[0][1]][detectCornerX[0][0]]==0)
 		return true;
 	return false;
 }
 bool AnimeObject::yUp()
 {
-	if (tile[detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[detectCornerY[0][1]][detectCornerY[0][0]] == 0)
+	if (tile[1][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[1][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::yDown()
 {
-	if (tile[detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+	if (tile[1][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[1][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }

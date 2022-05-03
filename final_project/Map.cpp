@@ -79,10 +79,10 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 	camera.x = (mainch.getX()+mainch.getWidth()/20  - camera.w);
 	camera.y = (mainch.getY()+mainch.getHeight()/20 - camera.h);
 	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
-	if (camera.x > WIDTH - camera.w )
-		camera.x = WIDTH - camera.w ;
-	if (camera.y > HEIGHT - camera.h )
-		camera.y = HEIGHT - camera.h ;
+	if (camera.x > WINDOWW - camera.w )
+		camera.x = WINDOWW - camera.w ;
+	if (camera.y > WINDOWH - camera.h )
+		camera.y = WINDOWH - camera.h ;
 	if (camera.x < 0)
 		camera.x = 0;
 	if (camera.y < 0)

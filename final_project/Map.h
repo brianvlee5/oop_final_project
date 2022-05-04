@@ -14,7 +14,8 @@ class Map
 		int getWidth();
 		int getHeight();
 		SDL_Rect getcamera(StaticObject);
-		SDL_Rect getcamera(AnimeObject);
+		void setcamera(AnimeObject);
+		SDL_Rect getcamera();
 	
 	private:
 		char path[100];

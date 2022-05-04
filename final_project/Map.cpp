@@ -76,8 +76,8 @@ void Map::set(const char* path, SDL_Renderer* ren)
 
 SDL_Rect Map::getcamera(StaticObject mainch)
 {
-	camera.x = (mainch.getX()+mainch.getWidth()/20  - camera.w);
-	camera.y = (mainch.getY()+mainch.getHeight()/20 - camera.h);
+	camera.x = (mainch.getX()+mainch.getWidth()/2/SHRINK  - camera.w);
+	camera.y = (mainch.getY()+mainch.getHeight()/2 / SHRINK - camera.h);
 	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
 	if (camera.x > WINDOWW - camera.w )
 		camera.x = WINDOWW - camera.w ;
@@ -90,10 +90,10 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 	return camera;
 }
 
-SDL_Rect Map::getcamera(AnimeObject mainch)
+void Map::setcamera(AnimeObject mainch)
 {
-	camera.x = (mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w);
-	camera.y = (mainch.getY() + mainch.getHeight() / 2 / SHRINK - camera.h);
+	camera.x = (mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w/2);
+	camera.y = (mainch.getY() + mainch.getHeight() / 2 / SHRINK - camera.h/2);
 	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
 	if (camera.x > WIDTH - camera.w)
 		camera.x = WIDTH - camera.w;
@@ -103,6 +103,14 @@ SDL_Rect Map::getcamera(AnimeObject mainch)
 		camera.x = 0;
 	if (camera.y < 0)
 		camera.y = 0;
+
+	printf("camerax: %d  cameray: %d\n", camera.x, camera.y);
+	//printf("%d %d\n", mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w / 2, mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w);
+	
+}
+
+SDL_Rect Map::getcamera()
+{
 	return camera;
 }
 

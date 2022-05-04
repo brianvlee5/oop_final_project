@@ -29,12 +29,12 @@ int main(int argc, char* args[])
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
 
-
 	Coordinate coord;
 	SDL_Rect forpooh;//for pooh's move
-	AnimeObject pooh("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject pooh("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	pooh.setPosition( 200, 370);
-//	pooh.startTimer(200);
+	pooh.startTimer(40);
+
 	Map demo1("../images/mapdemo3.png", window.getRenderer());
 
 	SDL_Event e;
@@ -42,7 +42,7 @@ int main(int argc, char* args[])
 	bool quit = false;
 	while (!quit)
 	{
-
+		
 		while (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
@@ -50,11 +50,12 @@ int main(int argc, char* args[])
 			poohKeyboard(e, pooh);
 		}
 
-		forpooh = demo1.getcamera(pooh);
-		pooh.move(forpooh);
+		
+		pooh.move();
+		demo1.setcamera(pooh);
 		window.clear();
 		coord.calMapCamera(demo1, pooh);
-		demo1.draw({ ALLREGION }, demo1.getcamera(pooh));
+		demo1.draw({ ALLREGION }, demo1.getcamera());
 		pooh.draw({ coord.getpCX(), coord.getpCY(), pooh.getWidth() / SHRINK,pooh.getHeight() / SHRINK}, {NULL});
 		window.display();
 	}

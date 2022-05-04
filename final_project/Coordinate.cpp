@@ -1,4 +1,6 @@
 #include "Coordinate.h"
+#include "constants.h"
+#include <stdio.h>
 
 
 Coordinate::Coordinate()
@@ -9,9 +11,10 @@ Coordinate::Coordinate()
 
 void Coordinate::calMapCamera(Map m, AnimeObject mainch)
 {
-	SDL_Rect temp = m.getcamera(mainch);
-	printCamX = mainch.getX() - temp.x;
-	printCamY = mainch.getY() - temp.y;
+	SDL_Rect temp = m.getcamera();
+	printCamX = (mainch.getX() - temp.x);
+	printCamY = (mainch.getY() - temp.y);
+	
 }
 
 int Coordinate::getpCX()

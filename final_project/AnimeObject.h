@@ -23,8 +23,8 @@ public:
 	void startTimer(Uint32 t);
 	void stopTimer();
 //	void move();
-	void move(SDL_Rect);
-	void setdetectCorner(SDL_Rect);
+	void move();
+	void setdetectCorner();
 	void moveOrNot();
 	bool xRight();
 	bool xLeft();

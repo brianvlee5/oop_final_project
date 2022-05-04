@@ -104,8 +104,7 @@ void Map::setcamera(AnimeObject mainch)
 	if (camera.y < 0)
 		camera.y = 0;
 
-	printf("camerax: %d  cameray: %d\n", camera.x, camera.y);
-	//printf("%d %d\n", mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w / 2, mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w);
+	
 	
 }
 

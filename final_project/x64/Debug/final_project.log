@@ -1,2 +1,7 @@
-﻿  main.cpp
-  final_project.vcxproj -> C:\Users\User\Desktop\final_project\x64\Debug\final_project.exe
+﻿  AnimeObject.cpp
+  main.cpp
+  Map.cpp
+  StaticObject.cpp
+C:\Users\ibm88\OneDrive\桌面\final_project\final_project\StaticObject.cpp(59,14): warning C4101: 's': unreferenced local variable
+  Generating Code...
+  final_project.vcxproj -> C:\Users\ibm88\OneDrive\桌面\final_project\x64\Debug\final_project.exe

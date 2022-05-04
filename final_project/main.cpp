@@ -29,12 +29,12 @@ int main(int argc, char* args[])
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
 
+
 	Coordinate coord;
 	SDL_Rect forpooh;//for pooh's move
-	AnimeObject pooh("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject pooh("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	pooh.setPosition( 200, 370);
-	pooh.startTimer(40);
-
+//	pooh.startTimer(200);
 	Map demo1("../images/mapdemo3.png", window.getRenderer());
 
 	SDL_Event e;

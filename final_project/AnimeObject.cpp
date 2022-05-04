@@ -205,7 +205,14 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 }
 
 void AnimeObject::move(SDL_Rect mc) {
-
+/*	if (velX)
+	{
+		startTimer(200);
+	}
+	else
+	{
+		stopTimer();
+	}*/
 	if (jumpFlag)
 	{
 		velY = -10;

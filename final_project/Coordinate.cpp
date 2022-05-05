@@ -9,12 +9,19 @@ Coordinate::Coordinate()
 	printCamY = 0;
 }
 
-void Coordinate::calMapCamera(Map m, AnimeObject mainch)
+void Coordinate::calMapCamera(Map m, AnimeObject& mainch)
 {
 	SDL_Rect temp = m.getcamera();
 	printCamX = (mainch.getX() - temp.x);
 	printCamY = (mainch.getY() - temp.y);
 	
+}
+
+void Coordinate::calMap(Map m, Attack& mainch)
+{
+	SDL_Rect temp = m.getcamera();
+	printCamX = (mainch.getX() - temp.x);
+	printCamY = (mainch.getY() - temp.y);
 }
 
 int Coordinate::getpCX()

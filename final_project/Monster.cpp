@@ -1,8 +1,8 @@
-#include "AnimeObject.h"
-#include "tile.h"
+#include "Monster.h"
 
 
-AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+
+Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 {
 	renderer = ren;
 	num = n;
@@ -31,8 +31,8 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren, Uint8 r, Ui
 			{
 				printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
 			}
-			width = imgSurface->w;
-			height = imgSurface->h;
+			width = imgSurface->w/5;
+			height = imgSurface->h/5;
 
 			// Get rid of old loaded surface
 			SDL_FreeSurface(imgSurface);
@@ -41,20 +41,20 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren, Uint8 r, Ui
 
 }
 
-AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren)
+Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 {
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
-	
-	
-	for (int i = 0; i < num; i++) 
+
+
+	for (int i = 0; i < num; i++)
 	{
 
 		char file[100];
 		sprintf_s(file, 100, "%s%02d.png", path, i + 1);
 
-		SDL_Surface * imgSurface = IMG_Load(file);
+		SDL_Surface* imgSurface = IMG_Load(file);
 		if (imgSurface == NULL)
 		{
 			printf("SDL_LoadBMP failed: %s\n", IMG_GetError());
@@ -70,8 +70,8 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren)
 			{
 				printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
 			}
-			width = imgSurface->w;
-			height = imgSurface->h;
+			width = imgSurface->w/5;
+			height = imgSurface->h/5;
 
 			// Get rid of old loaded surface
 			SDL_FreeSurface(imgSurface);
@@ -80,9 +80,9 @@ AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren)
 
 }
 
-Uint32 AnimeObject::changeData(Uint32 interval, void* param)
+Uint32 Monster::changeData(Uint32 interval, void* param)
 {
-	AnimeObject* p = (AnimeObject*)param;
+	Monster* p = (Monster*)param;
 	if (p->time != 0)
 	{
 		p->frame = (p->frame + 1) % p->num;
@@ -94,31 +94,31 @@ Uint32 AnimeObject::changeData(Uint32 interval, void* param)
 	}
 }
 
-void AnimeObject::startTimer(Uint32 t)
+void Monster::startTimer(Uint32 t)
 {
 	time = t;
 	timerID = SDL_AddTimer(time, changeData, this);
 }
 
-void AnimeObject::stopTimer()
+void Monster::stopTimer()
 {
 	time = 0;
 }
 
-void AnimeObject::close()
+void Monster::close()
 {
 	for (int i = 0; i < num; i++) {
 		SDL_DestroyTexture(texture[i]);
 	}
 }
 
-void AnimeObject::draw(SDL_Rect dst, SDL_Rect src) {
+void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
-//
-//	if (dst.x == NULL)
-//	{
-//		d = NULL;
-//	}
+	//
+	//	if (dst.x == NULL)
+	//	{
+	//		d = NULL;
+	//	}
 	if (src.x == NULL)
 	{
 		s = NULL;
@@ -127,7 +127,7 @@ void AnimeObject::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_RenderCopy(renderer, texture[frame], s, d);
 }
 /*
-void AnimeObject::draw()
+void Monster::draw()
 {
 	SDL_Rect dst, src;
 	dst.x = x;
@@ -136,7 +136,7 @@ void AnimeObject::draw()
 	dst.h = height;
 
 	//(texture)[frame].draw(renderer, dst, { NULL });
-	
+
 	SDL_Rect* d = &dst, * s = &src;
 	//if (dst.x == NULL)
 	//{
@@ -152,7 +152,7 @@ void AnimeObject::draw()
 */
 
 /*
-void AnimeObject::setdetectCorner(SDL_Rect mc)
+void Monster::setdetectCorner(SDL_Rect mc)
 {
 	if (velX >= 0)
 	{
@@ -162,7 +162,7 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 		detectCornerX[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 		detectCornerX[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
 		detectCornerX[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
+		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right
 		detectCornerX[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 	}
 	else if (velX < 0)
@@ -173,7 +173,7 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 		detectCornerX[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 		detectCornerX[2][0] = (mc.x + (x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
 		detectCornerX[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
+		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right
 		detectCornerX[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 	}
 
@@ -185,7 +185,7 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 		detectCornerY[1][1] = (mc.y + (y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 		detectCornerY[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
 		detectCornerY[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
+		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right
 		detectCornerY[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 	}
 	else if (velY > 0)
@@ -196,61 +196,75 @@ void AnimeObject::setdetectCorner(SDL_Rect mc)
 		detectCornerY[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 		detectCornerY[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
 		detectCornerY[2][1] = (mc.y + (height / SHRINK + y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
+		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right
 		detectCornerY[3][1] = (mc.y + (height / SHRINK + y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
 	}
 }*/
 
-void AnimeObject::setdetectCorner()
+void Monster::AIstart()
+{
+	
+	
+	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
+		setVX(2);
+	else if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+		setVX(-2);
+	//else if(tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
+	//	setVX(2);
+	move();
+	
+}
+
+void Monster::setdetectCorner()
 {
 	if (velX >= 0)
 	{
 		detectCornerX[0][0] = x * MAPTILEX / WIDTH;//up leftx
 		detectCornerX[0][1] = y * MAPTILEY / HEIGHT;//      y
 		detectCornerX[1][0] = (width / SHRINK + x + 2 * velX) * MAPTILEX / WIDTH;//up right
-		detectCornerX[1][1] = y  * MAPTILEY / HEIGHT;
-		detectCornerX[2][0] = x  * MAPTILEX / WIDTH;//bottom left
-		detectCornerX[2][1] = (height / SHRINK + y )  * MAPTILEY / HEIGHT;
+		detectCornerX[1][1] = y * MAPTILEY / HEIGHT;
+		detectCornerX[2][0] = x * MAPTILEX / WIDTH;//bottom left
+		detectCornerX[2][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
 		detectCornerX[3][0] = (width / SHRINK + x + 2 * velX) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerX[3][1] = (height / SHRINK + y )  * MAPTILEY / HEIGHT;
+		detectCornerX[3][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
 	}
 	else if (velX < 0)
 	{
 		detectCornerX[0][0] = (x + 2 * velX) * MAPTILEX / WIDTH;//up leftx
 		detectCornerX[0][1] = y * MAPTILEY / HEIGHT;//      y
-		detectCornerX[1][0] = (width / SHRINK + x ) * MAPTILEX / WIDTH;//up right
+		detectCornerX[1][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//up right
 		detectCornerX[1][1] = y * MAPTILEY / HEIGHT;
 		detectCornerX[2][0] = (x + 2 * velX) * MAPTILEX / WIDTH;//bottom left
 		detectCornerX[2][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (width / SHRINK + x ) * MAPTILEX / WIDTH;//bottom right 
+		detectCornerX[3][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
 		detectCornerX[3][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
 	}
 
 	if (velY <= 0)
 	{
-		detectCornerY[0][0] = (x ) * MAPTILEX / WIDTH;//up leftx
+		detectCornerY[0][0] = (x)*MAPTILEX / WIDTH;//up leftx
 		detectCornerY[0][1] = (y + 2 * velY) * MAPTILEY / HEIGHT;//      y
 		detectCornerY[1][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//up right
 		detectCornerY[1][1] = (y + 2 * velY) * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (x ) * MAPTILEX / WIDTH;//bottom left
+		detectCornerY[2][0] = (x)*MAPTILEX / WIDTH;//bottom left
 		detectCornerY[2][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
 		detectCornerY[3][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
 		detectCornerY[3][1] = (height / SHRINK + y) * MAPTILEY / HEIGHT;
 	}
 	else if (velY > 0)
 	{
-		detectCornerY[0][0] = (x ) * MAPTILEX / WIDTH;//up leftx
+		detectCornerY[0][0] = (x)*MAPTILEX / WIDTH;//up leftx
 		detectCornerY[0][1] = y * MAPTILEY / HEIGHT;//      y
 		detectCornerY[1][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//up right
 		detectCornerY[1][1] = y * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (x ) * MAPTILEX / WIDTH;//bottom left
+		detectCornerY[2][0] = (x)*MAPTILEX / WIDTH;//bottom left
 		detectCornerY[2][1] = (height / SHRINK + (y + 2 * velY)) * MAPTILEY / HEIGHT;
 		detectCornerY[3][0] = (width / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
 		detectCornerY[3][1] = (height / SHRINK + (y + 2 * velY)) * MAPTILEY / HEIGHT;
 	}
 }
 
-void AnimeObject::move() {
+void Monster::move() {
 
 	if (jumpFlag)
 	{
@@ -258,20 +272,20 @@ void AnimeObject::move() {
 	}
 	else if (yDown())
 	{
-		if(velY<=10)
+		if (velY <= 10)
 			velY += 1;
 	}
 	else
 	{
 		velY = 0;
 	}
-	jumpFlag = 0; 
+	jumpFlag = 0;
 	setdetectCorner();
 	moveOrNot();
-	
-	
 
-	if (x +  width / SHRINK >= WIDTH)
+
+
+	if (x + width / SHRINK >= WIDTH)
 		x = WIDTH - width / SHRINK;
 	if (y + height / SHRINK >= HEIGHT)
 		y = HEIGHT - height / SHRINK;
@@ -280,50 +294,48 @@ void AnimeObject::move() {
 	if (y < 0)
 		y = 0;
 
-	printf("x: %d  y: %d\n", x, y);
-	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
-	
+
 }
 
-bool AnimeObject::xRight()
+bool Monster::xRight()
 {
 	if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
-bool AnimeObject::xLeft()
+bool Monster::xLeft()
 {
-	if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[0][detectCornerX[0][1]][detectCornerX[0][0]]==0)
+	if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
 		return true;
 	return false;
 }
-bool AnimeObject::yUp()
+bool Monster::yUp()
 {
 	if (tile[0][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[0][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
-bool AnimeObject::yDown()
+bool Monster::yDown()
 {
 	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }
 
-void AnimeObject::moveOrNot()
+void Monster::moveOrNot()
 {
 
 	if (velX > 0)
 	{
 		if (xRight())
 		{
-			x+=velX;			
+			x += velX;
 		}
 	}
 	else if (velX < 0)
 	{
 		if (xLeft())
-		{	
+		{
 			x += velX;
 		}
 	}
@@ -331,8 +343,8 @@ void AnimeObject::moveOrNot()
 	if (velY < 0)
 	{
 		if (yUp())
-		{	
-			y += velY;	
+		{
+			y += velY;
 		}
 	}
 	else if (velY > 0)
@@ -343,40 +355,40 @@ void AnimeObject::moveOrNot()
 		}
 	}
 }
-void AnimeObject::setPosition(int xx, int yy)
+void Monster::setPosition(int xx, int yy)
 {
 	x = xx;
 	y = yy;
 }
-int AnimeObject::getWidth()
+int Monster::getWidth()
 {
 	return width;
 }
-int AnimeObject::getHeight()
+int Monster::getHeight()
 {
 	return height;
 }
-int AnimeObject::getX()
+int Monster::getX()
 {
 	return x;
 }
-int AnimeObject::getY()
+int Monster::getY()
 {
 	return y;
 }
-int AnimeObject::getVY() {
+int Monster::getVY() {
 	return velY;
 }
-void AnimeObject::setVY(int yy) {
+void Monster::setVY(int yy) {
 	velY = yy;
 }
-int AnimeObject::getVX() {
+int Monster::getVX() {
 	return velX;
 }
-void AnimeObject::setVX(int xx) {
+void Monster::setVX(int xx) {
 	velX = xx;
 }
-void AnimeObject::setJumpFlag(bool f)
+void Monster::setJumpFlag(bool f)
 {
 	jumpFlag = f;
 }

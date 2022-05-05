@@ -1,18 +1,19 @@
 #pragma once
 #include <SDL.h>
-
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
 #include "constants.h"
 #include "SDL_image.h"
+#include "tile.h"
+#include "MonsterAI.h"
 
 
 
-class AnimeObject
+class Monster
 {
 public:
-	AnimeObject(const char* path, int n, SDL_Renderer* ren);
-	AnimeObject(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	Monster(const char* path, int n, SDL_Renderer* ren);
+	Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void close();
 	void setPosition(int xx, int yy);
 	int getWidth();
@@ -23,11 +24,11 @@ public:
 	void setVY(int y);
 	int getVX();
 	int getVY();
-//	void draw(SDL_Renderer* renderer);
+	//	void draw(SDL_Renderer* renderer);
 	void draw(SDL_Rect, SDL_Rect);
 	void startTimer(Uint32 t);
 	void stopTimer();
-//	void move();
+	//	void move();
 	void move();
 	void setdetectCorner();
 	void moveOrNot();
@@ -36,7 +37,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
-	friend class MonsterAI;
+	void AIstart();
 
 private:
 	char path[100];
@@ -48,7 +49,7 @@ private:
 	int height;
 	int x;
 	int y;
-	SDL_TimerID timerID; 
+	SDL_TimerID timerID;
 	Uint32 time;
 	static Uint32 changeData(Uint32 interval, void* param);
 	int velX;
@@ -57,4 +58,3 @@ private:
 	int detectCornerY[4][2];
 	bool jumpFlag;
 };
-

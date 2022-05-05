@@ -1,6 +1,6 @@
 #pragma once
-#define WIDTH 1920
-#define HEIGHT 1280
+#define WIDTH 3840
+#define HEIGHT 2560
 #define ALLREGION -1
 #define WINDOWW 960
 #define WINDOWH 640
@@ -8,5 +8,8 @@
 #define CAMERAH   WINDOWH
 #define VELOCITY 4
 #define SHRINK 1
-#define MAPTILEX 60
-#define MAPTILEY 40
+#define MAPTILEX 120
+#define MAPTILEY 80
+
+#define WANDER 0
+#define TRACE 1

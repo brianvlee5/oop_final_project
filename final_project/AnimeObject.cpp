@@ -1,8 +1,4 @@
 #include "AnimeObject.h"
-#include "SDL2_gfxPrimitives.h"
-#include <stdio.h>
-#include "constants.h"
-#include "SDL_image.h"
 #include "tile.h"
 
 
@@ -284,32 +280,32 @@ void AnimeObject::move() {
 	if (y < 0)
 		y = 0;
 
-//	printf("x: %d  y: %d\n", x, y);
-//	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
+	printf("x: %d  y: %d\n", x, y);
+	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
 	
 }
 
 bool AnimeObject::xRight()
 {
-	if (tile[1][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[1][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
+	if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::xLeft()
 {
-	if (tile[1][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[1][detectCornerX[0][1]][detectCornerX[0][0]]==0)
+	if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[0][detectCornerX[0][1]][detectCornerX[0][0]]==0)
 		return true;
 	return false;
 }
 bool AnimeObject::yUp()
 {
-	if (tile[1][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[1][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
+	if (tile[0][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[0][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::yDown()
 {
-	if (tile[1][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[1][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }

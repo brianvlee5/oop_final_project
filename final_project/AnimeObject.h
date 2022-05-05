@@ -1,6 +1,11 @@
 #pragma once
 #include <SDL.h>
 
+#include "SDL2_gfxPrimitives.h"
+#include <stdio.h>
+#include "constants.h"
+#include "SDL_image.h"
+
 
 
 class AnimeObject
@@ -31,6 +36,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
+	friend class MonsterAI;
 
 private:
 	char path[100];

@@ -255,7 +255,7 @@ void AnimeObject::setdetectCorner()
 }
 
 void AnimeObject::move() {
-/*
+
 	if (jumpFlag)
 	{
 		velY = -10;
@@ -269,7 +269,7 @@ void AnimeObject::move() {
 	{
 		velY = 0;
 	}
-	jumpFlag = 0; */
+	jumpFlag = 0; 
 	setdetectCorner();
 	moveOrNot();
 	
@@ -291,25 +291,25 @@ void AnimeObject::move() {
 
 bool AnimeObject::xRight()
 {
-	if (tile[2][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[2][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
+	if (tile[1][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[1][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::xLeft()
 {
-	if (tile[2][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[2][detectCornerX[0][1]][detectCornerX[0][0]]==0)
+	if (tile[1][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[1][detectCornerX[0][1]][detectCornerX[0][0]]==0)
 		return true;
 	return false;
 }
 bool AnimeObject::yUp()
 {
-	if (tile[2][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[2][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
+	if (tile[1][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[1][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject::yDown()
 {
-	if (tile[2][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[2][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+	if (tile[1][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[1][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }

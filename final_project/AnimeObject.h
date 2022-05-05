@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-
+#include "tile.h"
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
 #include "constants.h"

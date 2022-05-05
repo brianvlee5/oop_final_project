@@ -284,8 +284,8 @@ void AnimeObject::move() {
 	if (y < 0)
 		y = 0;
 
-	printf("x: %d  y: %d\n", x, y);
-	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
+//	printf("x: %d  y: %d\n", x, y);
+//	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
 	
 }
 

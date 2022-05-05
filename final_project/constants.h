@@ -10,3 +10,4 @@
 #define SHRINK 1
 #define MAPTILEX 60
 #define MAPTILEY 40
+#define NO_TRANSPARENT_BG {0, 0, 0, 0}

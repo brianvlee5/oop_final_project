@@ -269,7 +269,6 @@ void AnimeObject::move() {
 	setdetectCorner();
 	moveOrNot();
 	
-	
 
 	if (x +  width / SHRINK >= WIDTH)
 		x = WIDTH - width / SHRINK;

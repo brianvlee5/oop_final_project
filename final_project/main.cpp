@@ -38,7 +38,7 @@ int main(int argc, char* args[])
 	pooh.setPosition(200, 370);
 //	pooh.startTimer(40);
 
-	Map demo1("../images/mapdemo3.png", window.getRenderer());
+	Map demo1("../images/mapdemo4.png", window.getRenderer());
 
 	SDL_Event e;
 

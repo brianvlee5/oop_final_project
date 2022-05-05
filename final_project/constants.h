@@ -10,6 +10,7 @@
 #define SHRINK 1
 #define MAPTILEX 120
 #define MAPTILEY 80
+#define NO_TRANSPARENT_BG {0, 0, 0, 0}
 
 #define WANDER 0
 #define TRACE 1

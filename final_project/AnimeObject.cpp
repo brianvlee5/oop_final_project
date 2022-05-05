@@ -1,5 +1,5 @@
 #include "AnimeObject.h"
-#include "tile.h"
+
 
 
 AnimeObject::AnimeObject(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)

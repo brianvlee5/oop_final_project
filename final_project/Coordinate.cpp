@@ -9,7 +9,7 @@ Coordinate::Coordinate()
 	printCamY = 0;
 }
 
-void Coordinate::calMapCamera(Map m, AnimeObject& mainch)
+void Coordinate::calMapCamera(Map m, AnimeObject mainch)
 {
 	SDL_Rect temp = m.getcamera();
 	printCamX = (mainch.getX() - temp.x);
@@ -17,11 +17,11 @@ void Coordinate::calMapCamera(Map m, AnimeObject& mainch)
 	
 }
 
-void Coordinate::calMap(Map m, Attack& mainch)
+void Coordinate::calMapCamera(Map m, Monster mons)
 {
 	SDL_Rect temp = m.getcamera();
-	printCamX = (mainch.getX() - temp.x);
-	printCamY = (mainch.getY() - temp.y);
+	printCamX = (mons.getX() - temp.x);
+	printCamY = (mons.getY() - temp.y);
 }
 
 int Coordinate::getpCX()

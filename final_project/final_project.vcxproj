@@ -143,11 +143,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimeObject.cpp" />
-    <ClCompile Include="Attack.cpp" />
     <ClCompile Include="Coordinate.cpp" />
-    <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="StaticObject.cpp" />
@@ -155,12 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimeObject.h" />
-    <ClInclude Include="Attack.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="event.h" />
-    <ClInclude Include="Image.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterAI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="StaticObject.h" />

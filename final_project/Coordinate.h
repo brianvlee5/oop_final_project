@@ -2,14 +2,14 @@
 #include <SDL.h>
 #include "Map.h"
 #include "AnimeObject.h"
-#include "Attack.h"
+#include "Monster.h"
 
 class Coordinate
 {
 public:
 	Coordinate();
-	void calMapCamera(Map, AnimeObject&);
-	void calMap(Map, Attack&);
+	void calMapCamera(Map, AnimeObject);
+	void calMapCamera(Map, Monster);
 	int getpCX();
 	int getpCY();
 private:

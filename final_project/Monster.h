@@ -25,7 +25,7 @@ public:
 	int getVX();
 	int getVY();
 	//	void draw(SDL_Renderer* renderer);
-	void draw(SDL_Rect, SDL_Rect);
+	void draw(SDL_Rect dst, SDL_Rect src);
 	void startTimer(Uint32 t);
 	void stopTimer();
 	//	void move();

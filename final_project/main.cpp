@@ -15,6 +15,7 @@
 #include "Map.h"
 #include "StaticObject.h"
 #include "AnimeObject.h"
+#include "AnimeObject2.h"
 #include "Coordinate.h"
 #include "Attack.h"
 #include "Image.h"
@@ -34,13 +35,14 @@ int main(int argc, char* args[])
 
 	Coordinate coord, coo, enemycord;
 	SDL_Rect forpooh;//for pooh's move
-	AnimeObject pooh("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject2 p("../images/panda.png", window.getRenderer());
 	Attack fire("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00);
 	Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	pooh.setPosition(200, 370);
+	pan.setPosition(200, 370);
 	enemy.setPosition(1320, 400);
 	enemy.setVX(2);
-//	pooh.startTimer(40);
 
 	Map demo1("../images/mapdemo4.png", window.getRenderer());
 
@@ -54,25 +56,27 @@ int main(int argc, char* args[])
 		{
 			if (e.type == SDL_QUIT)
 				quit = true;
-			poohKeyboard(e, pooh);
-			attackKeyboard(e, fire, pooh);
+			poohKeyboard(e, pan);
+			attackKeyboard(e, fire, pan);
 		}
 		
-		pooh.move();
+		pan.move();
 		enemy.AIstart();
-		demo1.setcamera(pooh);
+		demo1.setcamera(pan);
+
 		window.clear();
-		coord.calMapCamera(demo1, pooh);
+		coord.calMapCamera(demo1, pan);
 		coo.calMap(demo1, fire);
 		enemycord.calMapCamera(demo1, enemy);
+
 		demo1.draw({ ALLREGION }, demo1.getcamera());
-		pooh.draw({coord.getpCX(),coord.getpCY(),pooh.getWidth() / SHRINK,pooh.getHeight() / SHRINK},{NULL});
-		enemy.draw({ enemycord.getpCX(),enemycord.getpCY(),pooh.getWidth() / SHRINK,pooh.getHeight() / SHRINK }, { NULL });
-		fire.draw({ ALLREGION }, { coo.getpCX(),coo.getpCY(),fire.getWidth(),fire.getHeight()});
+		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
+		enemy.draw({ enemycord.getpCX(),enemycord.getpCY(),pan.getWidth() / SHRINK,pan.getHeight() / SHRINK }, { NULL });
+		fire.draw({ coo.getpCX(),coo.getpCY(),fire.getWidth(),fire.getHeight()});
 		window.display();
 	}
 	SDL_DestroyTexture(texture);
-	pooh.close();
+	pan.close();
 	demo1.close();
 	fire.close();
 	window.close();

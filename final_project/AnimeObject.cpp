@@ -114,11 +114,12 @@ void AnimeObject::close()
 
 void AnimeObject::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
-//
-//	if (dst.x == NULL)
-//	{
-//		d = NULL;
-//	}
+/*
+	if (dst.x == NULL)
+	{
+		d = NULL;
+	}
+*/
 	if (src.x == NULL)
 	{
 		s = NULL;
@@ -150,56 +151,6 @@ void AnimeObject::draw()
 	SDL_RenderCopy(renderer, texture[frame], s, d);
 }
 */
-
-/*
-void AnimeObject::setdetectCorner(SDL_Rect mc)
-{
-	if (velX >= 0)
-	{
-		detectCornerX[0][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up leftx
-		detectCornerX[0][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;//      y
-		detectCornerX[1][0] = (mc.x + ( width / SHRINK + x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up right
-		detectCornerX[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
-		detectCornerX[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerX[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-	}
-	else if (velX < 0)
-	{
-		detectCornerX[0][0] = (mc.x + (x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up leftx
-		detectCornerX[0][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;//      y
-		detectCornerX[1][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up right
-		detectCornerX[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[2][0] = (mc.x + (x - mc.x + 2 * velX) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
-		detectCornerX[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerX[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-	}
-
-	if (velY <= 0)
-	{
-		detectCornerY[0][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up leftx
-		detectCornerY[0][1] = (mc.y + (y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;//      y
-		detectCornerY[1][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up right
-		detectCornerY[1][1] = (mc.y + (y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
-		detectCornerY[2][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerY[3][1] = (mc.y + (height / SHRINK + y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-	}
-	else if (velY > 0)
-	{
-		detectCornerY[0][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up leftx
-		detectCornerY[0][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;//      y
-		detectCornerY[1][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//up right
-		detectCornerY[1][1] = (mc.y + (y - mc.y) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (mc.x + (x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom left
-		detectCornerY[2][1] = (mc.y + (height / SHRINK + y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (mc.x + ( width / SHRINK + x - mc.x) * CAMERAW / WINDOWW) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerY[3][1] = (mc.y + (height / SHRINK + y - mc.y + 2 * velY) * CAMERAH / WINDOWH) * MAPTILEY / HEIGHT;
-	}
-}*/
 
 void AnimeObject::setdetectCorner()
 {
@@ -268,7 +219,6 @@ void AnimeObject::move() {
 	jumpFlag = 0; 
 	setdetectCorner();
 	moveOrNot();
-	
 
 	if (x +  width / SHRINK >= WIDTH)
 		x = WIDTH - width / SHRINK;
@@ -278,9 +228,6 @@ void AnimeObject::move() {
 		x = 0;
 	if (y < 0)
 		y = 0;
-
-	printf("x: %d  y: %d\n", x, y);
-	printf("xtile: %d  ytile: %d\n", x * MAPTILEX / WIDTH, y * MAPTILEY / HEIGHT);
 	
 }
 

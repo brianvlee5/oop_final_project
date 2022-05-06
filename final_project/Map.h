@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "StaticObject.h"
 #include "AnimeObject.h"
+#include "AnimeObject2.h"
 
 class Map
 {
@@ -14,7 +15,8 @@ class Map
 		int getWidth();
 		int getHeight();
 		SDL_Rect getcamera(StaticObject);
-		void setcamera(AnimeObject);
+		void setcamera(AnimeObject&);
+		void setcamera(AnimeObject2&);
 		SDL_Rect getcamera();
 	
 	private:

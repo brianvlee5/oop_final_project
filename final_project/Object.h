@@ -21,6 +21,7 @@ public:
 	void setAlpha(int a);
 	double getAngle();
 	int getAlpha();
+
 	void startTimer(Uint32 t);
 	void stopTimer();
 
@@ -38,12 +39,14 @@ protected:
 	int num;
 	int x;
 	int y;
-
-private:
 	int wn; // image number in width
 	int hn; // image number in height
 	Image image;
+
+private:
+
 	SDL_TimerID timerID;
 	Uint32 time;
-	static Uint32 changeData(Uint32 interval, void* param); // Timer callback 
+	static Uint32 changeData(Uint32 interval, void* param);
+
 };

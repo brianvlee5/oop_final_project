@@ -61,7 +61,7 @@ int main(int argc, char* args[])
 		}
 		
 		pan.move();
-		enemy.AIstart();
+		enemy.AIstart(pan);
 		demo1.setcamera(pan);
 
 		window.clear();
@@ -78,9 +78,11 @@ int main(int argc, char* args[])
 	SDL_DestroyTexture(texture);
 	pan.close();
 	demo1.close();
+	enemy.close();
 	fire.close();
 	window.close();
 	sdl.close();
+	
 
 	return 0;
 }

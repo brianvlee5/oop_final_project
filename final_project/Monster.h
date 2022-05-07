@@ -2,10 +2,13 @@
 #include <SDL.h>
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
+#include <math.h>
 #include "constants.h"
 #include "SDL_image.h"
 #include "tile.h"
 #include "MonsterAI.h"
+#include "AnimeObject2.h"
+
 
 
 
@@ -37,7 +40,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
-	void AIstart();
+	void AIstart(AnimeObject2&);
 
 private:
 	char path[100];
@@ -57,4 +60,5 @@ private:
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
 	bool jumpFlag;
+	int AImode;
 };

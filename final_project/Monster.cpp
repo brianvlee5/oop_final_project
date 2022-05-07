@@ -201,16 +201,35 @@ void Monster::setdetectCorner(SDL_Rect mc)
 	}
 }*/
 
-void Monster::AIstart()
+void Monster::AIstart(AnimeObject2 &mainch)
 {
+	if (fabs(x - mainch.getX()) < 100 || fabs(y - mainch.getY()) < 100)
+		AImode = TRACE;
+	else
+		AImode = WANDER;
+
+	switch (AImode)
+	{
+		case TRACE:
+		{
+			if (x - mainch.getX() < 0)
+				setVX(2);
+			else if (x - mainch.getX() > 0)
+				setVX(-2);
+			else
+				setVX(0);	
+			break;
+		}
+		case WANDER:
+		{
+			if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
+				setVX(2);
+			else if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+				setVX(-2); 
+			break;
+		}
+	}
 	
-	
-	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
-		setVX(2);
-	else if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-		setVX(-2);
-	//else if(tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
-	//	setVX(2);
 	move();
 	
 }
@@ -281,6 +300,7 @@ void Monster::move() {
 	}
 	jumpFlag = 0;
 	setdetectCorner();
+
 	moveOrNot();
 
 
@@ -293,8 +313,6 @@ void Monster::move() {
 		x = 0;
 	if (y < 0)
 		y = 0;
-
-
 }
 
 bool Monster::xRight()

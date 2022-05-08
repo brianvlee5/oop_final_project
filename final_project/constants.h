@@ -12,5 +12,12 @@
 #define MAPTILEY 80
 #define NO_TRANSPARENT_BG {0, 0, 0, 0}
 
+//AImode
 #define WANDER 0
 #define TRACE 1
+
+//wander mode
+#define WALLL 0
+#define WALLR 1
+#define PLATFORMLB 2
+#define PLATFORMRB 3

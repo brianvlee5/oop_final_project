@@ -213,9 +213,17 @@ void Monster::AIstart(AnimeObject2 &mainch)
 		case TRACE:
 		{
 			if (x - mainch.getX() < 0)
+			{
 				setVX(2);
+				if (tile[0][detectCornerX[1][1] - 1][detectCornerX[1][0]] == 0&&(tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 1))
+					jumpFlag = 1;
+			}	
 			else if (x - mainch.getX() > 0)
+			{
 				setVX(-2);
+				if (tile[0][detectCornerX[2][1] - 1][detectCornerX[2][0]] == 0&&(tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 1))
+					jumpFlag = 1;
+			}	
 			else
 				setVX(0);	
 			break;
@@ -223,9 +231,29 @@ void Monster::AIstart(AnimeObject2 &mainch)
 		case WANDER:
 		{
 			if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
-				setVX(2);
+				WANDERmode = PLATFORMLB;
 			else if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-				setVX(-2); 
+				WANDERmode = PLATFORMRB;
+			else if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
+				WANDERmode = WALLR;	
+			else if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
+				WANDERmode = WALLL;				
+
+			switch (WANDERmode)
+			{
+				case WALLL:
+					setVX(2);
+					break;
+				case WALLR:
+					setVX(-2);
+					break;
+				case PLATFORMLB:
+					setVX(2);
+					break;
+				case PLATFORMRB:
+					setVX(-2);
+					break;
+			}
 			break;
 		}
 	}

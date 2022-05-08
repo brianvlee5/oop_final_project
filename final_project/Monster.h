@@ -61,4 +61,5 @@ private:
 	int detectCornerY[4][2];
 	bool jumpFlag;
 	int AImode;
+	int WANDERmode;
 };

@@ -6,6 +6,11 @@
 
 Map::Map()
 {
+	mapnum = 0;
+	camera.h = CAMERAH;
+	camera.w = CAMERAW;
+	start[0] = { 116*WIDTH/MAPTILEX, 74*HEIGHT/MAPTILEY };
+	start[1] = { 5 * WIDTH / MAPTILEX, 74 * HEIGHT / MAPTILEY };
 }
 
 Map::Map(const char* path, SDL_Renderer* ren)
@@ -40,13 +45,19 @@ Map::Map(const char* path, SDL_Renderer* ren)
 	}
 	camera.h = CAMERAH;
 	camera.w = CAMERAW;
+	mapnum = 0;
 }
 
-void Map::set(const char* path, SDL_Renderer* ren)
+void Map::set(const char* pth, SDL_Renderer* ren)
 {
+	SDL_DestroyTexture(texture);
 	renderer = ren;
+	strcpy_s(path, pth);
 	// Load a surface from a PNG file.	
-	SDL_Surface* imgSurface = IMG_Load(path);
+	char file[100];
+	sprintf_s(file, 100, "%s%02d.png", pth, mapnum+1);
+	SDL_Surface* imgSurface = IMG_Load(file);
+
 	if (imgSurface == NULL)
 	{
 		// Call IMG_GetError to get the error string.
@@ -72,6 +83,7 @@ void Map::set(const char* path, SDL_Renderer* ren)
 		// Get rid of old loaded surface
 		SDL_FreeSurface(imgSurface);
 	}
+	
 }
 
 SDL_Rect Map::getcamera(StaticObject mainch)
@@ -89,6 +101,99 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 		camera.y = 0;
 	return camera;
 }
+
+void Map::changemap(AnimeObject2& mainch)
+{
+	if (mainch.getMapFlag())
+	{
+		if (tile[mapnum][mainch.getY() * MAPTILEY / HEIGHT][mainch.getX() * MAPTILEX / WIDTH] == 8)
+		{
+			SDL_DestroyTexture(texture);
+			mapnum--;
+			mainch.setMapnum(mapnum);
+			char file[100];
+			sprintf_s(file, 100, "%s%02d.png", path, mapnum + 1);
+			printf("oymg\n");
+			SDL_Surface* imgSurface = IMG_Load(file);
+
+			if (imgSurface == NULL)
+			{
+				// Call IMG_GetError to get the error string.
+				printf("SDL_LoadBMP failed: %s\n", IMG_GetError());
+				exit(0);
+			}
+			else
+			{
+				// Create texture from surface pixels	
+				texture = SDL_CreateTextureFromSurface(renderer, imgSurface);
+
+				// Also, you can use IMG_LoadTexture() to replace IMG_Load and SDL_CreateTextureFromSurface
+				// texture = IMG_LoadTexture(renderer, path);
+
+				if (texture == NULL)
+				{
+					printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
+				}
+
+				width = imgSurface->w;
+				height = imgSurface->h;
+
+				// Get rid of old loaded surface
+				SDL_FreeSurface(imgSurface);
+			}
+		}
+		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 9)
+		{
+
+			SDL_DestroyTexture(texture);
+			mapnum++;
+			mainch.setMapnum(mapnum);
+			char file[100];
+			sprintf_s(file, 100, "%s%02d.png", path, mapnum + 1);
+
+			printf("%s%02d.png", path, mapnum);
+			SDL_Surface* imgSurface = IMG_Load(file);
+
+			if (imgSurface == NULL)
+			{
+				// Call IMG_GetError to get the error string.
+				printf("SDL_LoadBMP failed: %s\n", IMG_GetError());
+				exit(0);
+			}
+			else
+			{
+				// Create texture from surface pixels	
+				texture = SDL_CreateTextureFromSurface(renderer, imgSurface);
+
+				// Also, you can use IMG_LoadTexture() to replace IMG_Load and SDL_CreateTextureFromSurface
+				// texture = IMG_LoadTexture(renderer, path);
+
+				if (texture == NULL)
+				{
+					printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
+				}
+
+				width = imgSurface->w;
+				height = imgSurface->h;
+
+				// Get rid of old loaded surface
+				SDL_FreeSurface(imgSurface);
+			}
+
+		}
+	}
+}
+
+void Map::setmapnum(int n)
+{
+	mapnum = n;
+}
+
+int Map::getmapnum()
+{
+	return mapnum;
+}
+
 
 void Map::setcamera(AnimeObject& mainch)
 {

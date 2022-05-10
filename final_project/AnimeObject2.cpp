@@ -13,14 +13,9 @@ AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Render
 AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 	: Object(path, n, hhn, wwn, ren, r, g, b)
 {
-	Mapnum = 0;
+
 }
 
-void AnimeObject2::setMapnum(int n)
-{
-	Mapnum = n;
-	printf("%d\n", Mapnum);
-}
 
 Uint32 AnimeObject2::changeData(Uint32 interval, void* param)
 {
@@ -155,51 +150,29 @@ void AnimeObject2::setdetectCorner()
 	}
 }
 
-void AnimeObject2::setMapFlag(bool f)
-{
-	mapFlag = f;
-}
-
 bool AnimeObject2::xRight()
 {
-	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 9 && tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 9)
+	if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject2::xLeft()
 {
-	if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 8 && tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 8)
+	if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject2::yUp()
 {
-	if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 9 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 8)
+	if (tile[0][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[0][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
 bool AnimeObject2::yDown()
 {
-	if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 8 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 9)
+	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
-}
-
-bool AnimeObject2::getMapFlag()
-{
-	return mapFlag;
 }
 
 void AnimeObject2::moveOrNot()
@@ -235,7 +208,6 @@ void AnimeObject2::moveOrNot()
 		}
 	}
 }
-
 
 int AnimeObject2::getVY() {
 	return velY;

@@ -1,4 +1,7 @@
 #include "Object.h"
+Object::Object()
+{
+}
 Object::Object(const char* path, SDL_Renderer* ren)
 {
 	image.setPath(path);

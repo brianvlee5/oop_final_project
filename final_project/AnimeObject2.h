@@ -4,7 +4,6 @@
 #include "tile.h"
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
-
 #include "constants.h"
 #include "SDL_image.h"
 
@@ -26,7 +25,6 @@ public:
 //	void draw(SDL_Rect s, SDL_Rect d);
 
 	void move();
-
 	void setdetectCorner();
 	void moveOrNot();
 	bool xRight();
@@ -34,9 +32,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
-	void setMapFlag(bool f);
-	void setMapnum(int);
-	bool getMapFlag();
+
 	void startTimer(Uint32 t);
 	void stopTimer();
 
@@ -47,8 +43,6 @@ private:
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
 	bool jumpFlag;
-	bool mapFlag;
-	int Mapnum;
 	SDL_TimerID timerID;
 	Uint32 time;
 	static Uint32 changeData(Uint32 interval, void* param);

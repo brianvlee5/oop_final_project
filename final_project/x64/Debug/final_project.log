@@ -1,2 +1,3 @@
-﻿  Monster.cpp
-  final_project.vcxproj -> C:\Users\User\Desktop\final_project\x64\Debug\final_project.exe
+﻿  main.cpp
+C:\Users\ibm88\OneDrive\桌面\final_project\final_project\main.cpp(37,11): warning C4101: 'forpooh': unreferenced local variable
+  final_project.vcxproj -> C:\Users\ibm88\OneDrive\桌面\final_project\x64\Debug\final_project.exe

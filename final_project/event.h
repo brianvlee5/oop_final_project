@@ -5,19 +5,33 @@
 #include "Attack.h"
 #include "constants.h"
 int toward;
-
-void attackKeyboard(SDL_Event e, Attack& a, AnimeObject2& p) {
+int ii = 0;
+void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_s:
-			if (!a.getShownFlag())
+			if (!a[ii].getShownFlag())
 			{
-				a.setDir(toward);
-				a.setShownFlag(true);
-				a.setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a.startTimerLine(25);
+				a[ii].setDir(toward);
+				a[ii].setShownFlag(true);
+				a[ii].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii].startTimerLine(25);
+			}
+			else if(!a[ii+1].getShownFlag())
+			{
+				a[ii + 1].setDir(toward);
+				a[ii + 1].setShownFlag(true);
+				a[ii + 1].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 1].startTimerLine(25);
+			}
+			else if (!a[ii + 2].getShownFlag())
+			{
+				a[ii + 2].setDir(toward);
+				a[ii + 2].setShownFlag(true);
+				a[ii + 2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 2].startTimerLine(25);
 			}
 			break;
 		}
@@ -58,9 +72,6 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		case SDLK_SPACE:
 			pooh.setJumpFlag(1);
 			break;
-		case SDLK_b:
-			pooh.setMapFlag(1);
-			break;
 		case SDLK_s:
 			break;
 		}
@@ -87,9 +98,6 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 */
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);
-			break;
-		case SDLK_b:
-			pooh.setMapFlag(0);
 			break;
 		}
 	}

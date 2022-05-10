@@ -32,13 +32,19 @@ int main(int argc, char* args[])
 		return -1;
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
-
-	Coordinate coord, coo, enemycord;
+	const int num=6;
+	Coordinate coord, coo[num], enemycord;
 	SDL_Rect forpooh;//for pooh's move
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
-	Attack fire("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00);
+	Attack fire[num] = { Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
+	};
 	Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
 	enemy.setPosition(1320, 400);
@@ -70,20 +76,23 @@ int main(int argc, char* args[])
 
 		window.clear();
 		coord.calMapCamera(demo1, pan);
-		coo.calMap(demo1, fire);
+		for (int i = 0; i < 6; i++)
+			coo[i].calMap(demo1, fire[i]);
 		enemycord.calMapCamera(demo1, enemy);
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
 		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
 		enemy.draw({ enemycord.getpCX(),enemycord.getpCY(),pan.getWidth() / SHRINK,pan.getHeight() / SHRINK }, { NULL });
-		fire.draw({ coo.getpCX(),coo.getpCY(),fire.getWidth(),fire.getHeight()});
+		for (int i = 0; i < num; i++)
+			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
 		window.display();
 	}
 	SDL_DestroyTexture(texture);
 	pan.close();
 	demo1.close();
 	enemy.close();
-	fire.close();
+	for(int i=0; i<num; i++)
+		fire[i].close();
 	window.close();
 	sdl.close();
 	

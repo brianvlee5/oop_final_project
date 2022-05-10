@@ -60,8 +60,6 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-
-		
 	}
 }
 void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
@@ -93,7 +91,8 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		case SDLK_SPACE:
 			pooh.setJumpFlag(1);
 			break;
-		case SDLK_s:
+		case SDLK_b:
+			pooh.setMapFlag(1);
 			break;
 		}
 	}
@@ -119,6 +118,9 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 */
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);
+			break;
+		case SDLK_b:
+			pooh.setMapFlag(0);
 			break;
 		}
 	}

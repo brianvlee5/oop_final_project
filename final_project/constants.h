@@ -21,3 +21,7 @@
 #define WALLR 1
 #define PLATFORMLB 2
 #define PLATFORMRB 3
+
+struct startP {
+	int x, y;
+};

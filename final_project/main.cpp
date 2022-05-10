@@ -40,12 +40,13 @@ int main(int argc, char* args[])
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
 	Attack fire("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00);
 	Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	pan.setPosition(200, 370);
+	
 	enemy.setPosition(1320, 400);
 	enemy.setVX(2);
 
-	Map demo1("../images/mapdemo4.png", window.getRenderer());
-
+	Map demo1;
+	demo1.set("../images/map/mapdemo", window.getRenderer());
+	pan.setPosition(demo1.start[demo1.getmapnum()].x, demo1.start[demo1.getmapnum() ].y);
 	SDL_Event e;
 
 	bool quit = false;
@@ -61,8 +62,11 @@ int main(int argc, char* args[])
 		}
 		
 		pan.move();
+
 		enemy.AIstart(pan);
 		demo1.setcamera(pan);
+		demo1.changemap(pan);
+
 
 		window.clear();
 		coord.calMapCamera(demo1, pan);

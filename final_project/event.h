@@ -58,6 +58,9 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		case SDLK_SPACE:
 			pooh.setJumpFlag(1);
 			break;
+		case SDLK_b:
+			pooh.setMapFlag(1);
+			break;
 		case SDLK_s:
 			break;
 		}
@@ -84,6 +87,9 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 */
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);
+			break;
+		case SDLK_b:
+			pooh.setMapFlag(0);
 			break;
 		}
 	}

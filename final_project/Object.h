@@ -7,6 +7,7 @@
 class Object
 {
 public:
+	Object();
 	Object(const char* path, SDL_Renderer* ren);
 	Object(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren);
 	Object(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);

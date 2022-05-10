@@ -1,6 +1,9 @@
 #include "Attack.h"
 
-
+Attack::Attack()
+	: Object()
+{
+}
 Attack::Attack(const char* path, SDL_Renderer* ren)
 	: Object(path, ren) 
 {
@@ -17,6 +20,11 @@ Attack::Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uin
 	: Object(path, n, hhn, wwn, ren, r, g, b) 
 {
 	setShownFlag(false);
+}
+
+Attack Attack::set(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+{
+	return Attack(path, n, hhn, wwn, ren, r, g, b);
 }
 
 void Attack::draw() {

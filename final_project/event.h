@@ -5,19 +5,54 @@
 #include "Attack.h"
 #include "constants.h"
 int toward;
-
-void attackKeyboard(SDL_Event e, Attack& a, AnimeObject2& p) {
+int ii = 0;
+void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_s:
-			if (!a.getShownFlag())
+			if (!a[ii].getShownFlag())
 			{
-				a.setDir(toward);
-				a.setShownFlag(true);
-				a.setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a.startTimerLine(25);
+				a[ii].setDir(toward);
+				a[ii].setShownFlag(true);
+				a[ii].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii].startTimerLine(25);
+			}
+			else if(!a[ii + 1].getShownFlag())
+			{
+				a[ii + 1].setDir(toward);
+				a[ii + 1].setShownFlag(true);
+				a[ii + 1].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 1].startTimerLine(25);
+			}
+			else if (!a[ii + 2].getShownFlag())
+			{
+				a[ii + 2].setDir(toward);
+				a[ii + 2].setShownFlag(true);
+				a[ii + 2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 2].startTimerLine(25);
+			}
+			else if (!a[ii + 3].getShownFlag())
+			{
+				a[ii + 3].setDir(toward);
+				a[ii + 3].setShownFlag(true);
+				a[ii + 3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 3].startTimerLine(25);
+			}
+			else if (!a[ii + 4].getShownFlag())
+			{
+				a[ii + 4].setDir(toward);
+				a[ii + 4].setShownFlag(true);
+				a[ii + 4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 4].startTimerLine(25);
+			}
+			else if (!a[ii + 5].getShownFlag())
+			{
+				a[ii + 5].setDir(toward);
+				a[ii + 5].setShownFlag(true);
+				a[ii + 5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[ii + 5].startTimerLine(25);
 			}
 			break;
 		}
@@ -25,8 +60,6 @@ void attackKeyboard(SDL_Event e, Attack& a, AnimeObject2& p) {
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-
-		
 	}
 }
 void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
@@ -60,8 +93,6 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 			break;
 		case SDLK_b:
 			pooh.setMapFlag(1);
-			break;
-		case SDLK_s:
 			break;
 		}
 	}

@@ -162,39 +162,27 @@ void AnimeObject2::setMapFlag(bool f)
 
 bool AnimeObject2::xRight()
 {
-	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 9 && tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 9)
-		return true;
-	return false;
+	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
+		return false;
+	return true;
 }
 bool AnimeObject2::xLeft()
 {
-	if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 8 && tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 8)
-		return true;
-	return false;
+	if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
+		return false;
+	return true;
 }
 bool AnimeObject2::yUp()
 {
-	if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 9 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 8)
-		return true;
-	return false;
+	if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 1 || tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 1)
+		return false;
+	return true;
 }
 bool AnimeObject2::yDown()
 {
-	if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 8 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-		return true;
-	else if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 9)
-		return true;
-	return false;
+	if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 1 || tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
+		return false;
+	return true;
 }
 
 bool AnimeObject2::getMapFlag()

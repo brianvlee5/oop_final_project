@@ -9,8 +9,10 @@ Map::Map()
 	mapnum = 0;
 	camera.h = CAMERAH;
 	camera.w = CAMERAW;
-	start[0] = { 116*WIDTH/MAPTILEX, 74*HEIGHT/MAPTILEY };
-	start[1] = { 5 * WIDTH / MAPTILEX, 74 * HEIGHT / MAPTILEY };
+	startR[0] = { 116*WIDTH/MAPTILEX, 74*HEIGHT/MAPTILEY };
+	startR[1] = { 115 * WIDTH / MAPTILEX, 74 * HEIGHT / MAPTILEY };
+	startL[0] = { 5 * WIDTH / MAPTILEX, 75 * HEIGHT / MAPTILEY };
+	startL[1] = { 5 * WIDTH / MAPTILEX, 75 * HEIGHT / MAPTILEY };
 }
 
 Map::Map(const char* path, SDL_Renderer* ren)
@@ -141,11 +143,13 @@ void Map::changemap(AnimeObject2& mainch)
 				// Get rid of old loaded surface
 				SDL_FreeSurface(imgSurface);
 			}
+			mainch.setPosition(startR[getmapnum()].x, startR[getmapnum()].y);
 		}
 		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 9)
 		{
-
+			//clearing last map
 			SDL_DestroyTexture(texture);
+			//switch to next map
 			mapnum++;
 			mainch.setMapnum(mapnum);
 			char file[100];
@@ -179,9 +183,10 @@ void Map::changemap(AnimeObject2& mainch)
 				// Get rid of old loaded surface
 				SDL_FreeSurface(imgSurface);
 			}
-
+			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
 		}
 	}
+	
 }
 
 void Map::setmapnum(int n)

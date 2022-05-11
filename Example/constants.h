@@ -8,7 +8,6 @@
 #define SHADED 101
 #define BLENDED 102
 
-
 // New in this example
 #define MUSIC 10
 #define EFFECT 11

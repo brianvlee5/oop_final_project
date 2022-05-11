@@ -1,9 +1,8 @@
 #include "Fischinger.h"
 #include "constants.h"
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 Fischinger::Fischinger()
 {
 }
@@ -12,38 +11,36 @@ Fischinger::Fischinger()
 // 3. Initialize the values of data members of all Fischinger components
 Fischinger::Fischinger(SDL_Renderer* ren, int hn, int wn, char tone_Path[][100])
 {
+	// Set renderer, hnum and wnum
 	renderer = ren;
-
-	
-	fcg = new Fisch*[hn];
+	// Create array of Fischinger components
+	fcg = new Fisch * [hn];
 	for (int i = 0; i < hn; i++)
 		fcg[i] = new Fisch[wn];
 
-	for (int i = 0; i < hn; i++)
-	{
-		
-		for (int j = 0; j < wn; j++)
-		{
+	// Initialize the values of data members of all Fischinger components
+	for (int i = 0; i < hn; i++) {
+		for (int j = 0; j < wn; j++) {
+			fcg[i][j].w = WIDTH / wn;
+			fcg[i][j].h = HEIGHT / hn;
+
 			fcg[i][j].tone.setPath(tone_Path[i]);
 			fcg[i][j].tone.setType(EFFECT);
 			fcg[i][j].tone.load();
+
+			fcg[i][j].effectActivate = false;
 			fcg[i][j].activate = false;
 			fcg[i][j].runActivate = false;
-			fcg[i][j].w = WIDTH / wn;
-			fcg[i][j].h = HEIGHT / hn;
-			fcg[i][j].effectActivate = false;
-			fcg[i][j].cr = rand() % 256, fcg[i][j].cg = rand() % 256, fcg[i][j].cb = rand() % 256;
-			fcg[i][j].r = 5;
+
+			fcg[i][j].r = 2;
+			fcg[i][j].alpha = rand()%255;
+			if (fcg[i][j].alpha > 170)
+				fcg[i][j].alpha = 170;
+			fcg[i][j].cr = rand() % 255, fcg[i][j].cg = rand() % 255, fcg[i][j].cb = rand() % 255;
 		}
 	}
-
-	hnum = hn, wnum = wn;
-	// Set renderer, hnum and wnum
-	// ......
-	// Create array of Fischinger components
-	// ......
-	// Initialize the values of data members of all Fischinger components
-	// ......
+	hnum = hn;
+	wnum = wn;
 }
 // Set the activate status of Fischinger component [hn][wn]
 void Fischinger::setActivate(bool a, int hn, int wn)
@@ -54,7 +51,6 @@ void Fischinger::setActivate(bool a, int hn, int wn)
 bool Fischinger::getActivate(int hn, int wn)
 {
 	return fcg[hn][wn].activate;
-	
 }
 // Get the width of each Fischinger component
 // Because each component is equal in size, you can choose any one of them
@@ -69,21 +65,17 @@ int Fischinger::getH()
 	return fcg[0][0].h;
 }
 // Draw visual music on renderer according to parameters of Fischinger components
-// 1. Draw basic components or activate components or runActivate components
-//according to activate / runActivate status of Fischinger components
-// 2. Draw visual effects according to effectActivate status of Fischinger
-//components
+// 1. Draw basic components or activate components or runActivate components according to activate / runActivate status of Fischinger components
+// 2. Draw visual effects according to effectActivate status of Fischinger components
 //
-//https ://www.ferzkopp.net/Software/SDL2_gfx/Docs/html/_s_d_l2__gfx_primitives_8h.htm
-//l
-void Fischinger::draw(int h, int w, int x) //x for draw effect or normal
+//https ://www.ferzkopp.net/Software/SDL2_gfx/Docs/html/_s_d_l2__gfx_primitives_8h.html
+void Fischinger::draw(int i, int j, bool a)
 {
-	
-	if (x)
+	if (a==0)
 	{
-		if (fcg[h][w].runActivate == 0)
+		if (fcg[i][j].runActivate == 0)
 		{
-			if (getActivate(h, w))
+			if (getActivate(i, j))
 			{
 				filledCircleColor(renderer, getW() / 2, getH() / 2, 5, 0xAA00BBFF);
 			}
@@ -95,41 +87,37 @@ void Fischinger::draw(int h, int w, int x) //x for draw effect or normal
 			filledCircleColor(renderer, getW() / 2, getH() / 2, 5, 0xAAAABBCC);
 		}
 	}
-	else
-	{
-		if (fcg[h][w].effectActivate == 1 && fcg[h][w].r<=500)
+	else {
+		if (fcg[i][j].effectActivate)
 		{
-			//printf("h: %d\nw: %d\nr: %d\n",h, w, fcg[h][w].r);
-//			rectangleRGBA(renderer, (w ) * (WIDTH / 16) +(WIDTH/16)/2 - fcg[h][w].r, (h) * (HEIGHT / 11) +(HEIGHT/11)/2 - fcg[h][w].r, (w) * (WIDTH / 16) + (WIDTH / 16) / 2 + fcg[h][w].r, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2 + fcg[h][w].r, fcg[h][w].cr, fcg[h][w].cg, fcg[h][w].cb, 0xFF);
-			int n;
-			n=(h * w) % 5;
-			switch (n)
+			if (fcg[i][j].r < 500)
 			{
-			case 0:
-				rectangleRGBA(renderer, (w ) * (WIDTH / 16) + (WIDTH/16)/2 - fcg[h][w].r, (h) * (HEIGHT / 11) +(HEIGHT/11)/2 - fcg[h][w].r, (w) * (WIDTH / 16) + (WIDTH / 16) / 2 + fcg[h][w].r, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2 + fcg[h][w].r, fcg[h][w].cr, fcg[h][w].cg, fcg[h][w].cb, 0xAA);
-				break;
-			case 1:
-				roundedBoxColor(renderer, (w ) * (WIDTH / 16) +(WIDTH/16)/2 - fcg[h][w].r, (h) * (HEIGHT / 11) +(HEIGHT/11)/2 - fcg[h][w].r, (w) * (WIDTH / 16) + (WIDTH / 16) / 2 + fcg[h][w].r, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2 + fcg[h][w].r, 10, 0xCCFFAABB);
-				break;
-			case 2:
-				roundedRectangleColor(renderer, (w) * (WIDTH / 16) + (WIDTH / 16) / 2 - fcg[h][w].r, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2 - fcg[h][w].r, (w) * (WIDTH / 16) + (WIDTH / 16) / 2 + fcg[h][w].r, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2 + fcg[h][w].r, 50, 0xFFAABBCC);
-				break;
-			case 3:
-				circleColor(renderer, (w) * (WIDTH / 16) + (WIDTH / 16) / 2, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2, 5, 0xAA00BBFF);
-				break;
-			case 4:
-				filledCircleColor(renderer, (w) * (WIDTH / 16) + (WIDTH / 16) / 2, (h) * (HEIGHT / 11) + (HEIGHT / 11) / 2, 5, 0xAAAABBCC);
-				break;
+				int n = i + j;
+				switch (n%3)
+				{
+				case 0:
+					rectangleRGBA(renderer, getW() * j + getW() / 2 - fcg[i][j].r, getH() * i + getH() / 2 - fcg[i][j].r, getW() * j + getW() / 2 + fcg[i][j].r, getH() * i + getH() / 2 + fcg[i][j].r
+						, fcg[i][j].cr, fcg[i][j].cg, fcg[i][j].cb, fcg[i][j].alpha);
+					break;
+				case  1:
+					aaFilledEllipseRGBA(renderer, getW() * j + getW() / 2, getH() * i + getH() / 2, fcg[i][j].r, fcg[i][j].r, fcg[i][j].cr, fcg[i][j].cg, fcg[i][j].cb, fcg[i][j].alpha);
+					break;
+				case 2:
+					aacircleRGBA(renderer, getW() * j + getW() / 2, getH() * i + getH() / 2, fcg[i][j].r, fcg[i][j].cr, fcg[i][j].cg, fcg[i][j].cb, fcg[i][j].alpha);
+					break;
+				}
+				fcg[i][j].r++;
+				fcg[i][j].alpha--;
 			}
-			fcg[h][w].r++;
-		}
-		else if(fcg[h][w].effectActivate == 1 && fcg[h][w].r > 50)
-		{
-			fcg[h][w].r = 5;
-			fcg[h][w].effectActivate = 0;
+			else if(fcg[i][j].r>50 || fcg[i][j].alpha<0)
+			{
+				fcg[i][j].r = 2;
+				fcg[i][j].alpha = 125;
+				fcg[i][j].effectActivate = 0;
+			}
+	
 		}
 	}
-
 }
 // Start running timer callback funtion
 void Fischinger::startRunPlay(Uint32 t)
@@ -147,10 +135,15 @@ void Fischinger::startRunEffect(Uint32 t)
 void Fischinger::close()
 {
 	// Free the sound effects and fcg components
-	// ......
+	for (int i = 0; i < hnum; i++)
+		for (int j = 0; j < wnum; j++)
+			fcg[i][j].tone.close();
+	for (int i = 0; i < hnum; i++)
+		delete[]fcg[i];
+	delete[]fcg;
 	// Remove timer in case the call back was not called
 	SDL_RemoveTimer(timerRPid);
-	// ......
+	SDL_RemoveTimer(timerREid);
 }
 // Timer callback function
 // 1. Update runActivate status of Fischinger components
@@ -158,7 +151,7 @@ void Fischinger::close()
 // Hint: you can use static variable if needed
 Uint32 Fischinger::runPlay(Uint32 interval, void* param)
 {
-	static int num=0;
+	static int num = 0;
 	Fischinger* p = (Fischinger*)param;
 
 	for (int i = 0; i < 11; i++)
@@ -178,11 +171,7 @@ Uint32 Fischinger::runPlay(Uint32 interval, void* param)
 			p->fcg[i][num].tone.playEffect(0);
 			p->fcg[i][num].effectActivate = true;
 		}
-			
-		
 	}
-		
-
 	num = (num + 1) % 16;
 	return interval;
 }
@@ -193,15 +182,21 @@ Uint32 Fischinger::runPlay(Uint32 interval, void* param)
 Uint32 Fischinger::runEffect(Uint32 interval, void* param)
 {
 	Fischinger* p = (Fischinger*)param;
-	for (int i = 0; i < 11; i++)
-	{
-		for (int j = 0; j < 16; j++)
-		{
-			if (p->fcg[i][j].effectActivate)
-			{
+/*
+	for (int i = 0; i < p->hnum; i++) {
+		for (int j = 0; j < p->wnum; j++) {
+			if (p->fcg[i][j].effectActivate) {
+				p->fcg[i][j].alpha--;
+				p->fcg[i][j].r += 3;
 
+				if (p->fcg[i][j].alpha < 0)
+					p->fcg[i][j].r = 0, p->fcg[i][j].alpha = 125;
+				if (p->fcg[i][j].r > 250)
+					p->fcg[i][j].r = 0;
 			}
 		}
 	}
+*/
 	return interval;
+
 }

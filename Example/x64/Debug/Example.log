@@ -1,0 +1,6 @@
+﻿  Fischinger.cpp
+C:\Users\ibm88\Downloads\04_SDL2_Mixer_OOP\Example\Example\Fischinger.cpp(103,108): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ibm88\Downloads\04_SDL2_Mixer_OOP\Example\Example\Fischinger.cpp(103,95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ibm88\Downloads\04_SDL2_Mixer_OOP\Example\Example\Fischinger.cpp(103,72): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ibm88\Downloads\04_SDL2_Mixer_OOP\Example\Example\Fischinger.cpp(103,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Example.vcxproj -> C:\Users\ibm88\Downloads\04_SDL2_Mixer_OOP\Example\x64\Debug\Example.exe

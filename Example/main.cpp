@@ -3,7 +3,6 @@
 #include <SDL.h> // Using SDL
 #include <SDL2_gfxPrimitives.h> // Using SDL2_gfx
 #include <SDL_image.h>
-#include <vector>
 #include <SDL_ttf.h> // Using truetype font
 #include "RenderWindow.h"
 #include <SDL_mixer.h> // Using SDL2_mixer
@@ -12,8 +11,6 @@
 /* New in this example */
 #include "System.h"
 #include "Fischinger.h"
-
-using namespace std;
 /***********************/
 // Numbers of Fischinger components
 const int WNUM = 16;
@@ -29,13 +26,13 @@ void mouseHandleEvent(SDL_Event* e, Fischinger fcg)
 	{
 		// Get mouse position
 		SDL_GetMouseState(&x, &y);
-		if (e->button.button == SDL_BUTTON_LEFT && fcg.getActivate(y / fcg.getH(), x / fcg.getW()))
+		if (e->button.button == SDL_BUTTON_LEFT && fcg.getActivate(y/ fcg.getH(), x/ fcg.getW())==0)
 		{
-			fcg.setActivate(false, y / fcg.getH(), x / fcg.getW());
+			fcg.setActivate(1, y / fcg.getH(), x / fcg.getW());
 		}
 		else
 		{
-			fcg.setActivate(true, y / fcg.getH(), x / fcg.getW());
+			fcg.setActivate(0, y / fcg.getH(), x / fcg.getW());
 		}
 	}
 }
@@ -50,25 +47,17 @@ int main(int argc, char* args[])
 		printf("Failed to initialize SDL system!\n");
 		return -1;
 	}
-	RenderWindow window("OOP SDL Tutorial", 20, 20, WIDTH, HEIGHT);
+	RenderWindow window("OOP SDL Tutorial", 100, 40, WIDTH, HEIGHT);
 	// Initialize path of tone wave files
-	char tone_Path[HNUM][100] = { "../audio/p01.mp3","../audio/p02.mp3", "../audio/p03.mp3", 
-		"../audio/p04.mp3", "../audio/p05.mp3", "../audio/p06.mp3", 
-		"../audio/p07.mp3", "../audio/p08.mp3", "../audio/p09.mp3", 
-		"../audio/p10.mp3", "../audio/p11.mp3"
-	 };
+	char tone_Path[HNUM][100] = { "../audio/s01.wav", "../audio/s02.wav", "../audio/s03.wav", "../audio/s04.wav", 
+		"../audio/s05.wav", "../audio/s06.wav", "../audio/s07.wav", "../audio/s08.wav", "../audio/s09.wav", "../audio/s10.wav", "../audio/s11.wav"};
 	// Declare Fischinger object
-	
 	Fischinger f(window.getRenderer(), HNUM, WNUM, tone_Path);
-	for (int i = 0; i < HNUM; i++)
-	{
-		for (int j = 0; j < WNUM; j++)
-		{
-			//printf("%d %d\n", i * HEIGHT / HNUM, j * WIDTH / WNUM);
-			window.addVPregion({ {  j * WIDTH / WNUM, i * HEIGHT / HNUM, WIDTH / WNUM, HEIGHT / HNUM} });
-		}
 
-	}
+	for (int i = 0; i < HNUM; i++)
+		for (int j = 0; j < WNUM; j++)
+			window.addVPregion({ {  j * WIDTH / WNUM, i * HEIGHT / HNUM, WIDTH / WNUM, HEIGHT / HNUM} });
+	
 	// Initialize seed of random
 	srand(12345);
 	// start timer callback functions, runplay() and runEffect(), of Fischinger
@@ -90,37 +79,19 @@ int main(int argc, char* args[])
 			// Call mouse event handler
 			mouseHandleEvent(&e, f);
 		}
-		
 		// Clear screen
 		window.clear();
 		// Draw Fischinger components
-
-		
 		for (int i = 0; i < HNUM; i++)
-		{
-			for (int j = 0; j < WNUM; j++)
-			{
-				//printf("%d %d\n", i * HEIGHT / HNUM, j * WIDTH / WNUM);
+			for (int j = 0; j < WNUM; j++) {
 				window.setVP(-1);
-				f.draw(i, j, 0);
-			}
-
-		}
-
-		for (int i = 0; i < HNUM; i++)
-		{		
-			for (int j = 0; j < WNUM; j++)
-			{
-				//printf("%d %d\n", i * HEIGHT / HNUM, j * WIDTH / WNUM);
-				window.setVP(i*WNUM+j);
 				f.draw(i, j, 1);
 			}
-			
-		}
-
-		
-
-		
+		for (int i = 0; i < HNUM; i++)
+			for (int j = 0; j < WNUM; j++) {
+				window.setVP(i * WNUM + j);
+				f.draw(i, j, 0);
+			}
 		// Update screen
 		window.display();
 	}

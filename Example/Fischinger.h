@@ -12,7 +12,7 @@ public:
 	bool getActivate(int hn, int wn);
 	int getW();
 	int getH();
-	void draw(int, int, int);
+	void draw(int i, int j, bool a);
 	void startRunPlay(Uint32 t);
 	void startRunEffect(Uint32 t);
 	void close();

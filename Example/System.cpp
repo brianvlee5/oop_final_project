@@ -18,7 +18,7 @@ int System::init()
 {	
 	/****************************************************/
 	// Initialize SDL	
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
 	{
 		// Error Handling		
 		printf("SDL_Init failed: %s\n", SDL_GetError());

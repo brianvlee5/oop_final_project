@@ -52,7 +52,7 @@ int main(int argc, char* args[])
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
-	pan.setPosition(demo1.start[demo1.getmapnum()].x, demo1.start[demo1.getmapnum() ].y);
+	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum() ].y);
 	SDL_Event e;
 
 	bool quit = false;

@@ -8,7 +8,7 @@
 #include "tile.h"
 #include "MonsterAI.h"
 #include "AnimeObject2.h"
-
+#include <stdlib.h>
 
 
 
@@ -40,6 +40,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
+	void collisionAABB(AnimeObject2&);
 	void AIstart(AnimeObject2&);
 
 private:

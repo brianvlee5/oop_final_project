@@ -1,27 +1,24 @@
-//original
-#include <stdio.h>
-#include <stdlib.h>
+#include "main.h"
 
-//sdl related
-#include <SDL.h>
-#include "SDL2_gfxPrimitives.h"
-#include "SDL_image.h"
-#include "event.h"
-
-//self added
-#include "constants.h"
-#include "System.h"
-#include "RenderWindow.h"
-#include "Map.h"
-#include "StaticObject.h"
-#include "AnimeObject.h"
-#include "AnimeObject2.h"
-#include "Coordinate.h"
-#include "Attack.h"
-#include "Image.h"
-#include "Monster.h"
+using namespace std;
 
 SDL_Texture* texture = NULL;
+
+void spacial_hash(vector<Monster>& Mv, vector<vector<Monster>>& MvM)
+{
+	for (int i = 0; i < Mv.size(); i++)
+	{
+		//0 -> 1st quadrant, and so on
+		if (Mv[i].getX() < WIDTH / 2 && Mv[i].getY() < HEIGHT / 2)
+			MvM[0].push_back(Mv[i]);
+		else if (Mv[i].getX() >= WIDTH / 2 && Mv[i].getY() < HEIGHT / 2)
+			MvM[1].push_back(Mv[i]);
+		else if (Mv[i].getX() < WIDTH / 2 && Mv[i].getY() >= HEIGHT / 2)
+			MvM[2].push_back(Mv[i]);
+		else
+			MvM[3].push_back(Mv[i]);
+	}
+}
 
 int main(int argc, char* args[])
 {
@@ -33,7 +30,9 @@ int main(int argc, char* args[])
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
 	const int num=6;
-	Coordinate coord, coo[num], enemycord;
+	Coordinate coord, coo[num], enemycord[3];
+	vector<Monster> monsv;
+	vector<vector<Monster>> hash_monsv;
 	SDL_Rect forpooh;//for pooh's move
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -45,10 +44,20 @@ int main(int argc, char* args[])
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
 	};
-	Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	
-	enemy.setPosition(1320, 400);
-	enemy.setVX(2);
+
+	for (int i = 0; i < 3; i++)
+	{
+		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		enemy.setPosition(MonstP[i].x, MonstP[i].y);
+		monsv.push_back(enemy);
+	}
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		vector<Monster> v;
+		hash_monsv.push_back(v);
+	}
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
@@ -68,8 +77,12 @@ int main(int argc, char* args[])
 		}
 		
 		pan.move();
-
-		enemy.AIstart(pan);
+		
+		for (int i = 0; i < 3; i++)
+		{
+			monsv[i].AIstart(pan);
+			spacial_hash(monsv, hash_monsv);
+		}
 		demo1.setcamera(pan);
 		demo1.changemap(pan);
 
@@ -78,11 +91,39 @@ int main(int argc, char* args[])
 		coord.calMapCamera(demo1, pan);
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
-		enemycord.calMapCamera(demo1, enemy);
+		
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
 		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
-		enemy.draw({ enemycord.getpCX(),enemycord.getpCY(),pan.getWidth() / SHRINK,pan.getHeight() / SHRINK }, { NULL });
+		
+		for (int i = 0; i < 3; i++)
+		{
+			enemycord[i].calMapCamera(demo1, monsv[i]);
+			monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),pan.getWidth() / SHRINK,pan.getHeight() / SHRINK }, { NULL });
+		}
+
+		int tempmonv;
+		switch (pan.getX() * 2 / WIDTH + pan.getY() * 2 / HEIGHT * 2)
+		{
+		case 0:
+			tempmonv = 0;
+			break;
+		case 1:
+			tempmonv = 1;
+			break;
+		case 2:
+			tempmonv = 2;
+			break;
+		case 3:
+			tempmonv = 3;
+			break;
+		}
+		printf("%d\n", pan.getX() * 2 / WIDTH);
+		for (int i = 0; i < hash_monsv[tempmonv].size(); i++)
+		{
+			hash_monsv[tempmonv][i].collisionAABB(pan);
+		}
+
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
 		window.display();
@@ -90,7 +131,10 @@ int main(int argc, char* args[])
 	SDL_DestroyTexture(texture);
 	pan.close();
 	demo1.close();
-	enemy.close();
+
+	for (int i = 0; i < 3; i++)
+		monsv[i].close();
+
 	for(int i=0; i<num; i++)
 		fire[i].close();
 	window.close();
@@ -99,3 +143,6 @@ int main(int argc, char* args[])
 
 	return 0;
 }
+
+
+

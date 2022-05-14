@@ -76,8 +76,7 @@ void AnimeObject2::draw(SDL_Rect s, SDL_Rect d)
 	Object::draw(s, d);
 }
 */
-void AnimeObject2::move() 
-{
+void AnimeObject2::move() {
 
 	if (jumpFlag)
 	{
@@ -190,10 +189,7 @@ bool AnimeObject2::getMapFlag()
 {
 	return mapFlag;
 }
-int AnimeObject2::getMapnum()
-{
-	return Mapnum;
-}
+
 void AnimeObject2::moveOrNot()
 {
 

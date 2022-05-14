@@ -8,24 +8,18 @@ Attack::Attack(const char* path, SDL_Renderer* ren)
 	: Object(path, ren) 
 {
 	setShownFlag(false);
-	velX = velY = 0;
-	Mapnum = 0;
 }
 
 Attack::Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren)
 	: Object(path, n, hhn, wwn, ren) 
 {
 	setShownFlag(false);
-	velX = velY = 0;
-	Mapnum = 0;
 }
 
 Attack::Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 	: Object(path, n, hhn, wwn, ren, r, g, b) 
 {
 	setShownFlag(false);
-	velX = velY = 0;
-	Mapnum = 0;
 }
 
 Attack Attack::set(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
@@ -53,7 +47,7 @@ void Attack::draw(SDL_Rect d)
 	image.setSrcRegion(s);
 	image.setDstRegion(d);
 	
-	if (shownFlag && ii )
+	if (shownFlag)
 		image.draw();
 }
 /*
@@ -63,15 +57,8 @@ void Attack::draw(SDL_Rect s, SDL_Rect d) {
 }
 */
 void Attack::startTimerLine(Uint32 t) {
-	ii = 0;
 	time = t;
 	timerID = SDL_AddTimer(time, changeDataLine, this);
-}
-
-void Attack::startTimerParabola(Uint32 t) {
-	ii = 0;
-	time = t;
-	timerID = SDL_AddTimer(time, changeDataParabola, this);
 }
 
 Uint32 Attack::getTime() {
@@ -81,35 +68,11 @@ Uint32 Attack::getTime() {
 Uint32 Attack::changeDataLine(Uint32 interval, void* param)
 {
 	Attack* p = (Attack*)param;
-	if ( p->time != 0 && p->ii <= 30 )
+	if ( p->time != 0 && p->shownFlag  && p->ii <= 30 )
 	{
 		p->ii++;
-		p->move();
+		p->setPosition(p->getX() + 2*p->dir*VELOCITY, p->getY());
 		return interval;
-	}
-	else
-	{
-		p->setShownFlag(false);
-		return 0;
-	}
-}
-
-Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
-{
-	Attack* p = (Attack*)param;
-	if (p->time != 0 && p->ii <= 50)
-	{
-		if (p->ii <= 50)
-		{
-			p->ii++;
-			p->velY += 1;
-			p->move();
-			double angle = atan2(p->velY, p->dir * p->velX) * 180 / M_PI;
-//			printf("%lf\n", angle);
-			p->setCenterAngle({ 0, 0 }, atan2(p->velY, p->dir * p->velX) * 180 / M_PI);
-
-			return interval;
-		}
 	}
 	else
 	{
@@ -123,153 +86,11 @@ void Attack::stopTimer()
 	time = 0;
 }
 
-void Attack::move() 
-{
-	setdetectCorner();
-	moveOrNot();
-}
-
-void Attack::setdetectCorner()
-{
-	if (dir * velX >= 0)
-	{
-		detectCornerX[0][0] = x * MAPTILEX / WIDTH;//up leftx
-		detectCornerX[0][1] = y * MAPTILEY / HEIGHT;//      y
-		detectCornerX[1][0] = (getWidth() / SHRINK + x + 0 * dir * velX) * MAPTILEX / WIDTH;//up right
-		detectCornerX[1][1] = y * MAPTILEY / HEIGHT;
-		detectCornerX[2][0] = x * MAPTILEX / WIDTH;//bottom left
-		detectCornerX[2][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (getWidth() / SHRINK + x + 0 * dir * velX) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerX[3][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-	}
-	else if (dir * velX < 0)
-	{
-		detectCornerX[0][0] = (x + 0 * dir * velX) * MAPTILEX / WIDTH;//up leftx
-		detectCornerX[0][1] = y * MAPTILEY / HEIGHT;//      y
-		detectCornerX[1][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//up right
-		detectCornerX[1][1] = y * MAPTILEY / HEIGHT;
-		detectCornerX[2][0] = (x + 0 * dir * velX) * MAPTILEX / WIDTH;//bottom left
-		detectCornerX[2][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-		detectCornerX[3][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerX[3][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-	}
-
-	if (velY <= 0)
-	{
-		detectCornerY[0][0] = (x)*MAPTILEX / WIDTH;//up leftx
-		detectCornerY[0][1] = (y + 0 * velY) * MAPTILEY / HEIGHT;//      y
-		detectCornerY[1][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//up right
-		detectCornerY[1][1] = (y + 0 * velY) * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (x)*MAPTILEX / WIDTH;//bottom left
-		detectCornerY[2][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerY[3][1] = (getHeight() / SHRINK + y) * MAPTILEY / HEIGHT;
-	}
-	else if (velY > 0)
-	{
-		detectCornerY[0][0] = (x)*MAPTILEX / WIDTH;//up leftx
-		detectCornerY[0][1] = y * MAPTILEY / HEIGHT;//      y
-		detectCornerY[1][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//up right
-		detectCornerY[1][1] = y * MAPTILEY / HEIGHT;
-		detectCornerY[2][0] = (x)*MAPTILEX / WIDTH;//bottom left
-		detectCornerY[2][1] = (getHeight() / SHRINK + (y + 0 * velY)) * MAPTILEY / HEIGHT;
-		detectCornerY[3][0] = (getWidth() / SHRINK + x) * MAPTILEX / WIDTH;//bottom right 
-		detectCornerY[3][1] = (getHeight() / SHRINK + (y + 0 * velY)) * MAPTILEY / HEIGHT;
-	}
-}
-
-void Attack::moveOrNot()
-{
-
-	if (dir * velX > 0)
-	{
-		if (xRight())
-		{
-			x += dir * velX;
-		}
-		else
-		{
-			stopTimer();
-		}
-	}
-	else if (dir * velX < 0)
-	{
-		if (xLeft())
-		{
-			x += dir * velX;
-		}
-		else
-		{
-			stopTimer();
-		}
-	}
-
-	if (velY < 0)
-	{
-		if (yUp())
-		{
-			y += velY;
-		}
-		else
-		{
-			stopTimer();
-		}
-	}
-	else if (velY > 0)
-	{
-		if (yDown())
-		{
-			y += velY;
-		}
-		else
-		{
-			stopTimer();
-		}
-	}
-}
-
-
-bool Attack::xRight()
-{
-	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
-		return false;
-	return true;
-}
-bool Attack::xLeft()
-{
-	if (tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
-		return false;
-	return true;
-}
-bool Attack::yUp()
-{
-	if (tile[Mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 1 || tile[Mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 1)
-		return false;
-	return true;
-}
-bool Attack::yDown()
-{
-	if (tile[Mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 1 || tile[Mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
-		return false;
-	return true;
-}
-
-void Attack::setMapFlag(bool f)
-{
-	mapFlag = f;
-}
-bool Attack::getMapFlag()
-{
-	return mapFlag;
-}
-void Attack::setMapnum(int n)
-{
-	Mapnum = n;
-	printf("%d\n", Mapnum);
-}
 void Attack::setShownFlag(bool b) 
 {
 	shownFlag = b;
+	if(b)
+		ii = 0;
 }
 
 bool Attack::getShownFlag() 
@@ -280,19 +101,9 @@ bool Attack::getShownFlag()
 void Attack::setDir(int d)
 {
 	dir = d;
-//	if (dir == 1)
-//		setFlip(SDL_FLIP_NONE);
-//	if(dir == -1)
-//		setFlip(SDL_FLIP_HORIZONTAL);
+	if (dir == 1)
+		setFlip(SDL_FLIP_NONE);
+	if(dir == -1)
+		setFlip(SDL_FLIP_HORIZONTAL);
 
-}
-
-void Attack::setVy(int vyy)
-{
-	velY = vyy;
-}
-
-void Attack::setVx(int vxx)
-{
-	velX = vxx;
 }

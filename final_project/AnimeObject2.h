@@ -26,20 +26,20 @@ public:
 //	void draw(SDL_Rect s, SDL_Rect d);
 
 	void move();
+
 	void setdetectCorner();
 	void moveOrNot();
 	bool xRight();
 	bool xLeft();
 	bool yUp();
 	bool yDown();
-
 	void setJumpFlag(bool f);
 	void setMapFlag(bool f);
 	void setMapnum(int);
-	int getMapnum();
 	bool getMapFlag();
 	void startTimer(Uint32 t);
 	void stopTimer();
+
 
 private:
 
@@ -51,6 +51,7 @@ private:
 	bool mapFlag;
 	int Mapnum;
 	SDL_TimerID timerID;
+
 	Uint32 time;
 	static Uint32 changeData(Uint32 interval, void* param);
 

@@ -7,6 +7,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
+	setVX(2);
 
 	for (int i = 0; i < num; i++)
 	{
@@ -260,6 +261,17 @@ void Monster::AIstart(AnimeObject2 &mainch)
 	
 	move();
 	
+}
+
+void Monster::collisionAABB(AnimeObject2& mainch)
+{
+	if (x < mainch.getX() + mainch.getWidth() / SHRINK &&
+		mainch.getX() < x + width / SHRINK &&
+		y < mainch.getY() + mainch.getHeight() / SHRINK &&
+		mainch.getY() < y + height / SHRINK)
+	{
+		
+	}
 }
 
 void Monster::setdetectCorner()

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "constants.h"
 #include <math.h>
+#include "tile.h"
+
 class Attack :
     public Object
 {
@@ -21,6 +23,7 @@ public:
 	Uint32 getTime();
 	void stopTimer();
 
+	void move();
 	void setdetectCorner();
 	void moveOrNot();
 	bool xRight();
@@ -28,12 +31,14 @@ public:
 	bool yUp();
 	bool yDown();
 
+	void setMapFlag(bool f);
+	bool getMapFlag();
+	void setMapnum(int);
 	void setShownFlag(bool b);
 	bool getShownFlag();
 	void setDir(int);
 	void setVy(int vyy);
 	void setVx(int vxx);
-	SDL_Point getSelfCenter();
 
 private:
 	SDL_Renderer* renderer;
@@ -42,9 +47,13 @@ private:
 	static Uint32 changeDataLine(Uint32 interval, void* param);
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	bool shownFlag;
+	bool mapFlag;
+	int Mapnum;
 	int ii;
 	int dir;
-	int vx;
-	int vy;
+	int velX;
+	int velY;
+	int detectCornerX[4][2];
+	int detectCornerY[4][2];
 };
 

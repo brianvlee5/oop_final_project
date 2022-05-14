@@ -6,7 +6,6 @@
 #include <math.h>
 #include "constants.h"
 int toward;
-int ii = 0;
 void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -22,9 +21,10 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[0].setDir(toward);
 				a[0].setShownFlag(true);
 				a[0].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[0].setVx(2 * VELOCITY);
 				a[0].startTimerLine(25);
 			}
-			else if(!a[ii + 1].getShownFlag())
+			else if(!a[1].getShownFlag())
 			{
 				if (toward == 1)
 					a[1].setFlip(SDL_FLIP_NONE);
@@ -33,9 +33,10 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[1].setDir(toward);
 				a[1].setShownFlag(true);
 				a[1].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[1].setVx(2 * VELOCITY);
 				a[1].startTimerLine(25);
 			}
-			else if (!a[ii + 2].getShownFlag())
+			else if (!a[2].getShownFlag())
 			{
 				if (toward == 1)
 					a[2].setFlip(SDL_FLIP_NONE);
@@ -44,9 +45,10 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[2].setDir(toward);
 				a[2].setShownFlag(true);
 				a[2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[2].setVx(2 * VELOCITY);
 				a[2].startTimerLine(25);
 			}
-			else if (!a[ii + 3].getShownFlag())
+			else if (!a[3].getShownFlag())
 			{
 				if (toward == 1)
 					a[3].setFlip(SDL_FLIP_NONE);
@@ -55,23 +57,9 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[3].setDir(toward);
 				a[3].setShownFlag(true);
 				a[3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[3].setVx(2 * VELOCITY);
 				a[3].startTimerLine(25);
 			}
-/*			else if (!a[ii + 4].getShownFlag())
-			{
-				a[4].setDir(toward);
-				a[4].setShownFlag(true);
-				a[4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[4].startTimerLine(25);
-			}
-			else if (!a[ii + 5].getShownFlag())
-			{
-				a[5].setDir(toward);
-				a[5].setShownFlag(true);
-				a[5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[5].startTimerLine(25);
-			}
-*/
 			break;
 		case SDLK_w:
 			if (!a[4].getShownFlag())
@@ -92,11 +80,23 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[5].setVy(-4 * VELOCITY);
 				a[5].startTimerParabola(25);
 			}
+			break;
 		}
 
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
+		switch (e.key.keysym.sym)
+		{
+		case SDLK_b:
+			a[0].setMapnum(p.getMapnum());
+			a[1].setMapnum(p.getMapnum());
+			a[2].setMapnum(p.getMapnum());
+			a[3].setMapnum(p.getMapnum());
+			a[4].setMapnum(p.getMapnum());
+			a[5].setMapnum(p.getMapnum());
+			break;
+		}
 	}
 }
 void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
@@ -117,14 +117,6 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 			pooh.setFlip(SDL_FLIP_NONE);
 			pooh.setVX(pooh.getVX() + VELOCITY);
 			break;
-/*
-		case SDLK_DOWN:
-			pooh.setVY(pooh.getVY() + VELOCITY);
-			break;
-		case SDLK_UP:
-			pooh.setVY(pooh.getVY() - VELOCITY);
-			break;
-*/
 		case SDLK_SPACE:
 			pooh.setJumpFlag(1);
 			break;
@@ -145,14 +137,6 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		case SDLK_RIGHT:
 			pooh.setVX(pooh.getVX() - VELOCITY);
 			break;
-/*
-		case SDLK_UP:
-			pooh.setVY(pooh.getVY() + VELOCITY);
-			break;
-		case SDLK_DOWN:
-			pooh.setVY(pooh.getVY() - VELOCITY);
-			break;
-*/
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);
 			break;

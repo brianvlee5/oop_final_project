@@ -3,6 +3,7 @@
 #include "AnimeObject.h"
 #include "AnimeObject2.h"
 #include "Attack.h"
+#include <math.h>
 #include "constants.h"
 int toward;
 int ii = 0;
@@ -11,50 +12,86 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_s:
-			if (!a[ii].getShownFlag())
+		case SDLK_q:
+			if (!a[0].getShownFlag())
 			{
-				a[ii].setDir(toward);
-				a[ii].setShownFlag(true);
-				a[ii].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii].startTimerLine(25);
+				if (toward == 1)
+					a[0].setFlip(SDL_FLIP_NONE);
+				if (toward == -1)
+					a[0].setFlip(SDL_FLIP_HORIZONTAL);
+				a[0].setDir(toward);
+				a[0].setShownFlag(true);
+				a[0].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[0].startTimerLine(25);
 			}
 			else if(!a[ii + 1].getShownFlag())
 			{
-				a[ii + 1].setDir(toward);
-				a[ii + 1].setShownFlag(true);
-				a[ii + 1].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii + 1].startTimerLine(25);
+				if (toward == 1)
+					a[1].setFlip(SDL_FLIP_NONE);
+				if (toward == -1)
+					a[1].setFlip(SDL_FLIP_HORIZONTAL);
+				a[1].setDir(toward);
+				a[1].setShownFlag(true);
+				a[1].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[1].startTimerLine(25);
 			}
 			else if (!a[ii + 2].getShownFlag())
 			{
-				a[ii + 2].setDir(toward);
-				a[ii + 2].setShownFlag(true);
-				a[ii + 2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii + 2].startTimerLine(25);
+				if (toward == 1)
+					a[2].setFlip(SDL_FLIP_NONE);
+				if (toward == -1)
+					a[2].setFlip(SDL_FLIP_HORIZONTAL);
+				a[2].setDir(toward);
+				a[2].setShownFlag(true);
+				a[2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[2].startTimerLine(25);
 			}
 			else if (!a[ii + 3].getShownFlag())
 			{
-				a[ii + 3].setDir(toward);
-				a[ii + 3].setShownFlag(true);
-				a[ii + 3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii + 3].startTimerLine(25);
+				if (toward == 1)
+					a[3].setFlip(SDL_FLIP_NONE);
+				if (toward == -1)
+					a[3].setFlip(SDL_FLIP_HORIZONTAL);
+				a[3].setDir(toward);
+				a[3].setShownFlag(true);
+				a[3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[3].startTimerLine(25);
 			}
-			else if (!a[ii + 4].getShownFlag())
+/*			else if (!a[ii + 4].getShownFlag())
 			{
-				a[ii + 4].setDir(toward);
-				a[ii + 4].setShownFlag(true);
-				a[ii + 4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii + 4].startTimerLine(25);
+				a[4].setDir(toward);
+				a[4].setShownFlag(true);
+				a[4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[4].startTimerLine(25);
 			}
 			else if (!a[ii + 5].getShownFlag())
 			{
-				a[ii + 5].setDir(toward);
-				a[ii + 5].setShownFlag(true);
-				a[ii + 5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[ii + 5].startTimerLine(25);
+				a[5].setDir(toward);
+				a[5].setShownFlag(true);
+				a[5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[5].startTimerLine(25);
 			}
+*/
 			break;
+		case SDLK_w:
+			if (!a[4].getShownFlag())
+			{
+				a[4].setDir(toward);
+				a[4].setShownFlag(true);
+				a[4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[4].setVx(2 * VELOCITY);
+				a[4].setVy(-4 * VELOCITY);
+				a[4].startTimerParabola(25);
+			}
+			else if (!a[5].getShownFlag())
+			{
+				a[5].setDir(toward);
+				a[5].setShownFlag(true);
+				a[5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[5].setVx(2 * VELOCITY);
+				a[5].setVy(-4 * VELOCITY);
+				a[5].startTimerParabola(25);
+			}
 		}
 
 	}

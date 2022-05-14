@@ -47,7 +47,7 @@ void Attack::draw(SDL_Rect d)
 	image.setSrcRegion(s);
 	image.setDstRegion(d);
 	
-	if (shownFlag)
+	if (shownFlag && ii )
 		image.draw();
 }
 /*
@@ -57,8 +57,15 @@ void Attack::draw(SDL_Rect s, SDL_Rect d) {
 }
 */
 void Attack::startTimerLine(Uint32 t) {
+	ii = 0;
 	time = t;
 	timerID = SDL_AddTimer(time, changeDataLine, this);
+}
+
+void Attack::startTimerParabola(Uint32 t) {
+	ii = 0;
+	time = t;
+	timerID = SDL_AddTimer(time, changeDataParabola, this);
 }
 
 Uint32 Attack::getTime() {
@@ -81,6 +88,42 @@ Uint32 Attack::changeDataLine(Uint32 interval, void* param)
 	}
 }
 
+Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
+{
+	Attack* p = (Attack*)param;
+	if (p->time != 0 && p->shownFlag && p->ii <= 100)
+	{
+		if (p->ii <= 50)
+		{
+			p->ii++;
+			p->vy += 1;
+			p->x += p->dir * p->vx;
+			p->y += p->vy;
+			double angle = atan2(p->vy, p->dir * p->vx) * 180 / M_PI;
+			printf("%lf\n", angle);
+			p->setCenterAngle({0, 0}, atan2(p->vy, p->dir * p->vx) * 180 / M_PI);
+
+			return interval;
+		}
+		else if(p->ii <= 100)
+		{
+			p->ii++;
+			p->vy += 1;
+			p->x += p->dir * p->vx;
+			p->y += p->vy;
+			double angle = atan2(p->vy, p->dir * p->vx) * 180 / M_PI;
+			printf("%lf\n", angle);
+			p->setCenterAngle({0, 0}, atan2(p->vy, p->dir * p->vx) * 180 / M_PI );
+			return interval;
+		}
+	}
+	else
+	{
+		p->setShownFlag(false);
+		return 0;
+	}
+}
+
 void Attack::stopTimer()
 {
 	time = 0;
@@ -89,8 +132,6 @@ void Attack::stopTimer()
 void Attack::setShownFlag(bool b) 
 {
 	shownFlag = b;
-	if(b)
-		ii = 0;
 }
 
 bool Attack::getShownFlag() 
@@ -101,9 +142,24 @@ bool Attack::getShownFlag()
 void Attack::setDir(int d)
 {
 	dir = d;
-	if (dir == 1)
-		setFlip(SDL_FLIP_NONE);
-	if(dir == -1)
-		setFlip(SDL_FLIP_HORIZONTAL);
+//	if (dir == 1)
+//		setFlip(SDL_FLIP_NONE);
+//	if(dir == -1)
+//		setFlip(SDL_FLIP_HORIZONTAL);
 
+}
+
+void Attack::setVy(int vyy)
+{
+	vy = vyy;
+}
+
+void Attack::setVx(int vxx)
+{
+	vx = vxx;
+}
+
+SDL_Point Attack::getSelfCenter()
+{
+	return { getX() + getWidth() * 3/4, getY() + getHeight() / 2};
 }

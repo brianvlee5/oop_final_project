@@ -21,8 +21,8 @@ public:
 	void setPosition(int xx, int yy);
 	int getWidth();
 	int getHeight();
-	int getX();
-	int getY();
+	int getX() const;
+	int getY() const;
 	void setVX(int x);
 	void setVY(int y);
 	int getVX();

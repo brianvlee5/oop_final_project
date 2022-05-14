@@ -14,12 +14,24 @@ AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Render
 	: Object(path, n, hhn, wwn, ren, r, g, b)
 {
 	Mapnum = 0;
+	shownflag = true;
+	health = 5;
 }
 
 void AnimeObject2::setMapnum(int n)
 {
 	Mapnum = n;
 	printf("%d\n", Mapnum);
+}
+
+void AnimeObject2::setShownFlag(bool f)
+{
+	shownflag = f;
+}
+
+bool AnimeObject2::getShownFlag()
+{
+	return shownflag;
 }
 
 Uint32 AnimeObject2::changeData(Uint32 interval, void* param)
@@ -34,6 +46,32 @@ Uint32 AnimeObject2::changeData(Uint32 interval, void* param)
 	{
 		return 0;
 	}
+}
+
+void AnimeObject2::startHurt(Uint32 t)
+{
+	hurtt = t;
+	invincet = 0;
+	shownflag = true;
+	invinceflag = true;
+	HurtID = SDL_AddTimer(hurtt, invincible, this);
+}
+
+Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
+{
+	AnimeObject2* p = (AnimeObject2*)param;
+	if (p->getIVT() < 6)
+	{
+		p->setShownFlag(!p->getShownFlag());
+		p->setIVT(p->getIVT() + 1);
+		return interval;
+	}
+	else
+	{
+		p->setIVFlag(false);
+		return 0;
+	}
+		
 }
 
 void AnimeObject2::startTimer(Uint32 t)
@@ -56,19 +94,22 @@ void AnimeObject2::draw()
 void AnimeObject2::draw(SDL_Rect d)
 {
 
-	int wc = frame % wn;
-	int hc = frame / wn;
+	if (shownflag)
+	{
+		int wc = frame % wn;
+		int hc = frame / wn;
 
-	SDL_Rect s;
-	s.x = getWidth() * wc;
-	s.y = getHeight() * hc;
-	s.w = getWidth();
-	s.h = getHeight();
+		SDL_Rect s;
+		s.x = getWidth() * wc;
+		s.y = getHeight() * hc;
+		s.w = getWidth();
+		s.h = getHeight();
 
-	image.setSrcRegion(s);
-	image.setDstRegion(d);
+		image.setSrcRegion(s);
+		image.setDstRegion(d);
 
-	image.draw();
+		image.draw();
+	}
 }
 /*
 void AnimeObject2::draw(SDL_Rect s, SDL_Rect d)
@@ -161,6 +202,31 @@ void AnimeObject2::setMapFlag(bool f)
 	mapFlag = f;
 }
 
+void AnimeObject2::setIVT(int ivt)
+{
+	invincet = ivt;
+}
+
+void AnimeObject2::setIVFlag(bool f)
+{
+	invinceflag = f;
+}
+
+bool AnimeObject2::getIVFlag()
+{
+	return invinceflag;
+}
+
+void AnimeObject2::setHP(int hp)
+{
+	health = hp;
+}
+
+int AnimeObject2::getHP()
+{
+	return health;
+}
+
 bool AnimeObject2::xRight()
 {
 	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
@@ -194,6 +260,12 @@ int AnimeObject2::getMapnum()
 {
 	return Mapnum;
 }
+
+int AnimeObject2::getIVT()
+{
+	return invincet;
+}
+
 void AnimeObject2::moveOrNot()
 {
 

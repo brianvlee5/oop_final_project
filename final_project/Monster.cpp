@@ -265,12 +265,17 @@ void Monster::AIstart(AnimeObject2 &mainch)
 
 void Monster::collisionAABB(AnimeObject2& mainch)
 {
-	if (x < mainch.getX() + mainch.getWidth() / SHRINK &&
-		mainch.getX() < x + width / SHRINK &&
-		y < mainch.getY() + mainch.getHeight() / SHRINK &&
-		mainch.getY() < y + height / SHRINK)
+	if (!mainch.getIVFlag())
 	{
-		
+		if (getX() < mainch.getX() + mainch.getWidth() / SHRINK &&
+			mainch.getX() < x + width / SHRINK &&
+			y < mainch.getY() + mainch.getHeight() / SHRINK &&
+			mainch.getY() < y + height / SHRINK)
+		{
+			mainch.setHP(mainch.getHP() - 1);
+			printf("HP remain: %d\n", mainch.getHP());
+			mainch.startHurt(300);
+		}
 	}
 }
 
@@ -426,11 +431,11 @@ int Monster::getHeight()
 {
 	return height;
 }
-int Monster::getX()
+int Monster::getX() const
 {
 	return x;
 }
-int Monster::getY()
+int Monster::getY() const
 {
 	return y;
 }

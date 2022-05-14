@@ -4,7 +4,7 @@ using namespace std;
 
 SDL_Texture* texture = NULL;
 
-void spacial_hash(vector<Monster>& Mv, vector<vector<Monster>>& MvM)
+void spacial_hash(const vector<Monster>& Mv, vector<vector<Monster>>& MvM)
 {
 	for (int i = 0; i < Mv.size(); i++)
 	{
@@ -32,7 +32,7 @@ int main(int argc, char* args[])
 	const int num=6;
 	Coordinate coord, coo[num], enemycord[3];
 	vector<Monster> monsv;
-	vector<vector<Monster>> hash_monsv;
+	//vector<vector<Monster>> hash_monsv;
 	SDL_Rect forpooh;//for pooh's move
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -52,12 +52,12 @@ int main(int argc, char* args[])
 		monsv.push_back(enemy);
 	}
 
-
+	/*
 	for (int i = 0; i < 4; i++)
 	{
 		vector<Monster> v;
 		hash_monsv.push_back(v);
-	}
+	}*/
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
@@ -81,7 +81,7 @@ int main(int argc, char* args[])
 		for (int i = 0; i < 3; i++)
 		{
 			monsv[i].AIstart(pan);
-			spacial_hash(monsv, hash_monsv);
+			
 		}
 		demo1.setcamera(pan);
 		demo1.changemap(pan);
@@ -92,6 +92,8 @@ int main(int argc, char* args[])
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
 		
+		//for(int i=0; i<3; i++)
+		//	spacial_hash(monsv, hash_monsv);
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
 		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
@@ -99,9 +101,15 @@ int main(int argc, char* args[])
 		for (int i = 0; i < 3; i++)
 		{
 			enemycord[i].calMapCamera(demo1, monsv[i]);
-			monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),pan.getWidth() / SHRINK,pan.getHeight() / SHRINK }, { NULL });
+			monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK}, {NULL});
 		}
 
+		for (int i = 0; i < 3; i++)
+		{
+			monsv[i].collisionAABB(pan);
+		}
+
+		/*
 		int tempmonv;
 		switch (pan.getX() * 2 / WIDTH + pan.getY() * 2 / HEIGHT * 2)
 		{
@@ -118,11 +126,11 @@ int main(int argc, char* args[])
 			tempmonv = 3;
 			break;
 		}
-		printf("%d\n", pan.getX() * 2 / WIDTH);
+
 		for (int i = 0; i < hash_monsv[tempmonv].size(); i++)
 		{
 			hash_monsv[tempmonv][i].collisionAABB(pan);
-		}
+		}*/
 
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });

@@ -18,8 +18,12 @@ public:
 	
 	void setVX(int x);
 	void setVY(int y);
+	void setIVT(int ivt);
+	void setHP(int hp);
 	int  getVX();
 	int  getVY();
+	int getIVT();
+	int getHP();
 
 	void draw();
 	void draw(SDL_Rect d);
@@ -35,11 +39,17 @@ public:
 
 	void setJumpFlag(bool f);
 	void setMapFlag(bool f);
+	void setShownFlag(bool f);
+	void setIVFlag(bool f);
 	void setMapnum(int);
 	int getMapnum();
+	bool getIVFlag();
 	bool getMapFlag();
+	bool getShownFlag();
+
 	void startTimer(Uint32 t);
 	void stopTimer();
+	void startHurt(Uint32 t);
 
 private:
 
@@ -47,12 +57,18 @@ private:
 	int velY;
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
+	bool shownflag;
+	bool invinceflag;
 	bool jumpFlag;
 	bool mapFlag;
 	int Mapnum;
+	int health;
 	SDL_TimerID timerID;
+	SDL_TimerID HurtID;
 	Uint32 time;
+	Uint32 hurtt;
+	int invincet;
 	static Uint32 changeData(Uint32 interval, void* param);
-
+	static Uint32 invincible(Uint32 interval, void* param);
 };
 

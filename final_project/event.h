@@ -123,8 +123,7 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		if(e.key.keysym.sym!=SDLK_SPACE)
-			pooh.stopTimer();
+		pooh.stopTimer();
 		switch (e.key.keysym.sym)
 		{
 

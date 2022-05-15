@@ -149,11 +149,13 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimeObject.h" />
@@ -163,12 +165,15 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="event.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Mixer.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

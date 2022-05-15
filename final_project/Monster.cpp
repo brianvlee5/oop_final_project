@@ -111,6 +111,16 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	}
 }
 
+void Monster::setDeadFlag(bool f)
+{
+	deadFlag = f;
+}
+
+bool Monster::getDeadFlag()
+{
+	return deadFlag;
+}
+
 void Monster::setcdFlag(bool f)
 {
 	cdFlag = f;

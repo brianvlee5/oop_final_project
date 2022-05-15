@@ -302,7 +302,7 @@ void Attack::collision_mons(std::vector<Monster>& mv)
 {
 	for (int i = 0; i < mv.size(); i++)
 	{
-		if (!mv[i].getcdFlag() && shownFlag)
+		if (!mv[i].getcdFlag() && shownFlag && !mv[i].getDeadFlag())
 		{
 			if (x < mv[i].getX() + mv[i].getWidth() / SHRINK &&
 				mv[i].getX() < x + getWidth() / SHRINK &&
@@ -310,9 +310,18 @@ void Attack::collision_mons(std::vector<Monster>& mv)
 				mv[i].getY() < y + getHeight() / SHRINK)
 			{
 				mv[i].setHP(mv[i].getHP() - 10);
-				printf("%d HP remain: %d\n", i, mv[i].getHP());
 				stopTimer();
-				mv[i].startCD(300);
+				printf("%d HP remain: %d\n", i, mv[i].getHP());
+				if (mv[i].getHP() > 0)
+				{
+					mv[i].startCD(300);
+				}
+				else
+				{
+					mv[i].setDeadFlag(true);
+				}
+				
+				
 			}
 		}
 	}

@@ -51,18 +51,20 @@ int main(int argc, char* args[])
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
 
-	for (int i = 0; i < 3; i++)
-	{
-		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-		enemy.setPosition(MonstP[i].x, MonstP[i].y);
-		monsv.push_back(enemy);
-	}
+	
 
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum() ].y);
 	SDL_Event e;
+
+	for (int i = 0; i < 3; i++)
+	{
+		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
+		monsv.push_back(enemy);
+	}
 
 	bool quit = false;
 	while (!quit)
@@ -84,7 +86,7 @@ int main(int argc, char* args[])
 				monsv[i].AIstart(pan);
 		}
 		demo1.setcamera(pan);
-		demo1.changemap(pan);
+		demo1.changemap(pan, monsv);
 
 
 		window.clear();

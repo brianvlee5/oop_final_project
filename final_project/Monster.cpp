@@ -10,6 +10,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	setVX(2);
 	health = 30;
 	deadFlag = false;
+	mapnum = 0;
 	for (int i = 0; i < num; i++)
 	{
 
@@ -109,6 +110,16 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	{
 		return 0;
 	}
+}
+
+void Monster::setMapnum(int mapnumm)
+{
+	mapnum = mapnumm;
+}
+
+int Monster::getMapnum()
+{
+	return mapnum;
 }
 
 void Monster::setDeadFlag(bool f)
@@ -260,13 +271,13 @@ void Monster::AIstart(AnimeObject2 &mainch)
 			if (x - mainch.getX() < 0)
 			{
 				setVX(2);
-				if (tile[0][detectCornerX[1][1] - 1][detectCornerX[1][0]] == 0&&(tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 1))
+				if (tile[mapnum][detectCornerX[1][1] - 1][detectCornerX[1][0]] == 0&&(tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1))
 					jumpFlag = 1;
 			}	
 			else if (x - mainch.getX() > 0)
 			{
 				setVX(-2);
-				if (tile[0][detectCornerX[2][1] - 1][detectCornerX[2][0]] == 0&&(tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 1))
+				if (tile[mapnum][detectCornerX[2][1] - 1][detectCornerX[2][0]] == 0&&(tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1))
 					jumpFlag = 1;
 			}	
 			else
@@ -275,13 +286,13 @@ void Monster::AIstart(AnimeObject2 &mainch)
 		}
 		case WANDER:
 		{
-			if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
+			if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
 				WANDERmode = PLATFORMLB;
-			else if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+			else if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 				WANDERmode = PLATFORMRB;
-			else if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
+			else if (tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
 				WANDERmode = WALLR;	
-			else if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
+			else if (tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
 				WANDERmode = WALLL;				
 
 			switch (WANDERmode)
@@ -406,25 +417,25 @@ void Monster::move() {
 
 bool Monster::xRight()
 {
-	if (tile[0][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[0][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
+	if (tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
 bool Monster::xLeft()
 {
-	if (tile[0][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[0][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
+	if (tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
 		return true;
 	return false;
 }
 bool Monster::yUp()
 {
-	if (tile[0][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[0][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
+	if (tile[mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
 bool Monster::yDown()
 {
-	if (tile[0][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[0][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
+	if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }

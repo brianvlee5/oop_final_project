@@ -8,6 +8,7 @@ void spacial_hash(const vector<Monster>& Mv, vector<vector<Monster>>& MvM)
 {
 	for (int i = 0; i < Mv.size(); i++)
 	{
+		// hash: x*1 y*2
 		//0 -> 1st quadrant, and so on
 		if (Mv[i].getX() < WIDTH / 2 && Mv[i].getY() < HEIGHT / 2)
 			MvM[0].push_back(Mv[i]);
@@ -43,26 +44,21 @@ int main(int argc, char* args[])
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
 	};
-	vector<Object> heart;
-	Object h("../images/heart.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	h.setPosition(0, 0);
-	for (int i = 0; i < pan.getHP(); i++) {
-		//		heart.push_back(h);
-		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
-	}
 
-	for (int i = 0; i < 3; i++)
-	{
-		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-		enemy.setPosition(MonstP[i].x, MonstP[i].y);
-		monsv.push_back(enemy);
-	}
+	
 
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum() ].y);
 	SDL_Event e;
+
+	for (int i = 0; i < 3; i++)
+	{
+		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
+		monsv.push_back(enemy);
+	}
 
 	bool quit = false;
 	while (!quit)
@@ -84,11 +80,10 @@ int main(int argc, char* args[])
 				monsv[i].AIstart(pan);
 		}
 		demo1.setcamera(pan);
-		demo1.changemap(pan);
+		demo1.changemap(pan, monsv);
 
 
 		window.clear();
-		window.setVP(-1);
 		coord.calMapCamera(demo1, pan);
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
@@ -124,11 +119,6 @@ int main(int argc, char* args[])
 
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
-
-		for (int i = 0; i < pan.getHP(); i++) {
-			window.setVP(i);
-			h.draw();
-		}
 		window.display();
 	}
 	SDL_DestroyTexture(texture);

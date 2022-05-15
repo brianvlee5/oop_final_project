@@ -163,8 +163,10 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="event.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterP.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="StaticObject.h" />

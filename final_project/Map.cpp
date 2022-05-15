@@ -1,8 +1,5 @@
 #include "Map.h"
-#include "SDL_image.h" 
-#include <stdio.h>
-#include <SDL.h> // Using SDL
-#include "constants.h"
+
 
 Map::Map()
 {
@@ -104,7 +101,7 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 	return camera;
 }
 
-void Map::changemap(AnimeObject2& mainch)
+void Map::changemap(AnimeObject2& mainch, std::vector<Monster>& mv)
 {
 	if (mainch.getMapFlag())
 	{
@@ -144,6 +141,13 @@ void Map::changemap(AnimeObject2& mainch)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(startR[getmapnum()].x, startR[getmapnum()].y);
+			for (int i = 0; i < mv.size(); i++)
+			{
+				mv[i].setDeadFlag(false);
+				mv[i].setHP(30);
+				mv[i].setMapnum(mapnum);
+				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
+			}
 		}
 		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 9)
 		{
@@ -184,6 +188,13 @@ void Map::changemap(AnimeObject2& mainch)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
+			for (int i = 0; i < mv.size(); i++)
+			{
+				mv[i].setDeadFlag(false);
+				mv[i].setHP(30);
+				mv[i].setMapnum(mv[i].getMapnum() + 1);
+				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
+			}
 		}
 	}
 	

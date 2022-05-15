@@ -1,12 +1,5 @@
 #include "Text.h"
-#include <stdio.h>
-#include <SDL.h> // Using SDL
-#include <string.h>
-#include "constants.h"
-#include <SDL_ttf.h> // Using truetype font
 
-// New in this example
-#include "RenderWindow.h"
 
 Text::Text()
 {

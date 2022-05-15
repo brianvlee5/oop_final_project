@@ -32,7 +32,9 @@ int main(int argc, char* args[])
 	const int num=6;
 	Coordinate coord, coo[num], enemycord[3];
 	vector<Monster> monsv;
-
+	SDL_RendererFlip no = SDL_FLIP_NONE;
+	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60,  TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW/2-150, WINDOWH/2 }, { NULL, NULL }, NULL, no, 100);
+	
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
@@ -127,6 +129,7 @@ int main(int argc, char* args[])
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
 
+		
 		for (int i = 0; i < MAXHP; i++) {
 			window.setVP(i);
 			h.draw({h.getWidth()/2, 0, h.getWidth()/2, h.getWidth()}, {ALLREGION});
@@ -134,6 +137,15 @@ int main(int argc, char* args[])
 		for (int i = 0; i < pan.getHP(); i++) {
 			window.setVP(i);
 			h.draw();
+		}
+		window.setVP(-1);
+		if (pan.getDeadFlag())
+		{
+			fail.draw();
+			window.display();
+			system("pause");
+			
+			break;
 		}
 		window.display();
 	}

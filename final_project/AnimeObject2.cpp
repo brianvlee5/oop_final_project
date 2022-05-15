@@ -15,7 +15,7 @@ AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Render
 {
 	Mapnum = 0;
 	shownflag = true;
-	health = 5;
+	health = MAXHP;
 }
 
 void AnimeObject2::setMapnum(int n)

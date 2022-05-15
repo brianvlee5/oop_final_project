@@ -38,8 +38,8 @@ int main(int argc, char* args[])
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
 	Attack fire[num] = { Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire2.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
+					   Attack("../images/fire2.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
 	};
@@ -127,6 +127,10 @@ int main(int argc, char* args[])
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
 
+		for (int i = 0; i < MAXHP; i++) {
+			window.setVP(i);
+			h.draw({h.getWidth()/2, 0, h.getWidth()/2, h.getWidth()}, {ALLREGION});
+		}
 		for (int i = 0; i < pan.getHP(); i++) {
 			window.setVP(i);
 			h.draw();

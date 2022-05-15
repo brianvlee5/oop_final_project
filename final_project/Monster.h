@@ -48,6 +48,8 @@ public:
 
 	void setcdFlag(bool f);
 	bool getcdFlag();
+	void setDeadFlag(bool f);
+	bool getDeadFlag();
 private:
 	char path[100];
 	int num;

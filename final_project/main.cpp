@@ -73,8 +73,8 @@ int main(int argc, char* args[])
 		
 		for (int i = 0; i < 3; i++)
 		{
-			monsv[i].AIstart(pan);
-			
+			if (!monsv[i].getDeadFlag())
+				monsv[i].AIstart(pan);
 		}
 		demo1.setcamera(pan);
 		demo1.changemap(pan);
@@ -92,13 +92,17 @@ int main(int argc, char* args[])
 		
 		for (int i = 0; i < 3; i++)
 		{
-			enemycord[i].calMapCamera(demo1, monsv[i]);
-			monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK}, {NULL});
+			if (!monsv[i].getDeadFlag())
+			{
+				enemycord[i].calMapCamera(demo1, monsv[i]);
+				monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { NULL });
+			}
 		}
 
 		for (int i = 0; i < 3; i++)
 		{
-			monsv[i].collisionAABB(pan);
+			if(!monsv[i].getDeadFlag())
+				monsv[i].collisionAABB(pan);
 		}
 
 		

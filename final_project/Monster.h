@@ -24,9 +24,11 @@ public:
 	int getX() const;
 	int getY() const;
 	int getHP();
+	int getMapnum();
 	void setHP(int hp);
 	void setVX(int x);
 	void setVY(int y);
+	void setMapnum(int mapnumm);
 	int getVX();
 	int getVY();
 	//	void draw(SDL_Renderer* renderer);
@@ -75,6 +77,7 @@ private:
 	bool deadFlag;
 	int AImode;
 	int WANDERmode;
+	int mapnum;
 
 	int health;
 	int damageCD;

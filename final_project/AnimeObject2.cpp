@@ -16,6 +16,7 @@ AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Render
 	Mapnum = 0;
 	shownflag = true;
 	health = MAXHP;
+	deadFlag = false;
 }
 
 void AnimeObject2::setMapnum(int n)
@@ -205,6 +206,16 @@ void AnimeObject2::setMapFlag(bool f)
 void AnimeObject2::setIVT(int ivt)
 {
 	invincet = ivt;
+}
+
+void AnimeObject2::setDeadFlag(bool f)
+{
+	deadFlag = f;
+}
+
+bool AnimeObject2::getDeadFlag()
+{
+	return deadFlag;
 }
 
 void AnimeObject2::setIVFlag(bool f)

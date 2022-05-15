@@ -1,5 +1,8 @@
 #pragma once
 #include <SDL_mixer.h>
+#include <stdio.h>
+#include <string.h>
+#include "constants.h"
 
 class Mixer
 {

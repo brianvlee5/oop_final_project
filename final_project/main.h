@@ -6,9 +6,12 @@
 
 //sdl related
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include "SDL2_gfxPrimitives.h"
 #include "SDL_image.h"
 #include "event.h"
+#include "Mixer.h"
+#include "Text.h"
 
 //self added
 #include "constants.h"

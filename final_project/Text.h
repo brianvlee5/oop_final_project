@@ -1,6 +1,11 @@
 #pragma once
 #include <SDL.h> // Using SDL
 #include "RenderWindow.h"
+#include <stdio.h>
+#include <SDL.h> // Using SDL
+#include <string.h>
+#include "constants.h"
+#include <SDL_ttf.h> // Using truetype font
 
 class Text
 {

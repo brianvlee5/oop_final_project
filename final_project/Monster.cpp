@@ -328,6 +328,10 @@ void Monster::collisionAABB(AnimeObject2& mainch)
 			mainch.getY() < y + height / SHRINK)
 		{
 			mainch.setHP(mainch.getHP() - 1);
+			if (mainch.getHP() <= 0)
+			{
+				mainch.setDeadFlag(true);
+			}
 			//printf("HP remain: %d\n", mainch.getHP());
 			mainch.startHurt(300);
 		}

@@ -41,12 +41,13 @@ public:
 	void setMapFlag(bool f);
 	void setShownFlag(bool f);
 	void setIVFlag(bool f);
+	void setDeadFlag(bool f);
 	void setMapnum(int);
 	int getMapnum();
 	bool getIVFlag();
 	bool getMapFlag();
 	bool getShownFlag();
-
+	bool getDeadFlag();
 	void startTimer(Uint32 t);
 	void stopTimer();
 	void startHurt(Uint32 t);
@@ -61,6 +62,7 @@ private:
 	bool invinceflag;
 	bool jumpFlag;
 	bool mapFlag;
+	bool deadFlag;
 	int Mapnum;
 	int health;
 	SDL_TimerID timerID;

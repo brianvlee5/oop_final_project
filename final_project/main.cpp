@@ -43,6 +43,13 @@ int main(int argc, char* args[])
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
 					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
 	};
+	vector<Object> heart;
+	Object h("../images/heart.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	h.setPosition(0, 0);
+	for (int i = 0; i < pan.getHP(); i++) {
+		//		heart.push_back(h);
+		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
+	}
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -81,6 +88,7 @@ int main(int argc, char* args[])
 
 
 		window.clear();
+		window.setVP(-1);
 		coord.calMapCamera(demo1, pan);
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
@@ -116,6 +124,11 @@ int main(int argc, char* args[])
 
 		for (int i = 0; i < num; i++)
 			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
+
+		for (int i = 0; i < pan.getHP(); i++) {
+			window.setVP(i);
+			h.draw();
+		}
 		window.display();
 	}
 	SDL_DestroyTexture(texture);

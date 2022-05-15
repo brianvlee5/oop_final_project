@@ -112,7 +112,7 @@ Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
 			p->move();
 			double angle = atan2(p->velY, p->dir * p->velX) * 180 / M_PI;
 //			printf("%lf\n", angle);
-			p->setCenterAngle({ 0, 0 }, atan2(p->velY, p->dir * p->velX) * 180 / M_PI);
+			p->setCenterAngle({ p->getWidth()/2, p->getHeight()/2}, angle);
 
 			return interval;
 		}

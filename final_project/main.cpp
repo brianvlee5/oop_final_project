@@ -32,8 +32,7 @@ int main(int argc, char* args[])
 	const int num=6;
 	Coordinate coord, coo[num], enemycord[3];
 	vector<Monster> monsv;
-	vector<vector<Monster>> hash_monsv;
-	SDL_Rect forpooh;//for pooh's move
+
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
@@ -52,12 +51,6 @@ int main(int argc, char* args[])
 		monsv.push_back(enemy);
 	}
 
-	
-	for (int i = 0; i < 4; i++)
-	{
-		vector<Monster> v;
-		hash_monsv.push_back(v);
-	}
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
@@ -92,14 +85,7 @@ int main(int argc, char* args[])
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
 		
-		for (int i = 0; i < 4; i++)
-			hash_monsv[i].clear();
-
-		for (int i = 0; i < 3; i++)
-		{
-			spacial_hash(monsv, hash_monsv);
-		}
-			
+				
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
 		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
@@ -110,32 +96,18 @@ int main(int argc, char* args[])
 			monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK}, {NULL});
 		}
 
-		/*for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			monsv[i].collisionAABB(pan);
-		}*/
-
-		
-		int tempmonv;
-		switch (pan.getX() * 2 / WIDTH + pan.getY() * 2 / HEIGHT * 2)
-		{
-		case 0:
-			tempmonv = 0;
-			break;
-		case 1:
-			tempmonv = 1;
-			break;
-		case 2:
-			tempmonv = 2;
-			break;
-		case 3:
-			tempmonv = 3;
-			break;
 		}
 
-		for (int i = 0; i < hash_monsv[tempmonv].size(); i++)
+		
+
+
+		for (int i = 0; i < 6; i++)
 		{
-			hash_monsv[tempmonv][i].collisionAABB(pan);
+			fire[i].collision_mons(monsv);
+			//printf("x: %d y: %d\n", fire[i].getX(), fire[i].getY());
 		}
 
 		for (int i = 0; i < num; i++)

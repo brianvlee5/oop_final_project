@@ -8,7 +8,8 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	num = n;
 	texture = new SDL_Texture * [num];
 	setVX(2);
-
+	health = 30;
+	deadFlag = false;
 	for (int i = 0; i < num; i++)
 	{
 
@@ -81,6 +82,21 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 
 }
 
+Uint32 Monster::damaged(Uint32 interval, void* param)
+{
+	Monster* p = (Monster*)param;
+	if (p->damageCD<6)
+	{
+		p->damageCD++;
+		return interval;
+	}
+	else
+	{
+		p->cdFlag = false;
+		return 0;
+	}
+}
+
 Uint32 Monster::changeData(Uint32 interval, void* param)
 {
 	Monster* p = (Monster*)param;
@@ -93,6 +109,24 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	{
 		return 0;
 	}
+}
+
+void Monster::setcdFlag(bool f)
+{
+	cdFlag = f;
+}
+
+bool Monster::getcdFlag()
+{
+	return cdFlag;
+}
+
+void Monster::startCD(Uint32 t)
+{
+	hurtT = t;
+	damageCD = 0;
+	cdFlag = true;
+	damageID = SDL_AddTimer(hurtT, damaged, this);
 }
 
 void Monster::startTimer(Uint32 t)
@@ -439,8 +473,16 @@ int Monster::getY() const
 {
 	return y;
 }
+int Monster::getHP()
+{
+	return health;
+}
 int Monster::getVY() {
 	return velY;
+}
+void Monster::setHP(int hp)
+{
+	health = hp;
 }
 void Monster::setVY(int yy) {
 	velY = yy;

@@ -4,6 +4,8 @@
 #include "constants.h"
 #include <math.h>
 #include "tile.h"
+#include "Monster.h"
+#include <vector>
 
 class Attack :
     public Object
@@ -30,6 +32,8 @@ public:
 	bool xLeft();
 	bool yUp();
 	bool yDown();
+
+	void collision_mons(std::vector<Monster>&);
 
 	void setMapFlag(bool f);
 	bool getMapFlag();

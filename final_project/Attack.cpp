@@ -296,3 +296,24 @@ void Attack::setVx(int vxx)
 {
 	velX = vxx;
 }
+
+
+void Attack::collision_mons(std::vector<Monster>& mv)
+{
+	for (int i = 0; i < mv.size(); i++)
+	{
+		if (!mv[i].getcdFlag() && shownFlag)
+		{
+			if (x < mv[i].getX() + mv[i].getWidth() / SHRINK &&
+				mv[i].getX() < x + getWidth() / SHRINK &&
+				y < mv[i].getY() + mv[i].getHeight() / SHRINK &&
+				mv[i].getY() < y + getHeight() / SHRINK)
+			{
+				mv[i].setHP(mv[i].getHP() - 10);
+				printf("%d HP remain: %d\n", i, mv[i].getHP());
+				stopTimer();
+				mv[i].startCD(300);
+			}
+		}
+	}
+}

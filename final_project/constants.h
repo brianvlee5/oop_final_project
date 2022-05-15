@@ -11,6 +11,7 @@
 #define MAPTILEX 120
 #define MAPTILEY 80
 #define NO_TRANSPARENT_BG {0, 0, 0, 0}
+#define MAXHP 8
 
 //AImode
 #define WANDER 0

@@ -55,3 +55,61 @@ SDL_Renderer* RenderWindow::getRenderer()
 {
 	return renderer;
 }
+
+void RenderWindow::addVPregion(vector<SDL_Rect> r)
+{
+	for (int i = 0; i < r.size(); i++)
+	{
+		region.push_back(r[i]);
+	}
+}
+
+void RenderWindow::setVP(int n)
+{
+	// SDL_RenderSetViewport
+	if (n == ALLREGION)
+	{
+		// NULL to set the viewport to the entire target
+		SDL_RenderSetViewport(renderer, NULL);
+	}
+	else
+	{
+		SDL_RenderSetViewport(renderer, &region[n]);
+	}
+}
+
+int RenderWindow::getVPnum()
+{
+	return region.size();
+}
+
+SDL_Rect* RenderWindow::getRegion(int n)
+{
+	return &region[n];
+}
+
+void RenderWindow::clearVP()
+{
+	SDL_Rect fullViewport = { 0, 0, WIDTH, HEIGHT };
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+	SDL_RenderFillRect(renderer, &fullViewport);
+}
+
+void RenderWindow::clearVP(Uint32 color)
+{
+	SDL_Rect fullViewport = { 0, 0, WIDTH, HEIGHT };
+
+	SDL_SetRenderDrawColor(renderer, color / 0x1000000, (color / 0x10000) % 0x100, (color / 0x100) % 0x100, color % 0x100);
+	SDL_RenderFillRect(renderer, &fullViewport);
+}
+
+void RenderWindow::clearVP(Uint32 color, int n)
+{
+	SDL_Rect fullViewport = { 0, 0, WIDTH, HEIGHT };
+
+	SDL_RenderSetViewport(renderer, &region[n]);
+
+	SDL_SetRenderDrawColor(renderer, color / 0x1000000, (color / 0x10000) % 0x100, (color / 0x100) % 0x100, color % 0x100);
+	SDL_RenderFillRect(renderer, &fullViewport);
+}

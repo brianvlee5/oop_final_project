@@ -36,30 +36,6 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[1].setVx(2 * VELOCITY);
 				a[1].startTimerLine(25);
 			}
-			else if (!a[2].getShownFlag())
-			{
-				if (toward == 1)
-					a[2].setFlip(SDL_FLIP_NONE);
-				if (toward == -1)
-					a[2].setFlip(SDL_FLIP_HORIZONTAL);
-				a[2].setDir(toward);
-				a[2].setShownFlag(true);
-				a[2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[2].setVx(2 * VELOCITY);
-				a[2].startTimerLine(25);
-			}
-			else if (!a[3].getShownFlag())
-			{
-				if (toward == 1)
-					a[3].setFlip(SDL_FLIP_NONE);
-				if (toward == -1)
-					a[3].setFlip(SDL_FLIP_HORIZONTAL);
-				a[3].setDir(toward);
-				a[3].setShownFlag(true);
-				a[3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[3].setVx(2 * VELOCITY);
-				a[3].startTimerLine(25);
-			}
 			break;
 		case SDLK_w:
 			if (!a[4].getShownFlag())
@@ -79,6 +55,26 @@ void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
 				a[5].setVx(2 * VELOCITY);
 				a[5].setVy(-4 * VELOCITY);
 				a[5].startTimerParabola(25);
+			}
+			break;
+		case SDLK_e:
+			if (!a[2].getShownFlag())
+			{
+				a[2].setDir(toward);
+				a[2].setShownFlag(true);
+				a[2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[2].setVx(2 * VELOCITY);
+				a[2].setVy(1 * VELOCITY);
+				a[2].startTimerBounce(25);
+			}
+			else if (!a[3].getShownFlag())
+			{
+				a[3].setDir(toward);
+				a[3].setShownFlag(true);
+				a[3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[3].setVx(2 * VELOCITY);
+				a[3].setVy(1 * VELOCITY);
+				a[3].startTimerBounce(25);
 			}
 			break;
 		}
@@ -146,3 +142,4 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		}
 	}
 }
+

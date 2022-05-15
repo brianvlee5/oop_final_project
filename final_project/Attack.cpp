@@ -74,6 +74,12 @@ void Attack::startTimerParabola(Uint32 t) {
 	timerID = SDL_AddTimer(time, changeDataParabola, this);
 }
 
+void Attack::startTimerBounce(Uint32 t) {
+	ii = 0;
+	time = t;
+	timerID = SDL_AddTimer(time, changeDataBounce, this);
+}
+
 Uint32 Attack::getTime() {
 	return time;
 }
@@ -108,6 +114,27 @@ Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
 //			printf("%lf\n", angle);
 			p->setCenterAngle({ 0, 0 }, atan2(p->velY, p->dir * p->velX) * 180 / M_PI);
 
+			return interval;
+		}
+	}
+	else
+	{
+		p->setShownFlag(false);
+		return 0;
+	}
+}
+
+Uint32 Attack::changeDataBounce(Uint32 interval, void* param)
+{
+	Attack* p = (Attack*)param;
+	if (p->time != 0 && p->ii <= 120)
+	{
+		if (p->ii <= 120)
+		{
+			p->ii++;
+			p->velY += 1;
+			p->setdetectCorner();
+			p->moveWithBounce();
 			return interval;
 		}
 	}
@@ -228,6 +255,55 @@ void Attack::moveOrNot()
 	}
 }
 
+void Attack::moveWithBounce()
+{
+
+	if (dir * velX > 0)
+	{
+		if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 && tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
+		{
+			stopTimer();
+		}
+		else
+		{
+			x += dir * velX;
+		}
+	}
+	else if (dir * velX < 0)
+	{
+		if (tile[Mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1 && tile[Mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1)
+		{
+			stopTimer();
+		}
+		else
+		{
+			x += dir * velX;
+		}
+	}
+
+	if (velY < 0)
+	{
+		if (yUp())
+		{
+			y += velY;
+		}
+		else
+		{
+			velY = 2 * VELOCITY;
+		}
+	}
+	else if (velY > 0)
+	{
+		if (yDown())
+		{
+			y += velY;
+		}
+		else
+		{
+			velY = -2 * VELOCITY;
+		}
+	}
+}
 
 bool Attack::xRight()
 {

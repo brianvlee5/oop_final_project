@@ -22,12 +22,14 @@ public:
 
 	void startTimerLine(Uint32 t);
 	void startTimerParabola(Uint32 t);
+	void startTimerBounce(Uint32 t);
 	Uint32 getTime();
 	void stopTimer();
 
 	void move();
 	void setdetectCorner();
 	void moveOrNot();
+	void moveWithBounce();
 	bool xRight();
 	bool xLeft();
 	bool yUp();
@@ -50,6 +52,7 @@ private:
 	Uint32 time;
 	static Uint32 changeDataLine(Uint32 interval, void* param);
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
+	static Uint32 changeDataBounce(Uint32 interval, void* param);
 	bool shownFlag;
 	bool mapFlag;
 	int Mapnum;
@@ -60,4 +63,5 @@ private:
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
 };
+
 

@@ -390,7 +390,7 @@ void Attack::collision_mons(std::vector<Monster>& mv)
 				printf("%d HP remain: %d\n", i, mv[i].getHP());
 				if (mv[i].getHP() > 0)
 				{
-					mv[i].startCD(300);
+					mv[i].startCD(200);
 				}
 				else
 				{

@@ -12,6 +12,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	deadFlag = false;
 	mapnum = 0;
 	Maxhp = 30;
+	shownFlag = true;
 	for (int i = 0; i < num; i++)
 	{
 
@@ -89,6 +90,7 @@ Uint32 Monster::damaged(Uint32 interval, void* param)
 	Monster* p = (Monster*)param;
 	if (p->damageCD<6)
 	{
+		p->setShownFlag(!p->getShownFlag());
 		p->damageCD++;
 		return interval;
 	}
@@ -131,6 +133,16 @@ void Monster::setDeadFlag(bool f)
 bool Monster::getDeadFlag()
 {
 	return deadFlag;
+}
+
+void Monster::setShownFlag(bool f)
+{
+	shownFlag = f;
+}
+
+bool Monster::getShownFlag()
+{
+	return shownFlag;
 }
 
 void Monster::setcdFlag(bool f)
@@ -180,9 +192,12 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	{
 		s = NULL;
 	}
-	thickLineColor(renderer, d->x, d->y, d->x+d->w, d->y, 4, 0x987654FF);
-	thickLineRGBA(renderer, d->x, d->y, d->x + d->w*health/Maxhp, d->y, 4, 0x00, 0x80, 0x00, 0xff);
-	SDL_RenderCopy(renderer, texture[frame], s, d);
+	thickLineColor(renderer, d->x, d->y, d->x+d->w, d->y, 3, 0x987654FF);
+	thickLineRGBA(renderer, d->x, d->y, d->x + d->w*health/Maxhp, d->y, 3, 0x00, 0x80, 0x00, 0xff);
+	if (shownFlag)
+	{
+		SDL_RenderCopy(renderer, texture[frame], s, d);
+	}
 }
 /*
 void Monster::draw()

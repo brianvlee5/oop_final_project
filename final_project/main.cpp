@@ -29,12 +29,12 @@ int main(int argc, char* args[])
 		return -1;
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
-	const int num=6;
+	const int num = 6;
 	Coordinate coord, coo[num], enemycord[3], enemyhp[3];
 	vector<Monster> monsv;
 	SDL_RendererFlip no = SDL_FLIP_NONE;
-	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60,  TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW/2-150, WINDOWH/2 }, { NULL, NULL }, NULL, no, 100);
-	
+	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, no, 100);
+
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
@@ -53,11 +53,11 @@ int main(int argc, char* args[])
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
 
-	
 
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
+	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 6
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum() ].y);
 	SDL_Event e;
 
@@ -80,6 +80,8 @@ int main(int argc, char* args[])
 			attackKeyboard(e, fire, pan);
 		}
 		
+		window.clear();
+		window.setVP(-1);
 		pan.move();
 		
 		for (int i = 0; i < 3; i++)
@@ -91,8 +93,6 @@ int main(int argc, char* args[])
 		demo1.changemap(pan, monsv);
 
 
-		window.clear();
-		window.setVP(-1);
 		coord.calMapCamera(demo1, pan);
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
@@ -147,6 +147,9 @@ int main(int argc, char* args[])
 			
 			break;
 		}
+		window.setVP(8);
+		demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+		filledCircleColor(window.getRenderer(), (pan.getX()+pan.getWidth()/2) / 24, (pan.getY() + pan.getHeight() / 2) / 16, 2, 0xFF0000FF);
 		window.display();
 	}
 	SDL_DestroyTexture(texture);

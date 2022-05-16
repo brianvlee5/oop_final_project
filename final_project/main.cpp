@@ -30,7 +30,7 @@ int main(int argc, char* args[])
 	}
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
 	const int num=6;
-	Coordinate coord, coo[num], enemycord[3];
+	Coordinate coord, coo[num], enemycord[3], enemyhp[3];
 	vector<Monster> monsv;
 	SDL_RendererFlip no = SDL_FLIP_NONE;
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60,  TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW/2-150, WINDOWH/2 }, { NULL, NULL }, NULL, no, 100);
@@ -135,7 +135,7 @@ int main(int argc, char* args[])
 			h.draw({h.getWidth()/2, 0, h.getWidth()/2, h.getWidth()}, {ALLREGION});
 		}
 		for (int i = 0; i < pan.getHP(); i++) {
-			window.setVP(i);
+			window.setVP(i);		
 			h.draw();
 		}
 		window.setVP(-1);

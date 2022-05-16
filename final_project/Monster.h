@@ -24,6 +24,7 @@ public:
 	int getX() const;
 	int getY() const;
 	int getHP();
+	int getMaxHP();
 	int getMapnum();
 	void setHP(int hp);
 	void setVX(int x);
@@ -81,4 +82,5 @@ private:
 
 	int health;
 	int damageCD;
+	int Maxhp;
 };

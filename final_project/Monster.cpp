@@ -11,6 +11,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	health = 30;
 	deadFlag = false;
 	mapnum = 0;
+	Maxhp = 30;
 	for (int i = 0; i < num; i++)
 	{
 
@@ -179,7 +180,8 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	{
 		s = NULL;
 	}
-
+	thickLineColor(renderer, d->x, d->y, d->x+d->w, d->y, 4, 0x987654FF);
+	thickLineRGBA(renderer, d->x, d->y, d->x + d->w*health/Maxhp, d->y, 4, 0x00, 0x80, 0x00, 0xff);
 	SDL_RenderCopy(renderer, texture[frame], s, d);
 }
 /*
@@ -504,6 +506,10 @@ int Monster::getHP()
 }
 int Monster::getVY() {
 	return velY;
+}
+int Monster::getMaxHP()
+{
+	return Maxhp;
 }
 void Monster::setHP(int hp)
 {

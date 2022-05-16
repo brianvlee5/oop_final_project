@@ -53,6 +53,8 @@ public:
 	bool getcdFlag();
 	void setDeadFlag(bool f);
 	bool getDeadFlag();
+	void setShownFlag(bool f);
+	bool getShownFlag();
 private:
 	char path[100];
 	int num;
@@ -76,6 +78,7 @@ private:
 	bool jumpFlag;
 	bool cdFlag;
 	bool deadFlag;
+	bool shownFlag;
 	int AImode;
 	int WANDERmode;
 	int mapnum;

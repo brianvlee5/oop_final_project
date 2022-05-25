@@ -25,4 +25,5 @@
 #include "Attack.h"
 #include "Image.h"
 #include "Monster.h"
+#include "MonsterA.h"
 #include "MonsterP.h"

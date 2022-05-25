@@ -31,20 +31,15 @@ int main(int argc, char* args[])
 	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
 	const int num = 6;
 	Coordinate coord, coo[num], enemycord[3], enemyhp[3];
-	vector<Monster> monsv;
+	vector<MonsterA> monsv;
 	SDL_RendererFlip no = SDL_FLIP_NONE;
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, no, 100);
 
 	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	AnimeObject2 p("../images/panda.png", window.getRenderer());
-	Attack fire[num] = { Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire2.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire2.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00),
-					   Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00)
-	};
+	vector<Attack> fire(6, Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00));
+	
 	vector<Object> heart;
 	Object h("../images/heart.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	h.setPosition(0, 0);
@@ -63,7 +58,7 @@ int main(int argc, char* args[])
 
 	for (int i = 0; i < 3; i++)
 	{
-		Monster enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		MonsterA enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
 		monsv.push_back(enemy);
 	}

@@ -3,7 +3,7 @@
 #include "StaticObject.h"
 #include "AnimeObject.h"
 #include "AnimeObject2.h"
-#include "Monster.h"
+#include "MonsterA.h"
 #include <vector>
 #include "SDL_image.h" 
 #include <stdio.h>
@@ -25,7 +25,7 @@ class Map
 		void setcamera(AnimeObject&);
 		void setcamera(AnimeObject2 &mainch);
 		SDL_Rect getcamera();
-		void changemap(AnimeObject2&, std::vector<Monster>&);
+		void changemap(AnimeObject2&, std::vector<MonsterA>&);
 		void setmapnum(int);
 		int getmapnum();
 

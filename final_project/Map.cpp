@@ -101,7 +101,7 @@ SDL_Rect Map::getcamera(StaticObject mainch)
 	return camera;
 }
 
-void Map::changemap(AnimeObject2& mainch, std::vector<Monster>& mv)
+void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 {
 	if (mainch.getMapFlag())
 	{

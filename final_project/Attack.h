@@ -4,7 +4,7 @@
 #include "constants.h"
 #include <math.h>
 #include "tile.h"
-#include "Monster.h"
+#include "MonsterA.h"
 #include <vector>
 
 class Attack :
@@ -35,7 +35,7 @@ public:
 	bool yUp();
 	bool yDown();
 
-	void collision_mons(std::vector<Monster>&);
+	void collision_mons(std::vector<MonsterA>&);
 
 	void setMapFlag(bool f);
 	bool getMapFlag();

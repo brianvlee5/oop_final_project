@@ -374,7 +374,7 @@ void Attack::setVx(int vxx)
 }
 
 
-void Attack::collision_mons(std::vector<Monster>& mv)
+void Attack::collision_mons(std::vector<MonsterA>& mv)
 {
 	for (int i = 0; i < mv.size(); i++)
 	{

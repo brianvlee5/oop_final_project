@@ -47,7 +47,8 @@ public:
 	bool yDown();
 	void setJumpFlag(bool f);
 	void collisionAABB(AnimeObject2&);
-	void AIstart(AnimeObject2&);
+	int getDPX(int a, int b);
+	int getDPY(int a, int b);
 
 	void setcdFlag(bool f);
 	bool getcdFlag();
@@ -79,8 +80,7 @@ private:
 	bool cdFlag;
 	bool deadFlag;
 	bool shownFlag;
-	int AImode;
-	int WANDERmode;
+	
 	int mapnum;
 
 	int health;

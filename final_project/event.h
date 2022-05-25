@@ -6,7 +6,7 @@
 #include <math.h>
 #include "constants.h"
 int toward;
-void attackKeyboard(SDL_Event e, Attack *a, AnimeObject2& p) {
+void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)

@@ -1,2 +1,20 @@
-﻿  Monster.cpp
+﻿  AnimeObject.cpp
+  AnimeObject2.cpp
+  Attack.cpp
+  Coordinate.cpp
+  Image.cpp
+  main.cpp
+  Map.cpp
+  Mixer.cpp
+  Monster.cpp
+  MonsterA.cpp
+  Object.cpp
+  RenderWindow.cpp
+C:\Users\User\Desktop\final_project\final_project\RenderWindow.cpp(83,22): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  StaticObject.cpp
+C:\Users\User\Desktop\final_project\final_project\StaticObject.cpp(59,14): warning C4101: 's': unreferenced local variable
+  Text.cpp
+  Generating Code...
+C:\Users\User\Desktop\final_project\final_project\Attack.cpp(125): warning C4715: 'Attack::changeDataParabola': not all control paths return a value
+C:\Users\User\Desktop\final_project\final_project\Attack.cpp(146): warning C4715: 'Attack::changeDataBounce': not all control paths return a value
   final_project.vcxproj -> C:\Users\User\Desktop\final_project\x64\Debug\final_project.exe

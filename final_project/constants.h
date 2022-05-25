@@ -25,6 +25,7 @@
 #define WALLR 1
 #define PLATFORMLB 2
 #define PLATFORMRB 3
+#define FLOOR 4
 
 //for music
 #define MUSIC 10

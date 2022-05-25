@@ -274,66 +274,7 @@ void Monster::setdetectCorner(SDL_Rect mc)
 	}
 }*/
 
-void Monster::AIstart(AnimeObject2 &mainch)
-{
-	if (fabs(x - mainch.getX()) < 100 || fabs(y - mainch.getY()) < 100)
-		AImode = TRACE;
-	else
-		AImode = WANDER;
 
-	switch (AImode)
-	{
-		case TRACE:
-		{
-			if (x - mainch.getX() < 0)
-			{
-				setVX(2);
-				if (tile[mapnum][detectCornerX[1][1] - 1][detectCornerX[1][0]] == 0&&(tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1))
-					jumpFlag = 1;
-			}	
-			else if (x - mainch.getX() > 0)
-			{
-				setVX(-2);
-				if (tile[mapnum][detectCornerX[2][1] - 1][detectCornerX[2][0]] == 0&&(tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1))
-					jumpFlag = 1;
-			}	
-			else
-				setVX(0);	
-			break;
-		}
-		case WANDER:
-		{
-			if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 1)
-				WANDERmode = PLATFORMLB;
-			else if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 1 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
-				WANDERmode = PLATFORMRB;
-			else if (tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
-				WANDERmode = WALLR;	
-			else if (tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 1 || tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 1)
-				WANDERmode = WALLL;				
-
-			switch (WANDERmode)
-			{
-				case WALLL:
-					setVX(2);
-					break;
-				case WALLR:
-					setVX(-2);
-					break;
-				case PLATFORMLB:
-					setVX(2);
-					break;
-				case PLATFORMRB:
-					setVX(-2);
-					break;
-			}
-			break;
-		}
-	}
-	
-	move();
-	
-}
 
 void Monster::collisionAABB(AnimeObject2& mainch)
 {
@@ -542,4 +483,12 @@ void Monster::setVX(int xx) {
 void Monster::setJumpFlag(bool f)
 {
 	jumpFlag = f;
+}
+int Monster::getDPX(int a, int b)
+{
+	return detectCornerX[a][b];
+}
+int Monster::getDPY(int a, int b)
+{
+	return detectCornerY[a][b];
 }

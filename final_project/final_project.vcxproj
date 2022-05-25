@@ -151,6 +151,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MonsterA.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="StaticObject.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="MonsterA.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="StaticObject.h" />

@@ -7,6 +7,7 @@
 class Object
 {
 public:
+	/******Initialization******/
 	Object();
 	Object(const char* path, SDL_Renderer* ren);
 	Object(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
@@ -21,6 +22,9 @@ public:
 
 	int getX();
 	int getY();
+	void setVy(int vyy);
+	void setVx(int vxx);
+
 	void setCenterAngle(SDL_Point c, double a);
 	void setFlip(SDL_RendererFlip f);
 	void setAlpha(int a);
@@ -50,6 +54,8 @@ protected:
 	int num;
 	int x;
 	int y;
+	int velX;
+	int velY;
 	Image* image; // Wanting to set data in Image, 
 				  // we have to use loop to set every image[frame]
 

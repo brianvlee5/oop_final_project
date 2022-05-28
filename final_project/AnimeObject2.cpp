@@ -29,21 +29,21 @@ AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, 
 void AnimeObject2::initialize()
 {
 	Mapnum = 0;
-	shownflag = true;
+	shownFlag = true;
 	health = MAXHP;
 	deadFlag = false;
 }
 
 void AnimeObject2::draw()
 {
-	if (shownflag)
+	if (shownFlag)
 		Object::draw();
 }
 /*
 void AnimeObject2::draw(SDL_Rect src)
 {
 
-	if (shownflag)
+	if (shownFlag)
 	{
 		image[frame].setSrcRegion(src);
 		image[frame].draw();
@@ -53,7 +53,7 @@ void AnimeObject2::draw(SDL_Rect src)
 void AnimeObject2::draw(SDL_Rect dst)
 {
 
-	if (shownflag)
+	if (shownFlag)
 	{
 		image[frame].setDstRegion(dst);
 		image[frame].draw();
@@ -62,7 +62,7 @@ void AnimeObject2::draw(SDL_Rect dst)
 */
 void AnimeObject2::draw(SDL_Rect src, SDL_Rect dst)
 {
-	if (shownflag)
+	if (shownFlag)
 	{
 		Object::draw(src, dst);
 	}
@@ -76,12 +76,12 @@ void AnimeObject2::setMapnum(int n)
 
 void AnimeObject2::setShownFlag(bool f)
 {
-	shownflag = f;
+	shownFlag = f;
 }
 
 bool AnimeObject2::getShownFlag()
 {
-	return shownflag;
+	return shownFlag;
 }
 
 void AnimeObject2::startFrameTimer(Uint32 t)
@@ -113,8 +113,8 @@ void AnimeObject2::startHurt(Uint32 t)
 {
 	hurtt = t;
 	invincet = 0;
-	shownflag = true;
-	invinceflag = true;
+	shownFlag = true;
+	invinceFlag = true;
 	HurtID = SDL_AddTimer(hurtt, invincible, this);
 }
 
@@ -241,12 +241,12 @@ bool AnimeObject2::getDeadFlag()
 
 void AnimeObject2::setIVFlag(bool f)
 {
-	invinceflag = f;
+	invinceFlag = f;
 }
 
 bool AnimeObject2::getIVFlag()
 {
-	return invinceflag;
+	return invinceFlag;
 }
 
 void AnimeObject2::setHP(int hp)
@@ -332,19 +332,6 @@ void AnimeObject2::moveOrNot()
 	}
 }
 
-
-int AnimeObject2::getVY() {
-	return velY;
-}
-void AnimeObject2::setVY(int vvy) {
-	velY = vvy;
-}
-int AnimeObject2::getVX() {
-	return velX;
-}
-void AnimeObject2::setVX(int vvx) {
-	velX = vvx;
-}
 void AnimeObject2::setJumpFlag(bool f)
 {
 	jumpFlag = f;

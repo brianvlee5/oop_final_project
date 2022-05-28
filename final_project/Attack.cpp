@@ -340,14 +340,6 @@ void Attack::setMapnum(int n)
 	Mapnum = n;
 	printf("%d\n", Mapnum);
 }
-void Attack::setShownFlag(bool b) 
-{
-	shownFlag = b;
-}
-bool Attack::getShownFlag() 
-{
-	return shownFlag;
-}
 
 void Attack::setDir(int d)
 {
@@ -359,15 +351,6 @@ void Attack::setDir(int d)
 
 }
 
-void Attack::setVy(int vyy)
-{
-	velY = vyy;
-}
-
-void Attack::setVx(int vxx)
-{
-	velX = vxx;
-}
 
 
 void Attack::collision_mons(std::vector<MonsterA>& mv)

@@ -12,6 +12,7 @@ class AnimeObject2 :
     public Object
 {
 public:
+	/******Initialization******/
 	AnimeObject2();
 	AnimeObject2(const char* path, SDL_Renderer* ren);
 	AnimeObject2(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
@@ -19,12 +20,8 @@ public:
 	AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void initialize();
 	
-	void setVX(int vvx);
-	void setVY(int vvy);
 	void setIVT(int ivt);
 	void setHP(int hp);
-	int  getVX();
-	int  getVY();
 	int getIVT();
 	int getHP();
 
@@ -41,18 +38,19 @@ public:
 	bool yUp();
 	bool yDown();
 
+	/*****Flag*****/
 	void setJumpFlag(bool f);  //flag 1
 	void setMapFlag(bool f);   //flag 2 (both static and anime need it, which should be added to base class)
-	void setShownFlag(bool f); //flag 3 (both static and anime need it, which should be added to base class)
-	void setIVFlag(bool f);    //flag 4
-	void setDeadFlag(bool f);  //flag 5
-	void setMapnum(int n);
-	int getMapnum();
+	void setIVFlag(bool f);    //flag 3
+	void setDeadFlag(bool f);  //flag 4
 	bool getIVFlag();
 	bool getMapFlag();
-	bool getShownFlag();       // (both static and anime need it, which should be added to base class)
 	bool getDeadFlag();
 
+	void setMapnum(int n);
+	int getMapnum();
+
+	/*****Timer*****/
 	void startFrameTimer(Uint32 t);
 	void stopFrameTimer();
 	void startHurt(Uint32 t);
@@ -60,15 +58,14 @@ public:
 
 private:
 
-	int velX;
-	int velY;
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
-	bool shownflag;			   // (both static and anime need it, which should be added to base class)
+
 	bool mapFlag;			   // (both static and anime need it, which should be added to base class)
-	bool invinceflag;
+	bool invinceFlag;
 	bool jumpFlag;
 	bool deadFlag;
+
 	int Mapnum;
 	int health;
 	SDL_TimerID timerID;

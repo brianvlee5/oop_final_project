@@ -11,6 +11,7 @@ class Attack :
     public Object
 {
 public:
+	/******Initialization******/
 	Attack();
 	Attack(const char* path, SDL_Renderer* ren);
 	Attack(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
@@ -18,6 +19,7 @@ public:
 	Attack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void initialize();
 
+	/*******Draw Function******/
 	void draw();
 	void draw_src(SDL_Rect src);
 	void draw_dst(SDL_Rect dst);
@@ -43,11 +45,8 @@ public:
 	void setMapFlag(bool f);
 	bool getMapFlag();
 	void setMapnum(int);
-	void setShownFlag(bool b);
-	bool getShownFlag();
+
 	void setDir(int);
-	void setVy(int vyy);
-	void setVx(int vxx);
 
 private:
 	SDL_Renderer* renderer;
@@ -56,13 +55,12 @@ private:
 	static Uint32 changeDataLine(Uint32 interval, void* param);
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
-	bool shownFlag;
+
 	bool mapFlag;
 	int Mapnum;
 	int ii;
 	int dir;
-	int velX;
-	int velY;
+
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];
 };

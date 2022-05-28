@@ -237,6 +237,20 @@ int Object::getY()
 {
 	return y;
 }
+void Object::setVx(int vxx)
+{
+	velX = vxx;
+}
+void Object::setVy(int vyy)
+{
+	velY = vyy;
+}
+int Object::getVX() {
+	return velX;
+}
+int Object::getVY() {
+	return velY;
+}
 void Object::setAlpha(int a)
 {
 	for (int i = 0; i < num; i++) {

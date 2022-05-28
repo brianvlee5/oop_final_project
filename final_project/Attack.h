@@ -13,12 +13,15 @@ class Attack :
 public:
 	Attack();
 	Attack(const char* path, SDL_Renderer* ren);
-	Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren);
-	Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
-	Attack set(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	Attack(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	Attack(const char* path, int n, SDL_Renderer* ren);
+	Attack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	void initialize();
+
 	void draw();
-	void draw(SDL_Rect d);
-//	void draw(SDL_Rect s, SDL_Rect d);
+	void draw_src(SDL_Rect src);
+	void draw_dst(SDL_Rect dst);
+	void draw(SDL_Rect src, SDL_Rect dst);
 
 	void startTimerLine(Uint32 t);
 	void startTimerParabola(Uint32 t);

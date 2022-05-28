@@ -9,12 +9,16 @@ class Object
 public:
 	Object();
 	Object(const char* path, SDL_Renderer* ren);
-	Object(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren);
-	Object(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	Object(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	Object(const char* path, int n, SDL_Renderer* ren);
+	Object(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
+	~Object();
+
 	void close();
 	void setPosition(int xx, int yy);
 	int getWidth();
 	int getHeight();
+
 	int getX();
 	int getY();
 	void setCenterAngle(SDL_Point c, double a);
@@ -23,31 +27,36 @@ public:
 	double getAngle();
 	int getAlpha();
 
-	void startTimer(Uint32 t);
-	void stopTimer();
+	void startFrameTimer(Uint32 t);
+	void stopFrameTimer();
 
 	/* New in this example*/
-	virtual void draw();  // change into virtual function
-	virtual ~Object();
+	void draw();
+	void draw_src(SDL_Rect src);
+	void draw_dst(SDL_Rect dst);
+	void draw(SDL_Rect src, SDL_Rect dst);
 	/*********************/
-	virtual void draw(SDL_Rect s, SDL_Rect d);
 
-	/* New in this example*/
+	void setMapFlag(bool f);   //flag 1
+	void setShownFlag(bool f); //flag 2
+	bool getShownFlag();
+
 protected:
-	SDL_Renderer* renderer; // change into protected data member
-	/*********************/
+	SDL_Renderer* renderer; 
+
+	bool shownFlag;
+
 	int frame;
 	int num;
 	int x;
 	int y;
-	int wn; // image number in width
-	int hn; // image number in height
-	Image image;
+	Image* image; // Wanting to set data in Image, 
+				  // we have to use loop to set every image[frame]
 
 private:
 
 	SDL_TimerID timerID;
 	Uint32 time;
-	static Uint32 changeData(Uint32 interval, void* param);
+	static Uint32 changeFrame(Uint32 interval, void* param);
 
 };

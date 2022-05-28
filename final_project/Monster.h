@@ -49,7 +49,7 @@ public:
 	void collisionAABB(AnimeObject2&);
 	int getDPX(int a, int b);
 	int getDPY(int a, int b);
-
+	virtual void AIstart(AnimeObject2&)=0;
 	void setcdFlag(bool f);
 	bool getcdFlag();
 	void setDeadFlag(bool f);

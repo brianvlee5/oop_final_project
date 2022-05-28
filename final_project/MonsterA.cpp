@@ -76,3 +76,31 @@ void MonsterA::AIstart(AnimeObject2& mainch)
 	move();
 
 }
+
+void MonsterA::StartWait(Uint32 t)
+{
+	int vel;
+	do 
+	{
+		vel = (rand() % 3 - 1) * 2;
+	} 
+	while (vel != 0);
+	setVX(vel);
+	WaitID = SDL_AddTimer(waitT, WaitaMoment, this);
+}
+
+Uint32 MonsterA::WaitaMoment(Uint32 interval, void* param)
+{
+	MonsterA* p = (MonsterA*)param;
+	if (p->waitTime>60 || p->xRight() || p->xLeft())
+	{
+		
+		return 0;
+	}
+	else
+	{
+		p->waitTime++;
+		p->move();
+		return interval;
+	}
+}

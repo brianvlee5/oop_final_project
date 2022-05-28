@@ -1,64 +1,67 @@
 #include "Attack.h"
 
-/* About Initialization */
 Attack::Attack()
 	: Object()
 {
-	initialize();
 }
 Attack::Attack(const char* path, SDL_Renderer* ren)
 	: Object(path, ren) 
-{
-	initialize();
-}
-Attack::Attack(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
-	: Object(path, ren, r, g, b)
-{
-	initialize();
-}
-Attack::Attack(const char* path, int n, SDL_Renderer* ren)
-	: Object(path, n, ren) 
-{
-	initialize();
-}
-Attack::Attack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
-	: Object(path, n, ren, r, g, b) 
-{
-	initialize();
-}
-void Attack::initialize()
 {
 	setShownFlag(false);
 	velX = velY = 0;
 	Mapnum = 0;
 }
-/************************/
 
-/* Draw Functions */
-void Attack::draw() 
+Attack::Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren)
+	: Object(path, n, hhn, wwn, ren) 
 {
-	if (shownFlag && ii) 
+	setShownFlag(false);
+	velX = velY = 0;
+	Mapnum = 0;
+}
+
+Attack::Attack(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+	: Object(path, n, hhn, wwn, ren, r, g, b) 
+{
+	setShownFlag(false);
+	velX = velY = 0;
+	Mapnum = 0;
+}
+
+Attack Attack::set(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+{
+	return Attack(path, n, hhn, wwn, ren, r, g, b);
+}
+
+void Attack::draw() {
+	if (shownFlag)
 		Object::draw();
 }
 
-void Attack::draw_src(SDL_Rect src)
+void Attack::draw(SDL_Rect d)
 {
-	if (shownFlag && ii)
-		Object::draw_src(src);
-}
-void Attack::draw_dst(SDL_Rect dst)
-{
-	if (shownFlag && ii)
-		Object::draw_dst(dst);
-}
 
-void Attack::draw(SDL_Rect src, SDL_Rect dst)
-{
-	if (shownFlag && ii)
-		Object::draw(src, dst);
-}
-/******************/
+	int wc = frame % wn;
+	int hc = frame / wn;
 
+	SDL_Rect s;
+	s.x = getWidth() * wc;
+	s.y = getHeight() * hc;
+	s.w = getWidth();
+	s.h = getHeight();
+
+	image.setSrcRegion(s);
+	image.setDstRegion(d);
+	
+	if (shownFlag && ii )
+		image.draw();
+}
+/*
+void Attack::draw(SDL_Rect s, SDL_Rect d) {
+	if(shownFlag)
+		Object::draw(s, d);
+}
+*/
 void Attack::startTimerLine(Uint32 t) {
 	ii = 0;
 	time = t;
@@ -340,6 +343,15 @@ void Attack::setMapnum(int n)
 	Mapnum = n;
 	printf("%d\n", Mapnum);
 }
+void Attack::setShownFlag(bool b) 
+{
+	shownFlag = b;
+}
+
+bool Attack::getShownFlag() 
+{
+	return shownFlag;
+}
 
 void Attack::setDir(int d)
 {
@@ -351,6 +363,15 @@ void Attack::setDir(int d)
 
 }
 
+void Attack::setVy(int vyy)
+{
+	velY = vyy;
+}
+
+void Attack::setVx(int vxx)
+{
+	velX = vxx;
+}
 
 
 void Attack::collision_mons(std::vector<MonsterA>& mv)

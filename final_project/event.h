@@ -99,7 +99,7 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		if (e.key.keysym.sym == SDLK_LEFT || e.key.keysym.sym == SDLK_RIGHT)
-			pooh.startTimer(150);
+			pooh.startFrameTimer(150);
 
 		switch (e.key.keysym.sym)
 		{
@@ -123,7 +123,7 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		pooh.stopTimer();
+		pooh.stopFrameTimer();
 		switch (e.key.keysym.sym)
 		{
 

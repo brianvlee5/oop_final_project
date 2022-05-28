@@ -2,8 +2,6 @@
 
 using namespace std;
 
-SDL_Texture* texture = NULL;
-
 void spacial_hash(const vector<Monster>& Mv, vector<vector<Monster>>& MvM)
 {
 	for (int i = 0; i < Mv.size(); i++)
@@ -32,28 +30,24 @@ int main(int argc, char* args[])
 	const int num = 6;
 	Coordinate coord, coo[num], enemycord[3], enemyhp[3];
 	vector<MonsterA> monsv;
-	SDL_RendererFlip no = SDL_FLIP_NONE;
-	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, no, 100);
+	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 
-	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	AnimeObject2 p("../images/panda.png", window.getRenderer());
-	vector<Attack> fire(6, Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00));
-	
+	//	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	vector<Attack> fire(6, Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
+
 	vector<Object> heart;
-	Object h("../images/heart.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	h.setPosition(0, 0);
 	for (int i = 0; i < pan.getHP(); i++) {
-		//		heart.push_back(h);
+		heart.push_back(h);
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
-
-
 
 	Map demo1;
 	demo1.set("../images/map/mapdemo", window.getRenderer());
 	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 6
-	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum() ].y);
+	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
 	SDL_Event e;
 
 	for (int i = 0; i < 3; i++)
@@ -66,7 +60,7 @@ int main(int argc, char* args[])
 	bool quit = false;
 	while (!quit)
 	{
-		
+
 		while (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
@@ -74,11 +68,11 @@ int main(int argc, char* args[])
 			poohKeyboard(e, pan);
 			attackKeyboard(e, fire, pan);
 		}
-		
+
 		window.clear();
 		window.setVP(-1);
 		pan.move();
-		
+
 		for (int i = 0; i < 3; i++)
 		{
 			if (!monsv[i].getDeadFlag())
@@ -91,12 +85,11 @@ int main(int argc, char* args[])
 		coord.calMapCamera(demo1, pan);
 		for (int i = 0; i < 6; i++)
 			coo[i].calMap(demo1, fire[i]);
-		
-				
+
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
-		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
-		
+		pan.draw({ NULL }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+
 		for (int i = 0; i < 3; i++)
 		{
 			if (!monsv[i].getDeadFlag())
@@ -108,11 +101,11 @@ int main(int argc, char* args[])
 
 		for (int i = 0; i < 3; i++)
 		{
-			if(!monsv[i].getDeadFlag())
+			if (!monsv[i].getDeadFlag())
 				monsv[i].collisionAABB(pan);
 		}
 
-		
+
 
 
 		for (int i = 0; i < 6; i++)
@@ -122,15 +115,16 @@ int main(int argc, char* args[])
 		}
 
 		for (int i = 0; i < num; i++)
-			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
+			fire[i].draw({ NULL }, { coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
 
-		
+
 		for (int i = 0; i < MAXHP; i++) {
 			window.setVP(i);
-			h.draw({h.getWidth()/2, 0, h.getWidth()/2, h.getWidth()}, {ALLREGION});
+			h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
 		}
+
 		for (int i = 0; i < pan.getHP(); i++) {
-			window.setVP(i);		
+			window.setVP(i);
 			h.draw();
 		}
 		window.setVP(-1);
@@ -139,26 +133,25 @@ int main(int argc, char* args[])
 			fail.draw();
 			window.display();
 			system("pause");
-			
+
 			break;
 		}
 		window.setVP(8);
-		demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-		filledCircleColor(window.getRenderer(), (pan.getX()+pan.getWidth()/2) / 24, (pan.getY() + pan.getHeight() / 2) / 16, 2, 0xFF0000FF);
+		demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { NULL });
+		filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 24, (pan.getY() + pan.getHeight() / 2) / 16, 2, 0xFF0000FF);
 		window.display();
 	}
-	SDL_DestroyTexture(texture);
 	pan.close();
 	demo1.close();
 
 	for (int i = 0; i < 3; i++)
 		monsv[i].close();
 
-	for(int i=0; i<num; i++)
+	for (int i = 0; i < num; i++)
 		fire[i].close();
 	window.close();
 	sdl.close();
-	
+
 
 	return 0;
 }

@@ -349,11 +349,11 @@ void Monster::move() {
 
 	if (jumpFlag)
 	{
-		velY = -10;
+		velY = -20;
 	}
 	else if (yDown())
 	{
-		if (velY <= 10)
+		if (velY <= 20)
 			velY += 1;
 	}
 	else

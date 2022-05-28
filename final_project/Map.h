@@ -29,8 +29,8 @@ class Map
 		void setmapnum(int);
 		int getmapnum();
 
-		startP startR[2];
-		startP startL[2];
+		startP startR[7];
+		startP startL[7];
 	private:
 		char path[100];
 		SDL_Texture* texture;

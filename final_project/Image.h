@@ -13,10 +13,7 @@ public:
 	void generateTexture();
 	void close();
 	void draw();
-	void draw_src(SDL_Rect src);
-	void draw_dst(SDL_Rect dst);
-	void draw(SDL_Rect src, SDL_Rect dst);
-	void draw(SDL_Renderer* renderer, SDL_Rect src, SDL_Rect dst, SDL_Point center, double angle, SDL_RendererFlip flip, int alpha);
+	void draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src, SDL_Point center, double angle, SDL_RendererFlip flip, int alpha);
 
 	int getWidth();
 	int getHeight();
@@ -25,9 +22,9 @@ public:
 
 	void setPath(const char* p);
 	void setColorKey(SDL_Color c);  // NO_TRANSPARENT_BG | {r,g,b,255}
-	void setRenderer(SDL_Renderer* ren);
-	void setSrcRegion(SDL_Rect src);
-	void setDstRegion(SDL_Rect dst);
+	void setRenderer(SDL_Renderer* r);
+	void setSrcRegion(SDL_Rect s);
+	void setDstRegion(SDL_Rect d);
 	void setCenterAngle(SDL_Point c, double a);
 	void setFlip(SDL_RendererFlip f);
 	void setAlpha(int a);

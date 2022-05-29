@@ -6,10 +6,10 @@ Map::Map()
 	mapnum = 0;
 	camera.h = CAMERAH;
 	camera.w = CAMERAW;
-	startR[0] = { 40*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
-	startR[1] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
-	startR[2] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
-	startR[3] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
+	startR[0] = { 58*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
+	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
+	startR[2] = { 58 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
+	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[4] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
 	startR[5] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
 	startR[6] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
@@ -18,9 +18,9 @@ Map::Map()
 	startL[1] = { 2 * WIDTH / MAPTILEX, 35 * HEIGHT / MAPTILEY };
 	startL[2] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
 	startL[3] = { 1 * WIDTH / MAPTILEX, 12 * HEIGHT / MAPTILEY };
-	startL[4] = { 5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
-	startL[5] = { 5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
-	startL[6] = { 5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startL[4] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startL[5] = { 3 * WIDTH / MAPTILEX, 2 * HEIGHT / MAPTILEY };
+	startL[6] = { 2 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY };
 }
 
 Map::Map(const char* path, SDL_Renderer* ren)
@@ -164,7 +164,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 	}
 	else if (mainch.getMapFlag())
 	{
-		if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 6)
+		if (tile[mapnum][(mainch.getY() ) * MAPTILEY / HEIGHT][(mainch.getX()) * MAPTILEX / WIDTH] == 6)
 		{
 			//clearing last map
 			SDL_DestroyTexture(texture);
@@ -202,7 +202,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				// Get rid of old loaded surface
 				SDL_FreeSurface(imgSurface);
 			}
-			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
+			mainch.setPosition(56 * WIDTH / MAPTILEX, 35 * HEIGHT / MAPTILEY);
 			for (int i = 0; i < mv.size(); i++)
 			{
 				mv[i].setDeadFlag(false);
@@ -258,7 +258,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
 			}
 		}
-		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 8)
+		else if (tile[mapnum][(mainch.getY()) * MAPTILEY / HEIGHT][(mainch.getX()) * MAPTILEX / WIDTH] == 8)
 		{
 			//clearing last map
 			SDL_DestroyTexture(texture);
@@ -296,7 +296,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				// Get rid of old loaded surface
 				SDL_FreeSurface(imgSurface);
 			}
-			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
+			mainch.setPosition(startR[getmapnum()].x, startR[getmapnum()].y);
 			for (int i = 0; i < mv.size(); i++)
 			{
 				mv[i].setDeadFlag(false);

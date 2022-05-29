@@ -1,12 +1,2 @@
-﻿  AnimeObject.cpp
-  AnimeObject2.cpp
-  Attack.cpp
-  Coordinate.cpp
-  Map.cpp
-  Monster.cpp
-  MonsterA.cpp
-  main.cpp
-  Generating Code...
-C:\Users\User\Desktop\final_project\final_project\Attack.cpp(125): warning C4715: 'Attack::changeDataParabola': not all control paths return a value
-C:\Users\User\Desktop\final_project\final_project\Attack.cpp(146): warning C4715: 'Attack::changeDataBounce': not all control paths return a value
+﻿  Map.cpp
   final_project.vcxproj -> C:\Users\User\Desktop\final_project\x64\Debug\final_project.exe

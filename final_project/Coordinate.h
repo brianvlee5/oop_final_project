@@ -12,10 +12,11 @@ class Coordinate
 {
 public:
 	Coordinate();
+
 	void calMapCamera(Map, AnimeObject&);
 	void calMapCamera(Map, AnimeObject2&);
 	void calMapCamera(Map, Monster&);
-	void calMap(Map, Attack&);
+	void calMapCamera(Map, Attack&);
 	int getpCX();
 	int getpCY();
 private:

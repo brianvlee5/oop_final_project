@@ -1,4 +1,10 @@
 #include "Image.h"
+#include "SDL_image.h" 
+#include <stdio.h>
+#include <SDL.h> // Using SDL
+#include <string.h>
+#include "constants.h"
+
 
 Image::Image()
 {
@@ -39,7 +45,7 @@ void Image::generateTexture()
 			// Set the color key (transparent pixel) in a surface.		
 			SDL_SetColorKey(imgSurface, true, SDL_MapRGB(imgSurface->format, colorKey.r, colorKey.g, colorKey.b));
 		}
-		
+
 		// Create texture from surface pixels	
 		texture = SDL_CreateTextureFromSurface(renderer, imgSurface);
 
@@ -67,7 +73,7 @@ void Image::close()
 
 void Image::draw()
 {
-	SDL_Rect *d = &dstRegion, *s = &srcRegion;
+	SDL_Rect* d = &dstRegion, * s = &srcRegion;
 
 	if (dstRegion.x == ALLREGION)
 	{
@@ -77,7 +83,7 @@ void Image::draw()
 	{
 		s = NULL;
 	}
-		
+
 
 	// Set and enable standard alpha blending mode for a texture	
 	if (SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND) == -1)
@@ -100,7 +106,29 @@ void Image::draw()
 	//SDL_RenderCopy(renderer, texture, s, d);
 }
 
-void Image::draw(SDL_Renderer* renderer, SDL_Rect dst, SDL_Rect src, SDL_Point center, double angle, SDL_RendererFlip flip, int alpha)
+void Image::draw_src(SDL_Rect src)
+{
+	setSrcRegion(src);
+
+	draw();
+}
+
+void Image::draw_dst(SDL_Rect dst)
+{
+	setDstRegion(dst);
+
+	draw();
+}
+
+void Image::draw(SDL_Rect src, SDL_Rect dst)
+{
+	setSrcRegion(src);
+	setDstRegion(dst);
+
+	draw();
+}
+// 用處不大 constructor時就已經set過
+void Image::draw(SDL_Renderer* renderer, SDL_Rect src, SDL_Rect dst, SDL_Point center, double angle, SDL_RendererFlip flip, int alpha)
 {
 	setSrcRegion(src);
 	setDstRegion(dst);
@@ -163,12 +191,9 @@ void Image::setAlpha(int a)
 	alpha = a;
 }
 
-double Image::getAngle()
-{
+double Image::getAngle() {
 	return angle;
 }
-
-int Image::getAlpha()
-{
+int Image::getAlpha() {
 	return alpha;
 }

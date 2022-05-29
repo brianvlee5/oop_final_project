@@ -1,22 +1,71 @@
 #include "AnimeObject2.h"
 
+AnimeObject2::AnimeObject2()
+	: Object()
+{
+	initialize();
+}
 AnimeObject2::AnimeObject2(const char* path, SDL_Renderer* ren)
-	:Object(path, ren)
+	: Object(path, ren)
 {
-
+	initialize();
 }
-AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren)
-	: Object(path, n, hhn, wwn, ren)
+AnimeObject2::AnimeObject2(const char* path, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+	: Object(path, ren, r, g, b)
 {
-
+	initialize();
 }
-AnimeObject2::AnimeObject2(const char* path, int n, int hhn, int wwn, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
-	: Object(path, n, hhn, wwn, ren, r, g, b)
+AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren)
+	: Object(path, n, ren)
+{
+	initialize();
+}
+AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+	: Object(path, n, ren, r, g, b)
+{
+	initialize();
+}
+
+void AnimeObject2::initialize()
 {
 	Mapnum = 0;
-	shownflag = true;
+	shownFlag = true;
 	health = MAXHP;
 	deadFlag = false;
+}
+
+void AnimeObject2::draw()
+{
+	if (shownFlag)
+		Object::draw();
+}
+/*
+void AnimeObject2::draw(SDL_Rect src)
+{
+
+	if (shownFlag)
+	{
+		image[frame].setSrcRegion(src);
+		image[frame].draw();
+	}
+}
+
+void AnimeObject2::draw(SDL_Rect dst)
+{
+
+	if (shownFlag)
+	{
+		image[frame].setDstRegion(dst);
+		image[frame].draw();
+	}
+}
+*/
+void AnimeObject2::draw(SDL_Rect src, SDL_Rect dst)
+{
+	if (shownFlag)
+	{
+		Object::draw(src, dst);
+	}
 }
 
 void AnimeObject2::setMapnum(int n)
@@ -25,17 +74,18 @@ void AnimeObject2::setMapnum(int n)
 	printf("%d\n", Mapnum);
 }
 
-void AnimeObject2::setShownFlag(bool f)
+void AnimeObject2::startFrameTimer(Uint32 t)
 {
-	shownflag = f;
+	time = t;
+	timerID = SDL_AddTimer(time, changeFrame, this);
 }
 
-bool AnimeObject2::getShownFlag()
+void AnimeObject2::stopFrameTimer()
 {
-	return shownflag;
+	time = 0;
 }
 
-Uint32 AnimeObject2::changeData(Uint32 interval, void* param)
+Uint32 AnimeObject2::changeFrame(Uint32 interval, void* param)
 {
 	AnimeObject2* p = (AnimeObject2*)param;
 	if (p->time != 0)
@@ -53,9 +103,14 @@ void AnimeObject2::startHurt(Uint32 t)
 {
 	hurtt = t;
 	invincet = 0;
-	shownflag = true;
-	invinceflag = true;
+	shownFlag = true;
+	invinceFlag = true;
 	HurtID = SDL_AddTimer(hurtt, invincible, this);
+}
+
+void AnimeObject2::stopHurtTimer()
+{
+	hurtt = 0;
 }
 
 Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
@@ -72,62 +127,18 @@ Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
 		p->setIVFlag(false);
 		return 0;
 	}
-		
 }
 
-void AnimeObject2::startTimer(Uint32 t)
-{
-	time = t;
-	timerID = SDL_AddTimer(time, changeData, this);
-}
-
-void AnimeObject2::stopTimer()
-{
-	time = 0;
-}
-
-void AnimeObject2::draw()
-{
-	Object::draw();
-}
-
-
-void AnimeObject2::draw(SDL_Rect d)
-{
-
-	if (shownflag)
-	{
-		int wc = frame % wn;
-		int hc = frame / wn;
-
-		SDL_Rect s;
-		s.x = getWidth() * wc;
-		s.y = getHeight() * hc;
-		s.w = getWidth();
-		s.h = getHeight();
-
-		image.setSrcRegion(s);
-		image.setDstRegion(d);
-
-		image.draw();
-	}
-}
-/*
-void AnimeObject2::draw(SDL_Rect s, SDL_Rect d)
-{
-	Object::draw(s, d);
-}
-*/
 void AnimeObject2::move() 
 {
 
 	if (jumpFlag)
 	{
-		velY = -12;
+		velY = -10;
 	}
 	else if (yDown())
 	{
-		if (velY <= 12)
+		if (velY <= 10)
 			velY += 1;
 	}
 	else
@@ -220,12 +231,12 @@ bool AnimeObject2::getDeadFlag()
 
 void AnimeObject2::setIVFlag(bool f)
 {
-	invinceflag = f;
+	invinceFlag = f;
 }
 
 bool AnimeObject2::getIVFlag()
 {
-	return invinceflag;
+	return invinceFlag;
 }
 
 void AnimeObject2::setHP(int hp)
@@ -311,19 +322,6 @@ void AnimeObject2::moveOrNot()
 	}
 }
 
-
-int AnimeObject2::getVY() {
-	return velY;
-}
-void AnimeObject2::setVY(int yy) {
-	velY = yy;
-}
-int AnimeObject2::getVX() {
-	return velX;
-}
-void AnimeObject2::setVX(int xx) {
-	velX = xx;
-}
 void AnimeObject2::setJumpFlag(bool f)
 {
 	jumpFlag = f;

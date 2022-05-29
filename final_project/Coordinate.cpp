@@ -32,7 +32,7 @@ void Coordinate::calMapCamera(Map m, Monster& mainch)
 
 }
 
-void Coordinate::calMap(Map m, Attack& mainch)
+void Coordinate::calMapCamera(Map m, Attack& mainch)
 {
 	SDL_Rect temp = m.getcamera();
 	printCamX = (mainch.getX() - temp.x);

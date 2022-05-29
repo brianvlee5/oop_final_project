@@ -32,8 +32,8 @@ class GSManager
 {
 public:
 	GSManager();
-	void startGame(RenderWindow& win);
-	void GamePlay(RenderWindow &window);
+	void startGame(RenderWindow& window);
+	void GamePlay(RenderWindow & window);
 	void setGameState(int gs);
 	int getGameState();
 private:

@@ -35,16 +35,19 @@ int main(int argc, char* args[])
 	SDL_RendererFlip no = SDL_FLIP_NONE;
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, no, 100);
 
-	AnimeObject panda("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	AnimeObject2 pan("../images/panda.png", 4, 1, 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	AnimeObject2 p("../images/panda.png", window.getRenderer());
-	vector<Attack> fire(6, Attack("../images/fire1.png", 1, 1, 1, window.getRenderer(), 0x00, 0x00, 0x00));
+
+	Attack aaa("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00);
+
+	vector<Attack> fire;
+	for (int i = 0; i < num; i++)
+		fire.push_back(aaa);
 	
-	vector<Object> heart;
-	Object h("../images/heart.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	
+	
+	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	h.setPosition(0, 0);
 	for (int i = 0; i < pan.getHP(); i++) {
-		//		heart.push_back(h);
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
 
@@ -90,20 +93,20 @@ int main(int argc, char* args[])
 
 
 		coord.calMapCamera(demo1, pan);
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < num; i++)
 			coo[i].calMap(demo1, fire[i]);
 		
 				
 
 		demo1.draw({ ALLREGION }, demo1.getcamera());
-		pan.draw({ coord.getpCX(),coord.getpCY(),pan.getWidth() / SHRINK ,pan.getHeight() / SHRINK });
+		pan.draw({ALLREGION}, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 		
 		for (int i = 0; i < 3; i++)
 		{
 			if (!monsv[i].getDeadFlag())
 			{
 				enemycord[i].calMapCamera(demo1, monsv[i]);
-				monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { NULL });
+				monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 			}
 		}
 
@@ -116,21 +119,21 @@ int main(int argc, char* args[])
 		
 
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < num; i++)
 		{
 			fire[i].collision_mons(monsv);
 			//printf("x: %d y: %d\n", fire[i].getX(), fire[i].getY());
 		}
 
 		for (int i = 0; i < num; i++)
-			fire[i].draw({ coo[i].getpCX(),coo[i].getpCY(),fire[i].getWidth(),fire[i].getHeight() });
+			fire[i].draw({ALLREGION}, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 
 		
 		for (int i = 0; i < MAXHP; i++) {
 			window.setVP(i);
-			h.draw({h.getWidth()/2, 0, h.getWidth()/2, h.getWidth()}, {ALLREGION});
+			h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
 		}
-		for (int i = 0; i < pan.getHP(); i++) {
+		for (int i = 0; i < pan.getHP()/2; i++) {
 			window.setVP(i);		
 			h.draw();
 		}

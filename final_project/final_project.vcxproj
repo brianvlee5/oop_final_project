@@ -145,6 +145,7 @@
     <ClCompile Include="AnimeObject.cpp" />
     <ClCompile Include="AnimeObject2.cpp" />
     <ClCompile Include="Attack.cpp" />
+    <ClCompile Include="GSManager.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="AnimeObject.h" />
     <ClInclude Include="AnimeObject2.h" />
     <ClInclude Include="Attack.h" />
+    <ClInclude Include="GSManager.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="event.h" />

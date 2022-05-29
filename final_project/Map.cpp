@@ -6,7 +6,7 @@ Map::Map()
 	mapnum = 0;
 	camera.h = CAMERAH;
 	camera.w = CAMERAW;
-	startR[0] = { 58*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
+	startR[0] = { 56*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
 	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
 	startR[2] = { 58 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
@@ -164,6 +164,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 	}
 	else if (mainch.getMapFlag())
 	{
+		//printf("%d\n", mainch.getMapFlag());
 		if (tile[mapnum][(mainch.getY() ) * MAPTILEY / HEIGHT][(mainch.getX()) * MAPTILEX / WIDTH] == 6)
 		{
 			//clearing last map

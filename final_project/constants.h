@@ -34,6 +34,10 @@
 #define ONE 0
 #define ALLCHANNEL -1
 
+//for GSM
+#define MAINMENU 0
+#define GAMEPLAY 1
+
 struct startP {
 	int x, y;
 };

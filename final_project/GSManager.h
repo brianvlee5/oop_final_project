@@ -9,7 +9,7 @@
 #include <SDL_ttf.h>
 #include "SDL2_gfxPrimitives.h"
 #include "SDL_image.h"
-//#include "event.h"
+#include "event.h"
 #include "Mixer.h"
 #include "Text.h"
 
@@ -22,9 +22,24 @@
 #include "AnimeObject.h"
 #include "AnimeObject2.h"
 #include "Coordinate.h"
-//#include "Attack.h"
+#include "Attack.h"
 #include "Image.h"
 #include "Monster.h"
 #include "MonsterA.h"
 #include "MonsterP.h"
-#include "GSManager.h"
+
+class GSManager
+{
+public:
+	GSManager();
+	void startGame(RenderWindow& win);
+	void GamePlay(RenderWindow &window);
+	void setGameState(int gs);
+	int getGameState();
+private:
+	
+	SDL_Event ev;
+	bool quit;
+	int GameState;
+};
+

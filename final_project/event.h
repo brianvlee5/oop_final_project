@@ -5,8 +5,8 @@
 #include "Attack.h"
 #include <math.h>
 #include "constants.h"
-int toward;
-void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
+static int toward;
+static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)
@@ -95,23 +95,23 @@ void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
 		}
 	}
 }
-void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
+static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		if (e.key.keysym.sym == SDLK_LEFT || e.key.keysym.sym == SDLK_RIGHT)
-			pooh.startFrameTimer(150);
+			pooh.startTimer(150);
 
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
 			toward = -1;
 			pooh.setFlip(SDL_FLIP_HORIZONTAL);
-			pooh.setVx(pooh.getVx() - VELOCITY);
+			pooh.setVX(pooh.getVX() - VELOCITY);
 			break;
 		case SDLK_RIGHT:
 			toward = 1;
 			pooh.setFlip(SDL_FLIP_NONE);
-			pooh.setVx(pooh.getVx() + VELOCITY);
+			pooh.setVX(pooh.getVX() + VELOCITY);
 			break;
 		case SDLK_SPACE:
 			pooh.setJumpFlag(1);
@@ -123,15 +123,15 @@ void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		pooh.stopFrameTimer();
+		pooh.stopTimer();
 		switch (e.key.keysym.sym)
 		{
 
 		case SDLK_LEFT:
-			pooh.setVx(pooh.getVx() + VELOCITY);
+			pooh.setVX(pooh.getVX() + VELOCITY);
 			break;
 		case SDLK_RIGHT:
-			pooh.setVx(pooh.getVx() - VELOCITY);
+			pooh.setVX(pooh.getVX() - VELOCITY);
 			break;
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);

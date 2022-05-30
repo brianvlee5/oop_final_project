@@ -5,7 +5,12 @@
 #include "Attack.h"
 #include <math.h>
 #include "constants.h"
+#include "GSManager.h"
+
 static int toward;
+
+
+
 static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -95,6 +100,7 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 		}
 	}
 }
+
 static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{

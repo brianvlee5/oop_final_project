@@ -34,6 +34,7 @@ public:
 	GSManager();
 	void startGame(RenderWindow& window);
 	void GamePlay(RenderWindow & window);
+	void MainMenu(RenderWindow& window);
 	void setGameState(int gs);
 	int getGameState();
 private:

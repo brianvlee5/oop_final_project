@@ -38,6 +38,9 @@
 #define MAINMENU 0
 #define GAMEPLAY 1
 
+//for gameplay state
+#define PLAY 0
+#define PAUSE 1
 struct startP {
 	int x, y;
 };

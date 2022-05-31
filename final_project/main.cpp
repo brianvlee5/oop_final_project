@@ -28,7 +28,7 @@ int main(int argc, char* args[])
 		printf("Failed to initialize SDL system!\n");
 		return -1;
 	}
-	RenderWindow window("Elden's rOng", 300, 170, WINDOWW, WINDOWH);
+	RenderWindow window("Elden's rOng", 120, 50, WINDOWW, WINDOWH);
 	GSManager gsm;
 
 	gsm.startGame(window);

@@ -41,6 +41,23 @@
 //for gameplay state
 #define PLAY 0
 #define PAUSE 1
+#define SAVE 2
+
+//for menu states
+#define MENU 0
+#define LOAD 1
+
+//for saves
+struct MapSave {
+	int mapnum;
+};
+
+struct MainchSave {
+	int mapnum;
+	int health;
+	int x, y;
+};
+
 struct startP {
 	int x, y;
 };

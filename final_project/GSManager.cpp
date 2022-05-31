@@ -32,23 +32,42 @@ static void pauseEvents(SDL_Event e, int& state, GSManager* gsm)
 		{
 			gsm->setGameState(MAINMENU);
 		}
+		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))
+		{
+
+		}
 	}
 }
 
-static void MenuEvents(SDL_Event e, GSManager* gsm)
+static void MenuEvents(SDL_Event e, GSManager* gsm, int &state)
 {
 	int x, y;
 
 	if (e.type == SDL_MOUSEBUTTONUP)
 	{
 		SDL_GetMouseState(&x, &y);
-		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))
+		switch (state)
 		{
-			gsm->setGameState(GAMEPLAY);
-		}
-		else if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))
-		{
-			
+			case MENU:
+			{
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))
+				{
+					gsm->setGameState(GAMEPLAY);
+				}
+				else if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))
+				{
+					state = LOAD;
+				}
+				break;
+			}
+			case LOAD:
+			{
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2+110) && y <= (WINDOWH / 2 + 150))
+				{
+					state = MENU;
+				}
+				break;
+			}
 		}
 	}
 }
@@ -84,23 +103,50 @@ void GSManager::startGame(RenderWindow& window)
 void GSManager::MainMenu(RenderWindow& window)
 {
 	Object mainmenu("../images/mapdemo1.png", window.getRenderer());
-	Text startNewGame("New Game", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text NewGame("New Game", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text Load("load", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 +45}, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text Back("back", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 +110}, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text Slot1("Slot1", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2  }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	
+	
+	int state = MENU;
+	
+	
 	while (!quit && GameState == MAINMENU)
 	{
 		while (SDL_PollEvent(&ev) != 0)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			MenuEvents(ev, this);
+			MenuEvents(ev, this, state);
 		}
 		window.clear();
 		mainmenu.draw({ALLREGION}, {ALLREGION});
-		startNewGame.draw();
+
+		switch (state)
+		{
+			case MENU:
+			{
+				NewGame.draw();
+				Load.draw();
+				break;
+			}
+			case LOAD:
+			{
+				Slot1.draw();
+				Back.draw();
+				break;
+			}
+		}
+		
 
 
 		window.display();
 	}
-	startNewGame.close();
+	Slot1.close();
+	Back.close();
+	Load.close();
+	NewGame.close();
 	mainmenu.close();
 }
 
@@ -113,6 +159,10 @@ void GSManager::GamePlay(RenderWindow& window)
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2-30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text menu("menu", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2+15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text save("save", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 -50 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text slot1("Slot1", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text back("back", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 75 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
@@ -261,8 +311,41 @@ void GSManager::GamePlay(RenderWindow& window)
 				window.setVP(-1);
 				resume.draw();
 				menu.draw();
+				save.draw();
 				window.display();
 				
+				break;
+			}
+			case SAVE:
+			{
+				demo1.draw({ ALLREGION }, demo1.getcamera());
+				pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+				for (int i = 0; i < 3; i++)
+				{
+					if (!monsv[i].getDeadFlag())
+					{
+						enemycord[i].calMapCamera(demo1, monsv[i]);
+						monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+					}
+				}
+				for (int i = 0; i < 6; i++)
+					fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+				for (int i = 0; i < MAXHP; i++) {
+					window.setVP(i);
+					h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+				}
+				for (int i = 0; i < pan.getHP(); i++) {
+					window.setVP(i);
+					h.draw();
+				}
+				window.setVP(8);
+				demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+				filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+
+				window.setVP(-1);
+				slot1.draw();
+				back.draw();
+				window.display();
 				break;
 			}
 		}

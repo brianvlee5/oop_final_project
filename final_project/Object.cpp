@@ -1,6 +1,7 @@
 #include "Object.h"
-Object::Object()
-{
+
+Object::Object() {
+
 }
 Object::Object(const char* path, SDL_Renderer* ren)
 {
@@ -83,9 +84,8 @@ Object::Object(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uin
 	frame = 0;
 	renderer = ren;
 }
-Object::~Object()
-{
-	close();
+Object::~Object() {
+
 }
 
 void Object::close()
@@ -115,7 +115,7 @@ int Object::getHeight()
 {
 	return image[frame].getHeight();
 }
-/* Draw Functions */
+
 void Object::draw()
 {
 	SDL_Rect d, s;
@@ -124,41 +124,8 @@ void Object::draw()
 	d.w = image[frame].getWidth();
 	d.h = image[frame].getHeight();
 
-	image[frame].draw({ ALLREGION }, d);
-}
-
-void Object::draw_src(SDL_Rect src) // shownFlag is supposed to be applied here 
-								// instead of the derived class
-{
-	SDL_Rect s;
-	if (src.x == ALLREGION) {
-		s.x = ALLREGION;
-	}
-	else {
-		s.x = src.x;
-		s.y = src.y;
-		s.w = src.w;
-		s.h = src.h;
-	}
-
-	image[frame].draw_src(s);
-}
-void Object::draw_dst(SDL_Rect dst)
-{
-	SDL_Rect d;
-	if (dst.x == ALLREGION) {
-		d.x = x;
-		d.y = y;
-		d.w = image[frame].getWidth();
-		d.h = image[frame].getHeight();
-	}
-	else {
-		d.x = dst.x;
-		d.y = dst.y;
-		d.w = dst.w;
-		d.h = dst.h;
-	}
-	image[frame].draw_dst(d);
+	if (shownFlag)
+		image[frame].draw({ ALLREGION }, d);
 }
 
 void Object::draw(SDL_Rect src, SDL_Rect dst)
@@ -185,9 +152,10 @@ void Object::draw(SDL_Rect src, SDL_Rect dst)
 		d.w = dst.w;
 		d.h = dst.h;
 	}
-	image[frame].draw(s, d);
+
+	if (shownFlag)
+		image[frame].draw(s, d);
 }
-/******************/
 
 Uint32 Object::changeFrame(Uint32 interval, void* param)
 {
@@ -196,13 +164,14 @@ Uint32 Object::changeFrame(Uint32 interval, void* param)
 	if (p->time != 0)
 	{
 		p->frame = (p->frame + 1) % p->num;  // image frame	
+		p->x = (p->x - 5 + WIDTH) % WIDTH; // iamge position
+
 		return interval;
 	}
 	else
 	{
 		return 0;
 	}
-
 }
 
 void Object::startFrameTimer(Uint32 t)
@@ -216,18 +185,13 @@ void Object::stopFrameTimer()
 	time = 0;
 }
 
-void Object::setCenterAngle(SDL_Point c, double a)
+void Object::setShownFlag(bool b)
 {
-	for (int i = 0; i < num; i++) {
-		image[i].setCenterAngle(c, a);
-	}
+	shownFlag = b;
 }
-
-void Object::setFlip(SDL_RendererFlip f)
+bool Object::getShownFlag()
 {
-	for (int i = 0; i < num; i++) {
-		image[i].setFlip(f);
-	}
+	return shownFlag;
 }
 int Object::getX()
 {
@@ -245,19 +209,24 @@ void Object::setVy(int vyy)
 {
 	velY = vyy;
 }
-void Object::setX(int xx)
-{
-	x = xx;
-}
-void Object::setY(int yy)
-{
-	y = yy;
-}
 int Object::getVx() {
 	return velX;
 }
 int Object::getVy() {
 	return velY;
+}
+void Object::setCenterAngle(SDL_Point c, double a)
+{
+	for (int i = 0; i < num; i++) {
+		image[i].setCenterAngle(c, a);
+	}
+}
+
+void Object::setFlip(SDL_RendererFlip f)
+{
+	for (int i = 0; i < num; i++) {
+		image[i].setFlip(f);
+	}
 }
 void Object::setAlpha(int a)
 {
@@ -265,20 +234,11 @@ void Object::setAlpha(int a)
 		image[i].setAlpha(a);
 	}
 }
-
-double Object::getAngle()
-{
-	return image[0].getAngle();
-}
 int Object::getAlpha()
 {
 	return image[0].getAlpha();
 }
-void Object::setShownFlag(bool b)
+double Object::getAngle()
 {
-	shownFlag = b;
-}
-bool Object::getShownFlag()
-{
-	return shownFlag;
+	return image[0].getAngle();
 }

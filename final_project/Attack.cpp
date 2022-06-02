@@ -40,7 +40,7 @@ void Attack::draw()
 	if (shownFlag && ii) 
 		Object::draw();
 }
-
+/*
 void Attack::draw_src(SDL_Rect src)
 {
 	if (shownFlag && ii)
@@ -51,7 +51,7 @@ void Attack::draw_dst(SDL_Rect dst)
 	if (shownFlag && ii)
 		Object::draw_dst(dst);
 }
-
+*/
 void Attack::draw(SDL_Rect src, SDL_Rect dst)
 {
 	if (shownFlag && ii)

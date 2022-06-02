@@ -22,8 +22,6 @@ public:
 
 	int getX();
 	int getY();
-	void setX(int xx);
-	void setY(int yy);
 	void setVy(int vyy);
 	void setVx(int vxx);
 	int getVx();
@@ -40,8 +38,8 @@ public:
 
 	/* New in this example*/
 	void draw();
-	void draw_src(SDL_Rect src);
-	void draw_dst(SDL_Rect dst);
+//	void draw_src(SDL_Rect src);
+//	void draw_dst(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 	/*********************/
 

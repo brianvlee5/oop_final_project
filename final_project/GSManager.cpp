@@ -195,6 +195,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	h.setShownFlag(true);
 	h.setPosition(0, 0);
 	
 	for (int i = 0; i < pan.getHP(); i++) 

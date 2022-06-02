@@ -21,8 +21,8 @@ public:
 
 	/*******Draw Function******/
 	void draw();
-	void draw_src(SDL_Rect src);
-	void draw_dst(SDL_Rect dst);
+//	void draw_src(SDL_Rect src);
+//	void draw_dst(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 
 	void startTimerLine(Uint32 t);

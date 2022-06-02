@@ -4,6 +4,7 @@
 
 Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 {
+	frame = 0;
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
@@ -183,11 +184,11 @@ void Monster::close()
 
 void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
-	//
-	//	if (dst.x == NULL)
-	//	{
-	//		d = NULL;
-	//	}
+	
+	if (dst.x == ALLREGION)
+	{
+		d = NULL;
+	}
 	if (src.x == ALLREGION)
 	{
 		s = NULL;
@@ -196,7 +197,10 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	thickLineRGBA(renderer, d->x, d->y, d->x + d->w*health/Maxhp, d->y, 3, 0x00, 0x80, 0x00, 0xff);
 	if (shownFlag)
 	{
-		SDL_RenderCopy(renderer, texture[frame], s, d);
+		if (SDL_RenderCopy(renderer, texture[frame], s, d) == -1)
+		{
+			printf("%s\n", SDL_GetError());
+		}
 	}
 }
 /*

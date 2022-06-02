@@ -37,6 +37,7 @@
 //for GSM
 #define MAINMENU 0
 #define GAMEPLAY 1
+#define LOADGAMEPLAY 2
 
 //for gameplay state
 #define PLAY 0

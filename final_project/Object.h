@@ -22,6 +22,8 @@ public:
 
 	int getX();
 	int getY();
+	void setX(int xx);
+	void setY(int yy);
 	void setVy(int vyy);
 	void setVx(int vxx);
 	int getVx();

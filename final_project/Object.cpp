@@ -245,6 +245,14 @@ void Object::setVy(int vyy)
 {
 	velY = vyy;
 }
+void Object::setX(int xx)
+{
+	x = xx;
+}
+void Object::setY(int yy)
+{
+	y = yy;
+}
 int Object::getVx() {
 	return velX;
 }

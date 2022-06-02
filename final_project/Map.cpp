@@ -358,6 +358,52 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 	
 }
 
+void Map::setmap(std::vector<MonsterA> mv)
+{
+	//clearing last map
+	SDL_DestroyTexture(texture);
+	//switch to next map
+	char file[100];
+	sprintf_s(file, 100, "%s%02d.png", path, mapnum + 1);
+
+	printf("%s%02d.png", path, mapnum);
+	SDL_Surface* imgSurface = IMG_Load(file);
+
+	if (imgSurface == NULL)
+	{
+		// Call IMG_GetError to get the error string.
+		printf("SDL_LoadBMP failed: %s\n", IMG_GetError());
+		exit(0);
+	}
+	else
+	{
+		// Create texture from surface pixels	
+		texture = SDL_CreateTextureFromSurface(renderer, imgSurface);
+
+		// Also, you can use IMG_LoadTexture() to replace IMG_Load and SDL_CreateTextureFromSurface
+		// texture = IMG_LoadTexture(renderer, path);
+
+		if (texture == NULL)
+		{
+			printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		}
+
+		width = imgSurface->w;
+		height = imgSurface->h;
+
+		// Get rid of old loaded surface
+		SDL_FreeSurface(imgSurface);
+	}
+
+	for (int i = 0; i < mv.size(); i++)
+	{
+		mv[i].setDeadFlag(false);
+		mv[i].setHP(30);
+		mv[i].setMapnum(mv[i].getMapnum() + 1);
+		mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
+	}
+}
+
 void Map::setmapnum(int n)
 {
 	mapnum = n;

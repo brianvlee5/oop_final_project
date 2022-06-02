@@ -188,7 +188,7 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	//	{
 	//		d = NULL;
 	//	}
-	if (src.x == NULL)
+	if (src.x == ALLREGION)
 	{
 		s = NULL;
 	}

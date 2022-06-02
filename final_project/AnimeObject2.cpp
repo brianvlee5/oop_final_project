@@ -134,11 +134,11 @@ void AnimeObject2::move()
 
 	if (jumpFlag)
 	{
-		velY = -10;
+		velY = -12;
 	}
 	else if (yDown())
 	{
-		if (velY <= 10)
+		if (velY <= 12)
 			velY += 1;
 	}
 	else

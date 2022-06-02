@@ -1,8 +1,10 @@
 #include "GSManager.h"
 
 //global functions
-static void pauseEvents(SDL_Event e, int& state, GSManager* gsm)
+static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2 &mch)
 {
+	MainchSave mchsave;
+	MapSave mapsave;
 	int x, y;
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -24,16 +26,31 @@ static void pauseEvents(SDL_Event e, int& state, GSManager* gsm)
 	if (e.type == SDL_MOUSEBUTTONUP)
 	{
 		SDL_GetMouseState(&x, &y);
-		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))
+		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//resume
 		{
 			state = PLAY;
 		}
-		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))
+		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))//menu
 		{
 			gsm->setGameState(MAINMENU);
 		}
-		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))
+		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 -80) && y <= (WINDOWH / 2 -30))//save
 		{
+			FILE *fsave;
+			fopen_s(&fsave, "../saves/slot1.dat", "wb");
+			if (!fsave)
+				printf("open file fail\n");
+
+			mchsave.health = mch.getHP();
+			mchsave.mapnum = mch.getMapnum();
+			mchsave.x = mch.getX();
+			mchsave.y = mch.getY();
+			mapsave.mapnum = mch.getMapnum();
+
+			fwrite(&mchsave, sizeof(MainchSave), 1, fsave);
+			fwrite(&mapsave, sizeof(mapsave), 1, fsave);
+			fclose(fsave);
+			state = PLAY;
 
 		}
 	}
@@ -42,6 +59,7 @@ static void pauseEvents(SDL_Event e, int& state, GSManager* gsm)
 static void MenuEvents(SDL_Event e, GSManager* gsm, int &state)
 {
 	int x, y;
+	
 
 	if (e.type == SDL_MOUSEBUTTONUP)
 	{
@@ -62,9 +80,13 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int &state)
 			}
 			case LOAD:
 			{
-				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2+110) && y <= (WINDOWH / 2 + 150))
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2+110) && y <= (WINDOWH / 2 + 150))//back
 				{
 					state = MENU;
+				}
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 ) && y <= (WINDOWH / 2 + 40))//slot1
+				{
+					gsm->setGameState(LOADGAMEPLAY);
 				}
 				break;
 			}
@@ -93,6 +115,11 @@ void GSManager::startGame(RenderWindow& window)
 			case GAMEPLAY:
 			{
 				GamePlay(window);
+				break;
+			}
+			case LOADGAMEPLAY:
+			{
+				LoadGamePlay(window);
 				break;
 			}
 
@@ -159,7 +186,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2-30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text menu("menu", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2+15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
-	Text save("save", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 -50 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text save("save", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 -80 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text slot1("Slot1", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text back("back", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 75 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	
@@ -170,7 +197,8 @@ void GSManager::GamePlay(RenderWindow& window)
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	h.setPosition(0, 0);
 	
-	for (int i = 0; i < pan.getHP(); i++) {
+	for (int i = 0; i < pan.getHP(); i++) 
+	{
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
 
@@ -201,7 +229,7 @@ void GSManager::GamePlay(RenderWindow& window)
 				quit = true;
 			poohKeyboard(ev, pan);
 			attackKeyboard(ev, fire, pan);
-			pauseEvents(ev, state, this);
+			pauseEvents(ev, this, state, pan);
 		}
 
 		switch (state)
@@ -348,6 +376,235 @@ void GSManager::GamePlay(RenderWindow& window)
 				window.display();
 				break;
 			}
+		}
+	}
+	pan.close();
+	demo1.close();
+	fail.close();
+	resume.close();
+	menu.close();
+
+	for (int i = 0; i < 3; i++)
+		monsv[i].close();
+
+	for (int i = 0; i < 6; i++)
+		fire[i].close();
+}
+
+void GSManager::LoadGamePlay(RenderWindow& window)
+{
+	int state = PLAY;
+	Coordinate coord, coo[6], enemycord[3], enemyhp[3];
+	vector<MonsterA> monsv;
+
+	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2 - 30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text menu("menu", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text save("save", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 - 80 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text slot1("Slot1", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+	Text back("back", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2 + 75 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
+
+
+	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+
+	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	h.setPosition(0, 0);
+
+	for (int i = 0; i < pan.getHP(); i++)
+	{
+		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
+	}
+
+
+
+	Map demo1;
+	demo1.set("../images/map/map", window.getRenderer());
+	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 6
+	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
+
+
+	for (int i = 0; i < 3; i++)
+	{
+		MonsterA enemy("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
+		monsv.push_back(enemy);
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	}
+
+	MainchSave mchsave;
+	MapSave mapsave;
+	FILE *fload;
+	fopen_s(&fload, "../saves/slot1.dat", "rb");
+	fread(&mchsave, sizeof(mchsave), 1, fload);
+	fread(&mapsave, sizeof(mapsave), 1, fload);
+	printf("mapnum: %d\n", mapsave.mapnum);
+	demo1.setmapnum(mapsave.mapnum);
+	pan.setMapnum(mchsave.mapnum);
+	pan.setHP(mchsave.health);
+	pan.setPosition(mchsave.x, mchsave.y);
+	fclose(fload);
+	demo1.setmap(monsv);
+
+	while (!quit && GameState == LOADGAMEPLAY)
+	{
+
+		while (SDL_PollEvent(&ev) != 0)
+		{
+			if (ev.type == SDL_QUIT)
+				quit = true;
+			poohKeyboard(ev, pan);
+			attackKeyboard(ev, fire, pan);
+			pauseEvents(ev, this, state, pan);
+		}
+
+		switch (state)
+		{
+		case PLAY:
+		{
+			window.clear();
+			window.setVP(-1);
+			pan.move();
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (!monsv[i].getDeadFlag())
+					monsv[i].AIstart(pan);
+				//monsv[i].StartWait(30);
+			}
+			demo1.setcamera(pan);
+			demo1.changemap(pan, monsv);
+
+
+			coord.calMapCamera(demo1, pan);
+			for (int i = 0; i < 6; i++)
+				coo[i].calMapCamera(demo1, fire[i]);
+
+
+
+			demo1.draw({ ALLREGION }, demo1.getcamera());
+			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (!monsv[i].getDeadFlag())
+				{
+					enemycord[i].calMapCamera(demo1, monsv[i]);
+					monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+				}
+			}
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (!monsv[i].getDeadFlag())
+					monsv[i].collisionAABB(pan);
+			}
+
+
+
+
+			for (int i = 0; i < 6; i++)
+			{
+				fire[i].collision_mons(monsv);
+				//printf("x: %d y: %d\n", fire[i].getX(), fire[i].getY());
+			}
+
+			for (int i = 0; i < 6; i++)
+				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+
+
+			for (int i = 0; i < MAXHP; i++) {
+				window.setVP(i);
+				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+			}
+			for (int i = 0; i < pan.getHP(); i++) {
+				window.setVP(i);
+				h.draw();
+			}
+			window.setVP(-1);
+			if (pan.getDeadFlag())
+			{
+				fail.draw();
+				window.display();
+				system("pause");
+
+				break;
+			}
+			window.setVP(8);
+			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.display();
+			break;
+		}
+		case PAUSE:
+		{
+			demo1.draw({ ALLREGION }, demo1.getcamera());
+			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			for (int i = 0; i < 3; i++)
+			{
+				if (!monsv[i].getDeadFlag())
+				{
+					enemycord[i].calMapCamera(demo1, monsv[i]);
+					monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+				}
+			}
+			for (int i = 0; i < 6; i++)
+				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			for (int i = 0; i < MAXHP; i++) {
+				window.setVP(i);
+				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+			}
+			for (int i = 0; i < pan.getHP(); i++) {
+				window.setVP(i);
+				h.draw();
+			}
+			window.setVP(8);
+			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+
+			window.setVP(-1);
+			resume.draw();
+			menu.draw();
+			save.draw();
+			window.display();
+
+			break;
+		}
+		case SAVE:
+		{
+			demo1.draw({ ALLREGION }, demo1.getcamera());
+			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			for (int i = 0; i < 3; i++)
+			{
+				if (!monsv[i].getDeadFlag())
+				{
+					enemycord[i].calMapCamera(demo1, monsv[i]);
+					monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+				}
+			}
+			for (int i = 0; i < 6; i++)
+				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			for (int i = 0; i < MAXHP; i++) {
+				window.setVP(i);
+				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+			}
+			for (int i = 0; i < pan.getHP(); i++) {
+				window.setVP(i);
+				h.draw();
+			}
+			window.setVP(8);
+			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+
+			window.setVP(-1);
+			slot1.draw();
+			back.draw();
+			window.display();
+			break;
+		}
 		}
 	}
 	pan.close();

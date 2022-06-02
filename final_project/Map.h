@@ -1,7 +1,5 @@
 #pragma once
 #include <SDL.h>
-#include "StaticObject.h"
-#include "AnimeObject.h"
 #include "AnimeObject2.h"
 #include "MonsterA.h"
 #include <vector>
@@ -21,8 +19,6 @@ class Map
 		void draw(SDL_Rect dst, SDL_Rect src);
 		int getWidth();
 		int getHeight();
-		SDL_Rect getcamera(StaticObject);
-		void setcamera(AnimeObject&);
 		void setcamera(AnimeObject2 &mainch);
 		SDL_Rect getcamera();
 		void changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv);

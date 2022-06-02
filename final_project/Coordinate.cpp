@@ -8,13 +8,6 @@ Coordinate::Coordinate()
 	printCamY = 0;
 }
 
-void Coordinate::calMapCamera(Map m, AnimeObject& mainch)
-{
-	SDL_Rect temp = m.getcamera();
-	printCamX = (mainch.getX() - temp.x);
-	printCamY = (mainch.getY() - temp.y);
-	
-}
 
 void Coordinate::calMapCamera(Map m, AnimeObject2& mainch)
 {

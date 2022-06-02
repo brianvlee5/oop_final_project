@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AnimeObject.cpp" />
     <ClCompile Include="AnimeObject2.cpp" />
     <ClCompile Include="Attack.cpp" />
     <ClCompile Include="Coordinate.cpp" />
@@ -155,12 +154,10 @@
     <ClCompile Include="MonsterA.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
-    <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimeObject.h" />
     <ClInclude Include="AnimeObject2.h" />
     <ClInclude Include="Attack.h" />
     <ClInclude Include="constants.h" />
@@ -175,7 +172,6 @@
     <ClInclude Include="MonsterA.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
-    <ClInclude Include="StaticObject.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="tile.h" />

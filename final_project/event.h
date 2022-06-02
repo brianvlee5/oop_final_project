@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL.h>
-#include "AnimeObject.h"
 #include "AnimeObject2.h"
 #include "Attack.h"
 #include <math.h>

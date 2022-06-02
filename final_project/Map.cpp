@@ -96,21 +96,6 @@ void Map::set(const char* pth, SDL_Renderer* ren)
 	
 }
 
-SDL_Rect Map::getcamera(StaticObject mainch)
-{
-	camera.x = (mainch.getX()+mainch.getWidth()/2/SHRINK  - camera.w);
-	camera.y = (mainch.getY()+mainch.getHeight()/2 / SHRINK - camera.h);
-	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
-	if (camera.x > WINDOWW - camera.w )
-		camera.x = WINDOWW - camera.w ;
-	if (camera.y > WINDOWH - camera.h )
-		camera.y = WINDOWH - camera.h ;
-	if (camera.x < 0)
-		camera.x = 0;
-	if (camera.y < 0)
-		camera.y = 0;
-	return camera;
-}
 
 void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 {
@@ -412,22 +397,6 @@ void Map::setmapnum(int n)
 int Map::getmapnum()
 {
 	return mapnum;
-}
-
-
-void Map::setcamera(AnimeObject& mainch)
-{
-	camera.x = (mainch.getX() + mainch.getWidth() / 2 / SHRINK - camera.w/2);
-	camera.y = (mainch.getY() + mainch.getHeight() / 2 / SHRINK - camera.h/2);
-	//camera.x = (int)(WIDTH * (WIDTH / (double)mainch.getX())) ;
-	if (camera.x > WIDTH - camera.w)
-		camera.x = WIDTH - camera.w;
-	if (camera.y > HEIGHT - camera.h)
-		camera.y = HEIGHT - camera.h;
-	if (camera.x < 0)
-		camera.x = 0;
-	if (camera.y < 0)
-		camera.y = 0;
 }
 
 void Map::setcamera(AnimeObject2& mainch)

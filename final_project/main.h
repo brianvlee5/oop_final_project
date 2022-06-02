@@ -18,8 +18,6 @@
 #include "System.h"
 #include "RenderWindow.h"
 #include "Map.h"
-#include "StaticObject.h"
-#include "AnimeObject.h"
 #include "AnimeObject2.h"
 #include "Coordinate.h"
 //#include "Attack.h"

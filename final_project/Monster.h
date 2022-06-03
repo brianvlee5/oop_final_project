@@ -33,7 +33,7 @@ public:
 	int getVX();
 	int getVY();
 	//	void draw(SDL_Renderer* renderer);
-	void draw(SDL_Rect dst, SDL_Rect src);
+	virtual void draw(SDL_Rect dst, SDL_Rect src);
 	void startTimer(Uint32 t);
 	void stopTimer();
 	void startCD(Uint32);
@@ -49,13 +49,15 @@ public:
 	void collisionAABB(AnimeObject2&);
 	int getDPX(int a, int b);
 	int getDPY(int a, int b);
-	virtual void AIstart(AnimeObject2&)=0;
+	virtual void AIstart(AnimeObject2&);
 	void setcdFlag(bool f);
 	bool getcdFlag();
 	void setDeadFlag(bool f);
 	bool getDeadFlag();
 	void setShownFlag(bool f);
 	bool getShownFlag();
+	SDL_Renderer* getRenderer();
+
 private:
 	char path[100];
 	int num;

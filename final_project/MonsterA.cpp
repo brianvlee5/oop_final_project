@@ -104,3 +104,20 @@ Uint32 MonsterA::WaitaMoment(Uint32 interval, void* param)
 		return interval;
 	}
 }
+
+void MonsterA::draw(SDL_Rect dst, SDL_Rect src) 
+{
+	SDL_Rect* d = &dst, * s = &src;
+
+	if (dst.x == ALLREGION)
+	{
+		d = NULL;
+	}
+	if (src.x == ALLREGION)
+	{
+		s = NULL;
+	}
+	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
+	thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
+	Monster::draw(dst, src);
+}

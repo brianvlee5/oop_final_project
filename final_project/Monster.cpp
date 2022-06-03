@@ -182,9 +182,10 @@ void Monster::close()
 	}
 }
 
+
 void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
-	
+
 	if (dst.x == ALLREGION)
 	{
 		d = NULL;
@@ -193,9 +194,8 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	{
 		s = NULL;
 	}
-	thickLineColor(renderer, d->x, d->y, d->x+d->w, d->y, 3, 0x987654FF);
-	thickLineRGBA(renderer, d->x, d->y, d->x + d->w*health/Maxhp, d->y, 3, 0x00, 0x80, 0x00, 0xff);
-	if (shownFlag)
+	
+	if (shownFlag && !getDeadFlag())
 	{
 		if (SDL_RenderCopy(renderer, texture[frame], s, d) == -1)
 		{
@@ -278,7 +278,11 @@ void Monster::setdetectCorner(SDL_Rect mc)
 	}
 }*/
 
+void Monster::AIstart(AnimeObject2& mainch)
+{
+	
 
+}
 
 void Monster::collisionAABB(AnimeObject2& mainch)
 {
@@ -495,4 +499,8 @@ int Monster::getDPX(int a, int b)
 int Monster::getDPY(int a, int b)
 {
 	return detectCornerY[a][b];
+}
+SDL_Renderer* Monster::getRenderer()
+{
+	return renderer;
 }

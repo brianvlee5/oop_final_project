@@ -202,7 +202,7 @@ void GSManager::MainMenu(RenderWindow& window)
 void GSManager::GamePlay(RenderWindow& window)
 {
 	int state=0;
-	Coordinate coord, coo[6], enemycord[3], enemyhp[3];
+	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord;
 	vector<MonsterA> monsv;
 
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
@@ -214,6 +214,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -242,7 +243,9 @@ void GSManager::GamePlay(RenderWindow& window)
 	demo1.set("../images/map/map", window.getRenderer());
 	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
-
+	
+	thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
+	
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -307,6 +310,14 @@ void GSManager::GamePlay(RenderWindow& window)
 						monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 					}
 				}
+				
+				thekey.gotKey(pan);
+				if (demo1.getmapnum() == 3)
+				{
+					keycord.calMapCamera(demo1, thekey);
+					thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				}
+				
 
 				for (int i = 0; i < 3; i++)
 				{
@@ -353,6 +364,7 @@ void GSManager::GamePlay(RenderWindow& window)
 					prop.draw();
 					
 				}
+				
 				window.setVP(MAXHP + PROPNUM);
 				demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 				filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);

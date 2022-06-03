@@ -25,6 +25,7 @@
 #include "Monster.h"
 #include "MonsterA.h"
 #include "MonsterP.h"
+#include "MonsterI.h"
 
 class GSManager
 {

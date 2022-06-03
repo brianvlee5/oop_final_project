@@ -8,6 +8,7 @@ public:
     MonsterA(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
     void AIstart(AnimeObject2&);
     void StartWait(Uint32 t);
+    void draw(SDL_Rect dst, SDL_Rect src);
 private:
     SDL_TimerID WaitID;
     Uint32 waitT;

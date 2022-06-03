@@ -1,1 +1,5 @@
-﻿
+﻿  GSManager.cpp
+C:\Users\User\Desktop\final_project\final_project\GSManager.cpp(46,3): warning C4060: switch statement contains no 'case' or 'default' labels
+  Monster.cpp
+  Generating Code...
+  final_project.vcxproj -> C:\Users\User\Desktop\final_project\x64\Debug\final_project.exe

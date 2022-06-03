@@ -14,8 +14,8 @@ public:
 	Object(const char* path, int n, SDL_Renderer* ren);
 	Object(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	~Object();
-
 	void close();
+
 	void setPosition(int xx, int yy);
 	int getWidth();
 	int getHeight();
@@ -38,8 +38,6 @@ public:
 
 	/* New in this example*/
 	void draw();
-//	void draw_src(SDL_Rect src);
-//	void draw_dst(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 	/*********************/
 

@@ -59,6 +59,3 @@ struct MainchSave {
 	int x, y;
 };
 
-struct startP {
-	int x, y;
-};

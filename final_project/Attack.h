@@ -6,6 +6,7 @@
 #include "tile.h"
 #include "MonsterA.h"
 #include <vector>
+//#include "Coordinate.h"
 
 class Attack :
     public Object
@@ -21,8 +22,6 @@ public:
 
 	/*******Draw Function******/
 	void draw();
-//	void draw_src(SDL_Rect src);
-//	void draw_dst(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 
 	void startTimerLine(Uint32 t);
@@ -45,6 +44,7 @@ public:
 	void setMapFlag(bool f);
 	bool getMapFlag();
 	void setMapnum(int);
+	void setPause(bool f);
 
 	void setDir(int);
 
@@ -56,6 +56,7 @@ private:
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
 
+	bool pause;
 	bool mapFlag;
 	int Mapnum;
 	int ii;

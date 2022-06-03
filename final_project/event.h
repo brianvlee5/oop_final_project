@@ -6,8 +6,7 @@
 #include "constants.h"
 #include "GSManager.h"
 
-static int toward;
-
+static int toward=1;
 
 
 static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
@@ -89,12 +88,10 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_b:
-			a[0].setMapnum(p.getMapnum());
-			a[1].setMapnum(p.getMapnum());
-			a[2].setMapnum(p.getMapnum());
-			a[3].setMapnum(p.getMapnum());
-			a[4].setMapnum(p.getMapnum());
-			a[5].setMapnum(p.getMapnum());
+			for (int i = 0; i < a.size(); i++)
+			{
+				a[i].setMapnum(p.getMapnum());
+			}
 			break;
 		}
 	}

@@ -1,7 +1,7 @@
 #include "GSManager.h"
 
 //global functions
-static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2 &mch)
+static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2 &mch, vector<Attack> &atk)
 {
 	MainchSave mchsave;
 	MapSave mapsave;
@@ -11,7 +11,30 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2 &m
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			state = PAUSE;
+			if (state==PLAY)
+			{
+				for (int i = 0; i < atk.size(); i++)
+					atk[i].setPause(true);
+				state = PAUSE;
+			}
+			else if (state == PAUSE)
+			{
+				for (int i = 0; i < atk.size(); i++)
+					atk[i].setPause(false);
+				state = PLAY;
+			}
+			break;
+			/*
+		case SDLK_p:
+			if (state == PLAY)
+			{
+				state = BACKPACK;
+			}
+			else if (state == BACKPACK)
+			{
+				state = PLAY;
+			}
+			*/
 		}
 
 	}
@@ -93,7 +116,6 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int &state)
 		}
 	}
 }
-
 
 GSManager::GSManager()
 {
@@ -192,22 +214,33 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	vector<Object> prop_v;
+
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
-	
-	for (int i = 0; i < pan.getHP(); i++) 
+	for (int i = 0; i < MAXHP; i++) 
 	{
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
+	prop.setShownFlag(true);
+	prop.setPosition(0, 0);
+	for (int i = 0; i < PROPNUM; i++)
+	{
+		window.addVPregion({ {prop.getWidth() * i, h.getHeight() * 4 / 3, prop.getWidth() , prop.getHeight()} });
+	}
+	key.setShownFlag(true);
+	key.setPosition(0, 0);
 
+	prop_v.push_back(key);
 
 
 	Map demo1;
 	demo1.set("../images/map/map", window.getRenderer());
-	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 6
+	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
 
 
@@ -219,7 +252,10 @@ void GSManager::GamePlay(RenderWindow& window)
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		fire.push_back(Attack("../images/fire2.png",window.getRenderer(), 0xFF, 0xFF, 0xFF));
+		if(i==2||i==3)
+			fire.push_back(Attack("../images/fire2.png",window.getRenderer(), 0x00,0x00,0x00));
+		else
+			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00,0x00,0x00));
 	}
 	while (!quit && GameState==GAMEPLAY)
 	{
@@ -228,9 +264,12 @@ void GSManager::GamePlay(RenderWindow& window)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			poohKeyboard(ev, pan);
-			attackKeyboard(ev, fire, pan);
-			pauseEvents(ev, this, state, pan);
+			pauseEvents(ev, this, state, pan, fire);
+			if (state==PLAY)
+			{
+				poohKeyboard(ev, pan);
+				attackKeyboard(ev, fire, pan);
+			}
 		}
 
 		switch (state)
@@ -252,7 +291,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 
 				coord.calMapCamera(demo1, pan);
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < fire.size(); i++)
 					coo[i].calMapCamera(demo1, fire[i]);
 
 
@@ -278,14 +317,24 @@ void GSManager::GamePlay(RenderWindow& window)
 
 
 
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < fire.size(); i++)
 				{
 					fire[i].collision_mons(monsv);
-					//printf("x: %d y: %d\n", fire[i].getX(), fire[i].getY());
 				}
 
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < fire.size(); i++)
 					fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+
+
+				window.setVP(-1);
+				if (pan.getDeadFlag())
+				{
+					fail.draw();
+					window.display();
+					system("pause");
+
+					break;
+				}
 
 
 				for (int i = 0; i < MAXHP; i++) {
@@ -296,16 +345,15 @@ void GSManager::GamePlay(RenderWindow& window)
 					window.setVP(i);
 					h.draw();
 				}
-				window.setVP(-1);
-				if (pan.getDeadFlag())
+				for (int i = 0; i < PROPNUM; i++)
 				{
-					fail.draw();
-					window.display();
-					system("pause");
-
-					break;
+					window.setVP(MAXHP + i);
+					if(i==0)
+						prop_v[i].draw();
+					prop.draw();
+					
 				}
-				window.setVP(8);
+				window.setVP(MAXHP + PROPNUM);
 				demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 				filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 				window.display();
@@ -323,7 +371,7 @@ void GSManager::GamePlay(RenderWindow& window)
 						monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 					}
 				}
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < fire.size(); i++)
 					fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 				for (int i = 0; i < MAXHP; i++) {
 					window.setVP(i);
@@ -333,7 +381,12 @@ void GSManager::GamePlay(RenderWindow& window)
 					window.setVP(i);
 					h.draw();
 				}
-				window.setVP(8);
+				for (int i = 0; i < PROPNUM; i++)
+				{
+					window.setVP(MAXHP+i);
+					prop.draw();
+				}
+				window.setVP(MAXHP+ PROPNUM);
 				demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 				filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 				
@@ -357,7 +410,7 @@ void GSManager::GamePlay(RenderWindow& window)
 						monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 					}
 				}
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < fire.size(); i++)
 					fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 				for (int i = 0; i < MAXHP; i++) {
 					window.setVP(i);
@@ -367,7 +420,7 @@ void GSManager::GamePlay(RenderWindow& window)
 					window.setVP(i);
 					h.draw();
 				}
-				window.setVP(8);
+				window.setVP(MAXHP + 0);
 				demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 				filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 
@@ -377,6 +430,12 @@ void GSManager::GamePlay(RenderWindow& window)
 				window.display();
 				break;
 			}
+			/*
+			case BACKPACK:
+			{
+				break;
+			}
+			*/
 		}
 	}
 	pan.close();
@@ -433,7 +492,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0xFF, 0xFF, 0xFF));
+		fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
 	}
 
 	MainchSave mchsave;
@@ -459,7 +518,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				quit = true;
 			poohKeyboard(ev, pan);
 			attackKeyboard(ev, fire, pan);
-			pauseEvents(ev, this, state, pan);
+			pauseEvents(ev, this, state, pan, fire);
 		}
 
 		switch (state)
@@ -507,13 +566,13 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 
 
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < fire.size(); i++)
 			{
 				fire[i].collision_mons(monsv);
 				//printf("x: %d y: %d\n", fire[i].getX(), fire[i].getY());
 			}
 
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < fire.size(); i++)
 				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 
 
@@ -534,7 +593,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 				break;
 			}
-			window.setVP(8);
+			window.setVP(MAXHP + 0);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 			window.display();
@@ -562,7 +621,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				window.setVP(i);
 				h.draw();
 			}
-			window.setVP(8);
+			window.setVP(MAXHP + 0);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 
@@ -586,7 +645,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 					monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < fire.size(); i++)
 				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
@@ -596,7 +655,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				window.setVP(i);
 				h.draw();
 			}
-			window.setVP(8);
+			window.setVP(MAXHP + 0);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 

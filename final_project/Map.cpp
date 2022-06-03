@@ -6,7 +6,7 @@ Map::Map()
 	mapnum = 0;
 	camera.h = CAMERAH;
 	camera.w = CAMERAW;
-	startR[0] = { 58*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
+	startR[0] = { 57*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
 	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
 	startR[2] = { 58 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };

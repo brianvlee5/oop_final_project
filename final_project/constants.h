@@ -15,6 +15,7 @@
 #define SOLID 100
 #define SHADED 101
 #define BLENDED 102
+#define PROPNUM 6
 
 //AImode
 #define WANDER 0

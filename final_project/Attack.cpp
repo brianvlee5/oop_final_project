@@ -31,30 +31,19 @@ void Attack::initialize()
 	setShownFlag(false);
 	velX = velY = 0;
 	Mapnum = 0;
+	pause = false;
 }
 /************************/
 
 /* Draw Functions */
 void Attack::draw() 
 {
-	if (shownFlag && ii) 
+	if (ii) 
 		Object::draw();
 }
-/*
-void Attack::draw_src(SDL_Rect src)
-{
-	if (shownFlag && ii)
-		Object::draw_src(src);
-}
-void Attack::draw_dst(SDL_Rect dst)
-{
-	if (shownFlag && ii)
-		Object::draw_dst(dst);
-}
-*/
 void Attack::draw(SDL_Rect src, SDL_Rect dst)
 {
-	if (shownFlag && ii)
+	if (ii)
 		Object::draw(src, dst);
 }
 /******************/
@@ -86,9 +75,12 @@ Uint32 Attack::changeDataLine(Uint32 interval, void* param)
 	Attack* p = (Attack*)param;
 	if ( p->time != 0 && p->ii <= 30 )
 	{
-		p->ii++;
-		p->move();
-		return interval;
+		if (p->pause == false)
+		{
+			p->ii++;
+			p->move();
+			return interval;
+		}
 	}
 	else
 	{
@@ -102,17 +94,16 @@ Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
 	Attack* p = (Attack*)param;
 	if (p->time != 0 && p->ii <= 50)
 	{
-		if (p->ii <= 50)
+		if (p->pause == false)
 		{
 			p->ii++;
 			p->velY += 1;
 			p->move();
 			double angle = atan2(p->velY, p->dir * p->velX) * 180 / M_PI;
 //			printf("%lf\n", angle);
-			p->setCenterAngle({ p->getWidth()/2, p->getHeight()/2}, angle);
-
-			return interval;
+			p->setCenterAngle({ p->getWidth() / 2, p->getHeight() / 2 }, angle);
 		}
+			return interval;
 	}
 	else
 	{
@@ -124,16 +115,16 @@ Uint32 Attack::changeDataParabola(Uint32 interval, void* param)
 Uint32 Attack::changeDataBounce(Uint32 interval, void* param)
 {
 	Attack* p = (Attack*)param;
-	if (p->time != 0 && p->ii <= 120)
+	if (p->time != 0 && p->ii <= 70)
 	{
-		if (p->ii <= 120)
+		if (p->pause ==false)
 		{
 			p->ii++;
 			p->velY += 1;
 			p->setdetectCorner();
 			p->moveWithBounce();
-			return interval;
 		}
+		return interval;
 	}
 	else
 	{
@@ -338,7 +329,6 @@ bool Attack::getMapFlag()
 void Attack::setMapnum(int n)
 {
 	Mapnum = n;
-	printf("%d\n", Mapnum);
 }
 
 void Attack::setDir(int d)
@@ -348,7 +338,11 @@ void Attack::setDir(int d)
 //		setFlip(SDL_FLIP_NONE);
 //	if(dir == -1)
 //		setFlip(SDL_FLIP_HORIZONTAL);
+}
 
+void Attack::setPause(bool f)
+{
+	pause = f;
 }
 
 

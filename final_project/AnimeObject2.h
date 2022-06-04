@@ -20,10 +20,14 @@ public:
 	AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void initialize();
 	
+	void setRush(int ru);
 	void setIVT(int ivt);
 	void setHP(int hp);
+	void setDir(int d);
+	int getRush();
 	int getIVT();
 	int getHP();
+	int getDir();
 
 	void draw();
 //	void draw(SDL_Rect src);
@@ -55,6 +59,9 @@ public:
 	void stopFrameTimer();
 	void startHurt(Uint32 t);
 	void stopHurtTimer();
+	void startRush(Uint32 t);
+	void stopRushTimer();
+	void startRushCD(Uint32 t);
 
 private:
 
@@ -65,15 +72,27 @@ private:
 	bool invinceFlag;
 	bool jumpFlag;
 	bool deadFlag;
+	bool rushFlag;
+	bool gravityFlag;
 
+	int dir;
+	int init_vx;
 	int Mapnum;
 	int health;
 	SDL_TimerID timerID;
 	SDL_TimerID HurtID;
+	SDL_TimerID RushID;
+	SDL_TimerID cd_ID;
 	Uint32 time;
 	Uint32 hurtt;
+	Uint32 rush;
+	Uint32 cd;
 	int invincet;
+	int rush_count;
+	int cd_count;
 	static Uint32 changeFrame(Uint32 interval, void* param);
 	static Uint32 invincible(Uint32 interval, void* param);
+	static Uint32 rushing(Uint32 interval, void* param);
+	static Uint32 rushCD(Uint32 intercal, void* param);
 };
 

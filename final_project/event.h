@@ -102,16 +102,17 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 	{
 		if (e.key.keysym.sym == SDLK_LEFT || e.key.keysym.sym == SDLK_RIGHT)
 			pooh.startFrameTimer(150);
-
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
 			toward = -1;
+			pooh.setDir(-1);
 			pooh.setFlip(SDL_FLIP_HORIZONTAL);
 			pooh.setVx(pooh.getVx() - VELOCITY);
 			break;
 		case SDLK_RIGHT:
 			toward = 1;
+			pooh.setDir(1);
 			pooh.setFlip(SDL_FLIP_NONE);
 			pooh.setVx(pooh.getVx() + VELOCITY);
 			break;
@@ -120,6 +121,9 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 			break;
 		case SDLK_b:
 			pooh.setMapFlag(1);
+			break;
+		case SDLK_f:
+			pooh.startRush(20);
 			break;
 		}
 	}
@@ -130,10 +134,10 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
 		{
 
 		case SDLK_LEFT:
-			pooh.setVx(pooh.getVx() + VELOCITY);
+				pooh.setVx(pooh.getVx() + VELOCITY);
 			break;
 		case SDLK_RIGHT:
-			pooh.setVx(pooh.getVx() - VELOCITY);
+				pooh.setVx(pooh.getVx() - VELOCITY);
 			break;
 		case SDLK_SPACE:
 			pooh.setJumpFlag(0);

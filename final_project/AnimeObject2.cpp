@@ -28,10 +28,13 @@ AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, 
 
 void AnimeObject2::initialize()
 {
+	dir = 1;
 	Mapnum = 0;
 	shownFlag = true;
 	health = MAXHP;
 	deadFlag = false;
+	rushFlag = true;
+	gravityFlag = true;
 }
 
 void AnimeObject2::draw()
@@ -129,6 +132,73 @@ Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
 	}
 }
 
+void AnimeObject2::startRush(Uint32 t)
+{
+	if (rushFlag) {
+		init_vx = getVx();
+		rush = t;
+		rush_count = 0;
+		invinceFlag = true;
+		gravityFlag = false;
+		startRushCD(300);
+		RushID = SDL_AddTimer(rush, rushing, this);
+	}
+}
+
+void AnimeObject2::stopRushTimer()
+{
+	rush = 0;
+}
+
+Uint32 AnimeObject2::rushing(Uint32 interval, void* param)
+{
+	AnimeObject2* p = (AnimeObject2*)param;
+	if (p->getRush() < 3) //0 1 2
+	{
+		p->setVx(p->getVx()+5 * p->getDir() * VELOCITY);
+		p->setRush(p->getRush() + 1);
+		return interval;
+	}
+	else if (p->getRush() < 20)
+	{
+		if (p->getRush() <6)//3 4 5
+		{
+			p->setVx(p->getVx() - 5 * p->getDir() * VELOCITY);
+			p->gravityFlag = true;
+		}
+		p->setRush(p->getRush() + 1);
+		return interval;
+	}
+	else
+	{
+		p->setIVFlag(false);
+		return 0;
+	}
+}
+
+void AnimeObject2::startRushCD(Uint32 t)
+{
+	cd = t;
+	cd_count = 0;
+	rushFlag = false;
+	cd_ID = SDL_AddTimer(cd, rushCD, this);
+}
+
+Uint32 AnimeObject2::rushCD(Uint32 interval, void* param)
+{
+	AnimeObject2* p = (AnimeObject2*)param;
+	if (p->cd_count <1) 
+	{
+		p->cd_count++;
+		return interval;
+	}
+	else
+	{
+		p->rushFlag = true;
+		return 0;
+	}
+}
+
 void AnimeObject2::move() 
 {
 
@@ -136,7 +206,7 @@ void AnimeObject2::move()
 	{
 		velY = -12;
 	}
-	else if (yDown())
+	else if (yDown()&& gravityFlag)
 	{
 		if (velY <= 12)
 			velY += 1;
@@ -244,6 +314,15 @@ void AnimeObject2::setHP(int hp)
 	health = hp;
 }
 
+void AnimeObject2::setRush(int ru)
+{
+	rush_count = ru;
+}
+int AnimeObject2::getRush()
+{
+	return rush_count;
+}
+
 int AnimeObject2::getHP()
 {
 	return health;
@@ -286,6 +365,17 @@ int AnimeObject2::getMapnum()
 int AnimeObject2::getIVT()
 {
 	return invincet;
+}
+
+
+void AnimeObject2::setDir(int d)
+{
+	dir = d;
+}
+
+int AnimeObject2::getDir()
+{
+	return dir;
 }
 
 void AnimeObject2::moveOrNot()

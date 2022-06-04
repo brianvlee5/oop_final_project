@@ -194,7 +194,7 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	{
 		s = NULL;
 	}
-	
+
 	if (shownFlag && !getDeadFlag())
 	{
 		if (SDL_RenderCopy(renderer, texture[frame], s, d) == -1)
@@ -278,7 +278,7 @@ void Monster::setdetectCorner(SDL_Rect mc)
 	}
 }*/
 
-void Monster::AIstart(AnimeObject2& mainch)
+void Monster::AIstate(AnimeObject2& mainch)
 {
 	
 

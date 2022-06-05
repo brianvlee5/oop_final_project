@@ -27,6 +27,8 @@
 #define FLYBACK 5
 
 //wander mode
+#define LEFT 0
+#define RIGHT 1
 #define WALLL 0
 #define WALLR 1
 #define PLATFORMLB 2

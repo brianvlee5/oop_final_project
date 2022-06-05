@@ -97,7 +97,7 @@ void Map::set(const char* pth, SDL_Renderer* ren)
 }
 
 
-void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
+void Map::changemap(AnimeObject2& mainch, std::vector<Monster*>& mv)
 {
 
 	if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 5)
@@ -139,13 +139,8 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 			SDL_FreeSurface(imgSurface);
 		}
 		mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
-		for (int i = 0; i < mv.size(); i++)
-		{
-			mv[i].setDeadFlag(false);
-			mv[i].setHP(30);
-			mv[i].setMapnum(mv[i].getMapnum() + 1);
-			mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-		}
+		setMonster(mv, 1);
+		
 	}
 	else if (mainch.getMapFlag())
 	{
@@ -188,13 +183,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(56 * WIDTH / MAPTILEX, 35 * HEIGHT / MAPTILEY);
-			for (int i = 0; i < mv.size(); i++)
-			{
-				mv[i].setDeadFlag(false);
-				mv[i].setHP(30);
-				mv[i].setMapnum(mv[i].getMapnum() + 1);
-				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-			}
+			setMonster(mv, -3);
 		}
 		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 7)
 		{
@@ -235,13 +224,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
-			for (int i = 0; i < mv.size(); i++)
-			{
-				mv[i].setDeadFlag(false);
-				mv[i].setHP(30);
-				mv[i].setMapnum(mv[i].getMapnum() + 1);
-				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-			}
+			setMonster(mv, 3);
 		}
 		else if (tile[mapnum][(mainch.getY()) * MAPTILEY / HEIGHT][(mainch.getX()) * MAPTILEX / WIDTH] == 8)
 		{
@@ -282,13 +265,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(startR[getmapnum()].x, startR[getmapnum()].y);
-			for (int i = 0; i < mv.size(); i++)
-			{
-				mv[i].setDeadFlag(false);
-				mv[i].setHP(30);
-				mv[i].setMapnum(mv[i].getMapnum() + 1);
-				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-			}
+			setMonster(mv, -1);
 		}
 		else if (tile[mapnum][(mainch.getY() + mainch.getHeight()) * MAPTILEY / HEIGHT][(mainch.getX() + mainch.getWidth()) * MAPTILEX / WIDTH] == 9)
 		{
@@ -329,13 +306,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 				SDL_FreeSurface(imgSurface);
 			}
 			mainch.setPosition(startL[getmapnum()].x, startL[getmapnum()].y);
-			for (int i = 0; i < mv.size(); i++)
-			{
-				mv[i].setDeadFlag(false);
-				mv[i].setHP(30);
-				mv[i].setMapnum(mv[i].getMapnum() + 1);
-				mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-			}
+			setMonster(mv, 1);
 		}
 		
 		
@@ -343,6 +314,23 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 	
 }
 
+void Map::setMonster(std::vector<Monster*>& mv, int mapnumADD)
+{
+	FILE* fspawn;
+	char file2[100];
+	int xx, yy, Dflag;
+	sprintf_s(file2, 100, "%s%02d.txt", "../Mspawn/", mv[0]->getMapnum() + mapnumADD + 1);
+	fopen_s(&fspawn, file2, "r");
+	for (int i = 0; i < mv.size(); i++)
+	{
+		mv[i]->setMapnum(mv[i]->getMapnum() + mapnumADD);
+		fscanf_s(fspawn, "%d %d %d", &Dflag, &xx, &yy);
+		mv[i]->setDeadFlag(Dflag);
+		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
+		mv[i]->setBase(xx, yy);
+		mv[i]->setHP(30);
+	}
+}
 void Map::setmap(std::vector<Monster*> mv)
 {
 	//clearing last map

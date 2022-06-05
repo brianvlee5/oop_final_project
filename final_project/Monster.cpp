@@ -500,6 +500,10 @@ int Monster::getDPY(int a, int b)
 {
 	return detectCornerY[a][b];
 }
+bool Monster::getJumpFlag()
+{
+	return jumpFlag;
+}
 SDL_Renderer* Monster::getRenderer()
 {
 	return renderer;

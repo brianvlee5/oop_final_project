@@ -5,6 +5,7 @@
 #include "Attack.h"
 #include "Monster.h"
 #include "MonsterC.h"
+#include "MonsterD.h"
 #include "constants.h"
 #include <stdio.h>
 
@@ -18,6 +19,7 @@ public:
 	void calMapCamera(Map, Monster&);
 	void calMapCamera(Map, Attack&);
 	void calMapCamera(Map, MonsterC&);
+	void calMapCamera(Map, MonsterD&);
 	int getpCX();
 	int getpCY();
 private:

@@ -1,4 +1,5 @@
 #pragma once
+#include <SDL.h>
 #define WIDTH 1920
 #define HEIGHT 1280
 #define ALLREGION -1
@@ -22,6 +23,8 @@
 #define TRACE 1
 #define WAIT 2
 #define TELEPORT 3
+#define FLY 4
+#define FLYBACK 5
 
 //wander mode
 #define WALLL 0
@@ -62,3 +65,6 @@ struct MainchSave {
 	int x, y;
 };
 
+
+//monster start points
+const SDL_Point MDStartP = { 57 * WIDTH / MAPTILEX, 25 * HEIGHT / MAPTILEY };

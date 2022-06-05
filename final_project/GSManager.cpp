@@ -202,9 +202,10 @@ void GSManager::MainMenu(RenderWindow& window)
 void GSManager::GamePlay(RenderWindow& window)
 {
 	int state=0;
-	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord;
+	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord, tempcord;
 	vector<MonsterA> monsv;
-
+	vector<MonsterC> tempmonsv;
+	
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2-30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text menu("menu", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 70, WINDOWH / 2+15 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
@@ -220,6 +221,15 @@ void GSManager::GamePlay(RenderWindow& window)
 	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Object> prop_v;
+
+
+	MonsterC a("../images/bee/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	tempmonsv.push_back(a);
+	tempmonsv[0].setMchptr(pan);
+	tempmonsv[0].setDeadFlag(false);
+	tempmonsv[0].setPosition(1 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
+	tempmonsv[0].startAI(30);
+
 
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
@@ -286,7 +296,7 @@ void GSManager::GamePlay(RenderWindow& window)
 				for (int i = 0; i < 3; i++)
 				{
 					if (!monsv[i].getDeadFlag())
-						monsv[i].AIstart(pan);
+						monsv[i].AIstate(pan);
 					//monsv[i].StartWait(30);
 				}
 				demo1.setcamera(pan);
@@ -325,7 +335,9 @@ void GSManager::GamePlay(RenderWindow& window)
 						monsv[i].collisionAABB(pan);
 				}
 
-
+				tempcord.calMapCamera(demo1, tempmonsv[0]);
+				tempmonsv[0].draw({ tempcord.getpCX(), tempcord.getpCY(), tempmonsv[0].getWidth() , tempmonsv[0].getHeight()  }, { ALLREGION });
+				//a.draw({ enemycord[1].getpCX(),enemycord[1].getpCY(),monsv[1].getWidth() / SHRINK,monsv[1].getHeight() / SHRINK }, { ALLREGION });
 
 
 				for (int i = 0; i < fire.size(); i++)
@@ -468,6 +480,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	int state = PLAY;
 	Coordinate coord, coo[6], enemycord[3], enemyhp[3];
 	vector<MonsterA> monsv;
+	
 
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2 - 30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
@@ -502,6 +515,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
 		monsv.push_back(enemy);
 	}
+	
+
 	for (int i = 0; i < 6; i++)
 	{
 		fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
@@ -544,9 +559,9 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			for (int i = 0; i < 3; i++)
 			{
 				if (!monsv[i].getDeadFlag())
-					monsv[i].AIstart(pan);
-				//monsv[i].StartWait(30);
+					monsv[i].AIstate(pan);
 			}
+			
 			demo1.setcamera(pan);
 			demo1.changemap(pan, monsv);
 
@@ -568,6 +583,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 					monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
+			
 
 			for (int i = 0; i < 3; i++)
 			{

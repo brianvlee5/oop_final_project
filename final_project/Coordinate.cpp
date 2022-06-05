@@ -32,6 +32,14 @@ void Coordinate::calMapCamera(Map m, Attack& mainch)
 	printCamY = (mainch.getY() - temp.y);
 }
 
+void Coordinate::calMapCamera(Map m, MonsterC& mainch)
+{
+	SDL_Rect temp = m.getcamera();
+	printCamX = (mainch.getX() - temp.x);
+	printCamY = (mainch.getY() - temp.y);
+
+}
+
 int Coordinate::getpCX()
 {
 	return printCamX;

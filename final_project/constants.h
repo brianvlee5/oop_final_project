@@ -20,6 +20,8 @@
 //AImode
 #define WANDER 0
 #define TRACE 1
+#define WAIT 2
+#define TELEPORT 3
 
 //wander mode
 #define WALLL 0

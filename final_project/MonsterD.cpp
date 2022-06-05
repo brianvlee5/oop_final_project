@@ -17,7 +17,13 @@ MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g,
 void MonsterD::startAI(Uint32 t)
 {
 	AIinterval = t;
+	XBase = getX();
+	YBase = getY();
 	AIID = SDL_AddTimer(AIinterval, AIState, this);
+}
+void MonsterD::stopAI()
+{
+	AIinterval = 0;
 }
 
 Uint32 MonsterD::AIState(Uint32 interval, void* param)
@@ -28,7 +34,7 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 	{
 		case WAIT:
 		{
-			if (sqrt((MDStartP.x - p->Mchptr->getX()) * (MDStartP.x - p->Mchptr->getX()) + (MDStartP.y - p->Mchptr->getY()) * (MDStartP.y - p->Mchptr->getY())) <= 250 && p->Flycd==0)
+			if (sqrt((p->XBase - p->Mchptr->getX()) * (p->XBase - p->Mchptr->getX()) + (p->YBase - p->Mchptr->getY()) * (p->YBase - p->Mchptr->getY())) <= 250 && p->Flycd==0)
 			{
 				printf("to fly\n");
 				p->FlyTime = 0;
@@ -48,7 +54,7 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 		}
 		case FLY:
 		{
-			if (sqrt((MDStartP.x - p->getX()) * (MDStartP.x - p->getX()) + (MDStartP.y - p->getY()) * (MDStartP.y - p->getY())) <= 250)
+			if (sqrt((p->XBase - p->getX()) * (p->XBase - p->getX()) + (p->YBase - p->getY()) * (p->YBase - p->getY())) <= 250)
 			{
 				p->setVX(p->XFly / 20);
 				p->setVY(p->YFly / 20);

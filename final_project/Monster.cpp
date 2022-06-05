@@ -117,6 +117,11 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	}
 }
 
+void Monster::setBase(int xx, int yy)
+{
+
+}
+
 void Monster::setMapnum(int mapnumm)
 {
 	mapnum = mapnumm;

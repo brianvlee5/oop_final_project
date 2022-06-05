@@ -138,6 +138,7 @@ void GSManager::InitMonsters(std::vector<Monster*>& mv)
 		fscanf_s(fspawn, "%d %d %d", &Dflag, &xx, &yy);
 		mv[i]->setDeadFlag(Dflag);
 		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
+		mv[i]->setBase(xx, yy);
 	}
 	fclose(fspawn);
 

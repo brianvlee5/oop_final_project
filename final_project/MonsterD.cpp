@@ -17,8 +17,6 @@ MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g,
 void MonsterD::startAI(Uint32 t)
 {
 	AIinterval = t;
-	XBase = getX();
-	YBase = getY();
 	AIID = SDL_AddTimer(AIinterval, AIState, this);
 }
 void MonsterD::stopAI()
@@ -34,19 +32,18 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 	{
 		case WAIT:
 		{
-			if (sqrt((p->XBase - p->Mchptr->getX()) * (p->XBase - p->Mchptr->getX()) + (p->YBase - p->Mchptr->getY()) * (p->YBase - p->Mchptr->getY())) <= 250 && p->Flycd==0)
+			if (sqrt((p->XBase - p->Mchptr->getX()) * (p->XBase - p->Mchptr->getX()) + (p->YBase - p->Mchptr->getY()) * (p->YBase - p->Mchptr->getY())) <= 150 && p->Flycd==0)
 			{
 				printf("to fly\n");
 				p->FlyTime = 0;
 				p->AImode = FLY;
-				p->XFly = p->Mchptr->getX() - MDStartP.x;
-				p->YFly = p->Mchptr->getY() - MDStartP.y;
+				p->XFly = p->Mchptr->getX() - p->XBase;
+				p->YFly = p->Mchptr->getY() - p->YBase;
 				printf("x:%d y:%d\n", p->XFly, p->YFly);
 			}
 			else if(p->Flycd>0)
 			{
 				p->Flycd--;
-				
 			}
 
 			return interval;
@@ -54,10 +51,10 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 		}
 		case FLY:
 		{
-			if (sqrt((p->XBase - p->getX()) * (p->XBase - p->getX()) + (p->YBase - p->getY()) * (p->YBase - p->getY())) <= 250)
+			if (sqrt((p->XBase - p->getX()) * (p->XBase - p->getX()) + (p->YBase - p->getY()) * (p->YBase - p->getY())) <= 150)
 			{
-				p->setVX(p->XFly / 20);
-				p->setVY(p->YFly / 20);
+				p->setVX(p->XFly / 30);
+				p->setVY(p->YFly / 30);
 				p->move();
 				p->FlyTime++;
 			}
@@ -73,8 +70,8 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 		{
 			if (p->FlyTime > 0)
 			{
-				p->setVX(-p->XFly / 20);
-				p->setVY(-p->YFly / 20);
+				p->setVX(-p->XFly / 30);
+				p->setVY(-p->YFly / 30);
 				p->FlyTime--;
 			}
 			else
@@ -135,4 +132,10 @@ void MonsterD::draw(SDL_Rect dst, SDL_Rect src)
 void MonsterD::setMchptr(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
+}
+
+void MonsterD::setBase(int xx, int yy)
+{
+	XBase = xx * WIDTH / MAPTILEX;
+	YBase = yy * HEIGHT / MAPTILEY;
 }

@@ -11,6 +11,7 @@ public:
     void stopAI();
     void draw(SDL_Rect dst, SDL_Rect src);
     void move();
+    void setBase(int xx, int yy);
 private:
     SDL_TimerID AIID;
     Uint32 AIinterval;

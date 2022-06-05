@@ -35,6 +35,7 @@ void AnimeObject2::initialize()
 	deadFlag = false;
 	rushFlag = true;
 	gravityFlag = true;
+	num_potion = 5;
 }
 
 void AnimeObject2::draw()
@@ -328,6 +329,16 @@ int AnimeObject2::getHP()
 	return health;
 }
 
+void AnimeObject2::setKey(bool f)
+{
+	key = f;
+}
+
+bool AnimeObject2::getKey()
+{
+	return key;
+}
+
 bool AnimeObject2::xRight()
 {
 	if (tile[Mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 1 || tile[Mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 1)
@@ -415,4 +426,30 @@ void AnimeObject2::moveOrNot()
 void AnimeObject2::setJumpFlag(bool f)
 {
 	jumpFlag = f;
+}
+
+void AnimeObject2::usePotion()
+{
+	if (health + 2 < MAXHP)
+	{
+		health += 2;
+	}
+	else
+	{
+		health = MAXHP;
+	}
+	if (num_potion > 0)
+	{
+		num_potion--;
+	}
+}
+
+void AnimeObject2::setPotionNum(int n)
+{
+	num_potion = n;
+}
+
+int AnimeObject2::getPotionNum()
+{
+	return num_potion;
 }

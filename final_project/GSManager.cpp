@@ -243,9 +243,11 @@ void GSManager::GamePlay(RenderWindow& window)
 	MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object frame("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	vector<Object> prop_v;
+	vector<Object> number;
 
 	vector<MonsterA> tempa;
 	vector<MonsterB> tempb;
@@ -290,16 +292,28 @@ void GSManager::GamePlay(RenderWindow& window)
 	{
 		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
 	}
-	prop.setShownFlag(true);
-	prop.setPosition(0, 0);
+	frame.setShownFlag(true);
+	frame.setPosition(0, 0);
 	for (int i = 0; i < PROPNUM; i++)
 	{
-		window.addVPregion({ {prop.getWidth() * i, h.getHeight() * 4 / 3, prop.getWidth() , prop.getHeight()} });
+		window.addVPregion({ {(frame.getWidth()+1) * i, h.getHeight() * 4 / 3, frame.getWidth(), frame.getHeight()} });
 	}
 	key.setShownFlag(true);
 	key.setPosition(0, 0);
+	potion.setShownFlag(true);
+	potion.setPosition(0, 0);
 
 	prop_v.push_back(key);
+	prop_v.push_back(potion);
+	
+	for (int i = 0; i < 10; i++)
+	{
+		char file[100];
+		sprintf_s(file, "../images/number/%d.png", i);
+		number.push_back(Object(file, window.getRenderer(), 32, 29, 32));
+		number[i].setShownFlag(true);
+		number[i].setPosition(0, 0);
+	}
 
 
 	Map demo1;
@@ -419,9 +433,16 @@ void GSManager::GamePlay(RenderWindow& window)
 			for (int i = 0; i < PROPNUM; i++)
 			{
 				window.setVP(MAXHP + i);
-				if (i == 0)
-					prop_v[i].draw();
-				prop.draw();
+				if (pan.getKey() == true && i == 0) //key
+				{
+					prop_v[0].draw();
+				}
+				if (i == 1) //potion
+				{
+					prop_v[1].draw();
+					number[pan.getPotionNum()].draw();
+				}
+				frame.draw();
 
 			}
 
@@ -457,7 +478,10 @@ void GSManager::GamePlay(RenderWindow& window)
 			for (int i = 0; i < PROPNUM; i++)
 			{
 				window.setVP(MAXHP + i);
-				prop.draw();
+				if (pan.getKey() == true && i == 0)
+					prop_v[0].draw();
+				frame.draw();
+
 			}
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });

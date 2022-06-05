@@ -20,6 +20,7 @@ void MonsterI::gotKey(AnimeObject2& mainch)
 	{
 
 		setDeadFlag(true);
+		mainch.setKey(true);
 	}
 }
 

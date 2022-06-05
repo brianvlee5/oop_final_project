@@ -40,6 +40,7 @@ public:
 	void LoadGamePlay(RenderWindow& window);
 	void setGameState(int gs);
 	int getGameState();
+	void InitMonsters(std::vector<Monster*>& mv, RenderWindow& window);
 private:
 	
 	SDL_Event ev;

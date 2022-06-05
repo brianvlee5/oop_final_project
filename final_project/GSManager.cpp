@@ -117,10 +117,18 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int &state)
 	}
 }
 
+//class GSManager
+
 GSManager::GSManager()
 {
 	quit = false;
 	GameState = GAMEPLAY;
+}
+
+void GSManager::InitMonsters(std::vector<Monster*>& mv, RenderWindow& window)
+{
+	
+
 }
 
 void GSManager::startGame(RenderWindow& window)
@@ -204,7 +212,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	int state=0;
 	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord, tempcord;
 	vector<MonsterA> monsv;
-	vector<MonsterD> tempmonsv;
+
 	
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2-30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
@@ -223,13 +231,22 @@ void GSManager::GamePlay(RenderWindow& window)
 	vector<Object> prop_v;
 
 
-	MonsterD a("../images/bee/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	tempmonsv.push_back(a);
-	tempmonsv[0].setMchptr(pan);
-	tempmonsv[0].setDeadFlag(false);
-	tempmonsv[0].setPosition(MDStartP.x, MDStartP.y);
-	tempmonsv[0].startAI(30);
+	std::vector<MonsterA> tempa(3, MonsterA("../images/MonsterA/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	std::vector<MonsterB> tempb(3, MonsterB("../images/MonsterB/", 5, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	std::vector<MonsterC> tempc(2, MonsterC("../images/MonsterC/", 6, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	std::vector<MonsterD> tempd(2, MonsterD("../images/MonsterD/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	std::vector<Monster*> Monsv;
+	for (int i = 0; i < tempa.size(); i++)
+		Monsv.push_back(&tempa[i]);
+	for (int i = 0; i < tempb.size(); i++)
+		Monsv.push_back(&tempb[i]);
+	for (int i = 0; i < tempc.size(); i++)
+		Monsv.push_back(&tempc[i]);
+	for (int i = 0; i < tempd.size(); i++)
+		Monsv.push_back(&tempd[i]);
 
+	for (int i = 0; i < Monsv.size(); i++)
+		Monsv[i]->setPosition((i + 5) * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
@@ -263,6 +280,16 @@ void GSManager::GamePlay(RenderWindow& window)
 		enemy.setPosition(MonstP[demo1.getmapnum()][i].x, MonstP[demo1.getmapnum()][i].y);
 		monsv.push_back(enemy);
 	}
+	MonsterA tryt("../images/pooh/", 22, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	tryt.setMchptr(pan);
+	tryt.startAI(15);
+
+	for (int i = 0; i < monsv.size(); i++)
+	{
+		monsv[i].setMchptr(pan);
+		monsv[i].startAI(15);
+	}
+
 	for (int i = 0; i < 6; i++)
 	{
 		if(i==2||i==3)
@@ -293,12 +320,12 @@ void GSManager::GamePlay(RenderWindow& window)
 				window.setVP(-1);
 				pan.move();
 
-				for (int i = 0; i < 3; i++)
-				{
-					if (!monsv[i].getDeadFlag())
-						monsv[i].AIstate(pan);
-					//monsv[i].StartWait(30);
-				}
+//			for (int i = 0; i < 3; i++)
+//			{
+//				if (!monsv[i].getDeadFlag())
+//					monsv[i].AIstate(pan);
+//				//monsv[i].StartWait(30);
+//			}
 				demo1.setcamera(pan);
 				demo1.changemap(pan, monsv);
 
@@ -316,8 +343,19 @@ void GSManager::GamePlay(RenderWindow& window)
 				{
 					if (!monsv[i].getDeadFlag())
 					{
-						enemycord[i].calMapCamera(demo1, monsv[i]);
-						monsv[i].draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+						enemycord[0].calMapCamera(demo1, monsv[i]);
+						monsv[i].draw({ enemycord[0].getpCX(),enemycord[0].getpCY(),monsv[i].getWidth() / SHRINK,monsv[i].getHeight() / SHRINK }, { ALLREGION });
+					}
+				}
+				coord.calMapCamera(demo1, tryt);
+				tryt.draw({ coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK }, { ALLREGION });
+
+				for (int i = 0; i < Monsv.size(); i++)
+				{
+					if (!Monsv[i]->getDeadFlag())
+					{
+						enemycord[0].calMapCamera(demo1, *Monsv[i]);
+						Monsv[i]->draw({ enemycord[0].getpCX(),enemycord[0].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 					}
 				}
 				
@@ -335,9 +373,6 @@ void GSManager::GamePlay(RenderWindow& window)
 						monsv[i].collisionAABB(pan);
 				}
 
-				tempcord.calMapCamera(demo1, tempmonsv[0]);
-				tempmonsv[0].draw({ tempcord.getpCX(), tempcord.getpCY(), tempmonsv[0].getWidth() , tempmonsv[0].getHeight()  }, { ALLREGION });
-				//a.draw({ enemycord[1].getpCX(),enemycord[1].getpCY(),monsv[1].getWidth() / SHRINK,monsv[1].getHeight() / SHRINK }, { ALLREGION });
 
 
 				for (int i = 0; i < fire.size(); i++)

@@ -13,7 +13,12 @@ MonsterA::MonsterA(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g,
 void MonsterA::startAI(Uint32 t)
 {
 	AIinterval = t;
+	AImode = WANDER;
 	AIID = SDL_AddTimer(AIinterval, AIState, this);
+}
+void MonsterA::stopAI()
+{
+	AIinterval = 0;
 }
 
 Uint32 MonsterA::AIState(Uint32 interval, void* param)

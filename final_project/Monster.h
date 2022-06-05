@@ -60,6 +60,7 @@ public:
 	SDL_Renderer* getRenderer();
 	virtual void setMchptr(AnimeObject2& mainch)=0;
 	virtual void startAI(Uint32 t)=0;
+	virtual void stopAI()=0;
 private:
 	char path[100];
 	int num;

@@ -89,7 +89,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 Uint32 Monster::damaged(Uint32 interval, void* param)
 {
 	Monster* p = (Monster*)param;
-	if (p->damageCD<6)
+	if (p->damageCD<4)
 	{
 		p->setShownFlag(!p->getShownFlag());
 		p->damageCD++;

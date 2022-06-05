@@ -15,6 +15,10 @@ void MonsterC::startAI(Uint32 t)
 	AIinterval = t;
 	AIID = SDL_AddTimer(AIinterval, AIState, this);
 }
+void MonsterC::stopAI()
+{
+	AIinterval = 0;
+}
 
 Uint32 MonsterC::AIState(Uint32 interval, void* param)
 {
@@ -45,7 +49,6 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 		}
 		case WAIT:
 		{
-			printf("tpcd: %d\n", p->TPcd);
 			p->TPcd--;
 			return interval;
 			break;
@@ -68,8 +71,8 @@ void MonsterC::draw(SDL_Rect dst, SDL_Rect src)
 	{
 		s = NULL;
 	}
-	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
-	thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
+//	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
+	//thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
 	Monster::draw(dst, src);
 }
 

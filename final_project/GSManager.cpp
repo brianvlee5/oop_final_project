@@ -125,9 +125,21 @@ GSManager::GSManager()
 	GameState = GAMEPLAY;
 }
 
-void GSManager::InitMonsters(std::vector<Monster*>& mv, RenderWindow& window)
+void GSManager::InitMonsters(std::vector<Monster*>& mv)
 {
+	FILE* fspawn;
+	char file[100];
+	int xx, yy, Dflag;
 
+	sprintf_s(file, 100, "%s%02d.txt", "../Mspawn/", mv[0]->getMapnum() + 1);
+	fopen_s(&fspawn, file, "r");
+	for (int i = 0; i < mv.size(); i++)
+	{
+		fscanf_s(fspawn, "%d %d %d", &Dflag, &xx, &yy);
+		mv[i]->setDeadFlag(Dflag);
+		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
+	}
+	fclose(fspawn);
 
 }
 
@@ -137,21 +149,21 @@ void GSManager::startGame(RenderWindow& window)
 	{
 		switch (GameState)
 		{
-		case MAINMENU:
-		{
-			MainMenu(window);
-			break;
-		}
-		case GAMEPLAY:
-		{
-			GamePlay(window);
-			break;
-		}
-		case LOADGAMEPLAY:
-		{
-			LoadGamePlay(window);
-			break;
-		}
+			case MAINMENU:
+			{
+				MainMenu(window);
+				break;
+			}
+			case GAMEPLAY:
+			{
+				GamePlay(window);
+				break;
+			}
+			case LOADGAMEPLAY:
+			{
+				LoadGamePlay(window);
+				break;
+			}
 
 		}
 	}
@@ -234,7 +246,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	vector<MonsterB> tempb;
 	vector<MonsterC> tempc;
 	vector<MonsterD> tempd;
-
+	vector<Monster*> Monsv;
 	for (int i = 0; i < 3; i++)
 	{
 		MonsterA a("../images/MonsterA/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -255,7 +267,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		MonsterD d("../images/MonsterD/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 		tempd.push_back(d);
 	}		
-	vector<Monster*> Monsv;
+	
 	for (int i = 0; i < tempa.size(); i++)
 		Monsv.push_back(&tempa[i]);
 	for (int i = 0; i < tempb.size(); i++)
@@ -265,8 +277,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	for (int i = 0; i < tempd.size(); i++)
 		Monsv.push_back(&tempd[i]);
 
-	for (int i = 0; i < Monsv.size(); i++)
-		Monsv[i]->setPosition((i + 5) * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
+	InitMonsters(Monsv);
 
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
@@ -337,7 +348,7 @@ void GSManager::GamePlay(RenderWindow& window)
 			//				//monsv[i].StartWait(30);
 			//			}
 			demo1.setcamera(pan);
-
+			demo1.changemap(pan, Monsv);
 
 
 			coord.calMapCamera(demo1, pan);

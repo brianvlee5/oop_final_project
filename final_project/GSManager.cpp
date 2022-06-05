@@ -1,7 +1,7 @@
 #include "GSManager.h"
 
 //global functions
-static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& mch, vector<Attack>& atk)
+static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& mch, vector<Attack>& atk, vector<Monster*>&mv)
 {
 	MainchSave mchsave;
 	MapSave mapsave;
@@ -15,12 +15,16 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 			{
 				for (int i = 0; i < atk.size(); i++)
 					atk[i].setPause(true);
+				for (int i = 0; i < mv.size(); i++)
+					mv[i]->stopAI();
 				state = PAUSE;
 			}
 			else if (state == PAUSE)
 			{
 				for (int i = 0; i < atk.size(); i++)
 					atk[i].setPause(false);
+				for (int i = 0; i < mv.size(); i++)
+					mv[i]->startAI(15);
 				state = PLAY;
 			}
 			break;
@@ -122,7 +126,7 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int& state)
 GSManager::GSManager()
 {
 	quit = false;
-	GameState = GAMEPLAY;
+	GameState = MAINMENU;
 }
 
 void GSManager::InitMonsters(std::vector<Monster*>& mv)
@@ -236,7 +240,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	//MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -303,7 +307,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
 
-	//thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
+	thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
 
 
 	for (int i = 0; i < Monsv.size(); i++)
@@ -326,7 +330,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			pauseEvents(ev, this, state, pan, fire);
+			pauseEvents(ev, this, state, pan, fire, Monsv);
 			if (state == PLAY)
 			{
 				poohKeyboard(ev, pan);
@@ -342,12 +346,6 @@ void GSManager::GamePlay(RenderWindow& window)
 			window.setVP(-1);
 			pan.move();
 
-			//			for (int i = 0; i < 3; i++)
-			//			{
-			//				if (!monsv[i].getDeadFlag())
-			//					monsv[i].AIstate(pan);
-			//				//monsv[i].StartWait(30);
-			//			}
 			demo1.setcamera(pan);
 			demo1.changemap(pan, Monsv);
 
@@ -372,12 +370,12 @@ void GSManager::GamePlay(RenderWindow& window)
 				}
 			}
 
-			//thekey.gotKey(pan);
-		//if (demo1.getmapnum() == 3)
-		//{
-		//	keycord.calMapCamera(demo1, thekey);
-		//	thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
-		//}
+			thekey.gotKey(pan);
+			if (demo1.getmapnum() == 3)
+			{
+				keycord.calMapCamera(demo1, thekey);
+				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+			}
 
 
 
@@ -435,6 +433,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		}
 		case PAUSE:
 		{
+
 			demo1.draw({ ALLREGION }, demo1.getcamera());
 			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 			for (int i = 0; i < Monsv.size(); i++)
@@ -583,8 +582,6 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	for (int i = 0; i < tempd.size(); i++)
 		Monsv.push_back(&tempd[i]);
 
-	for (int i = 0; i < Monsv.size(); i++)
-		Monsv[i]->setPosition((i + 5) * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
@@ -631,7 +628,6 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	fopen_s(&fload, "../saves/slot1.dat", "rb");
 	fread(&mchsave, sizeof(mchsave), 1, fload);
 	fread(&mapsave, sizeof(mapsave), 1, fload);
-	printf("mapnum: %d\n", mapsave.mapnum);
 	demo1.setmapnum(mapsave.mapnum);
 	pan.setMapnum(mchsave.mapnum);
 	pan.setHP(mchsave.health);
@@ -646,7 +642,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			pauseEvents(ev, this, state, pan, fire);
+			pauseEvents(ev, this, state, pan, fire, Monsv);
 			if (state == PLAY)
 			{
 				poohKeyboard(ev, pan);

@@ -331,7 +331,7 @@ void Map::setMonster(std::vector<Monster*>& mv, int mapnumADD)
 		mv[i]->setHP(30);
 	}
 }
-void Map::setmap(std::vector<Monster*> mv)
+void Map::setmap(std::vector<Monster*> &mv)
 {
 	//clearing last map
 	SDL_DestroyTexture(texture);
@@ -339,7 +339,7 @@ void Map::setmap(std::vector<Monster*> mv)
 	char file[100];
 	sprintf_s(file, 100, "%s%02d.png", path, mapnum + 1);
 
-	printf("%s%02d.png", path, mapnum);
+	//printf("%s%02d.png", path, mapnum);
 	SDL_Surface* imgSurface = IMG_Load(file);
 
 	if (imgSurface == NULL)
@@ -368,13 +368,7 @@ void Map::setmap(std::vector<Monster*> mv)
 		SDL_FreeSurface(imgSurface);
 	}
 
-	for (int i = 0; i < mv.size(); i++)
-	{
-		mv[i]->setDeadFlag(false);
-		mv[i]->setHP(30);
-		mv[i]->setMapnum(mv[i]->getMapnum() + 1);
-		mv[i]->setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
-	}
+	setMonster(mv, getmapnum() - mv[0]->getMapnum());
 }
 
 void Map::setmapnum(int n)

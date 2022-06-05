@@ -22,3 +22,19 @@ void MonsterI::gotKey(AnimeObject2& mainch)
 		setDeadFlag(true);
 	}
 }
+
+void MonsterI::setMchptr(AnimeObject2& mainch)
+{
+
+}
+
+void MonsterI::startAI(Uint32 t)
+{
+
+}
+
+void MonsterI::stopAI()
+{
+
+}
+

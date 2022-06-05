@@ -22,7 +22,7 @@ class Map
 		void setcamera(AnimeObject2 &mainch);
 		SDL_Rect getcamera();
 		void changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv);
-		void setmap(std::vector<MonsterA> mv);
+		void setmap(std::vector<Monster*> mv);
 		void setmapnum(int);
 		int getmapnum();
 

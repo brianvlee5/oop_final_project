@@ -11,76 +11,91 @@ MonsterB::MonsterB(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g,
 
 }
 
-
-void MonsterB::AIstate(AnimeObject2& mainch)
+Uint32 MonsterB::AIState(Uint32 interval, void* param)
 {
-	AImode = WANDER;
+	MonsterB* p = (MonsterB*)param;
 
-	switch (AImode)
+	switch (p->AImode)
 	{
-	case TRACE:
-	{
-		if (getX() - mainch.getX() < 0)
+		case WAIT:
 		{
-			setVX(2);
-			if (tile[getMapnum()][getDPX(1, 1) - 1][getDPX(1, 0)] == 0 && (tile[getMapnum()][getDPX(1, 1)][getDPX(1, 0)] == 1 || tile[getMapnum()][getDPX(3, 1)][getDPX(3, 0)] == 1))
-				setJumpFlag(1);
+			if (p->WaitTime > 0)
+			{
+				p->WaitTime--;
+			}
+			else
+			{
+				p->AImode = WANDER;
+				p->WanderTime = 50;
+
+				if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
+					p->WANDERmode = RIGHT;
+				else if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 1 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 0)
+					p->WANDERmode = LEFT;
+				else if (tile[p->getMapnum()][p->getDPX(1, 1)][p->getDPX(1, 0)] == 1 || tile[p->getMapnum()][p->getDPX(3, 1)][p->getDPX(3, 0)] == 1)
+					p->WANDERmode = LEFT;
+				else if (tile[p->getMapnum()][p->getDPX(2, 1)][p->getDPX(2, 0)] == 1 || tile[p->getMapnum()][p->getDPX(0, 1)][p->getDPX(0, 0)] == 1)
+					p->WANDERmode = RIGHT;
+				else
+					p->WANDERmode = rand() % 2;
+			}
+			return interval;
+			break;
 		}
-		else if (getX() - mainch.getX() > 0)
+		case WANDER:
 		{
-			setVX(-2);
-			if (tile[getMapnum()][getDPX(2, 1) - 1][getDPX(2, 0)] == 0 && (tile[getMapnum()][getDPX(2, 1)][getDPX(2, 0)] == 1 || tile[getMapnum()][getDPX(0, 1)][getDPX(0, 0)] == 1))
-				setJumpFlag(1);
+			if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 1 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 0)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPX(1, 1)][p->getDPX(1, 0)] == 1 || tile[p->getMapnum()][p->getDPX(3, 1)][p->getDPX(3, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPX(2, 1)][p->getDPX(2, 0)] == 1 || tile[p->getMapnum()][p->getDPX(0, 1)][p->getDPX(0, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (p->WanderTime > 0)
+			{
+				if (p->WANDERmode == LEFT)
+					p->setVX(2);
+				else
+					p->setVX(-2);
+
+				p->move();
+				p->WanderTime--;
+			}
+			else
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+
+			return interval;
+			break;
 		}
-		else
-			setVX(0);
-		break;
 	}
-	case WANDER:
-	{
-		if (tile[getMapnum()][getDPY(2, 1)][getDPY(2, 0)] == 0 && tile[getMapnum()][getDPY(3, 1)][getDPY(3, 0)] == 1)
-			WANDERmode = PLATFORMLB;
-		else if (tile[getMapnum()][getDPY(2, 1)][getDPY(2, 0)] == 1 && tile[getMapnum()][getDPY(3, 1)][getDPY(3, 0)] == 0)
-			WANDERmode = PLATFORMRB;
-		else if (tile[getMapnum()][getDPX(1, 1)][getDPX(1, 0)] == 1 || tile[getMapnum()][getDPX(3, 1)][getDPX(3, 0)] == 1)
-			WANDERmode = WALLR;
-		else if (tile[getMapnum()][getDPX(2, 1)][getDPX(2, 0)] == 1 || tile[getMapnum()][getDPX(0, 1)][getDPX(0, 0)] == 1)
-			WANDERmode = WALLL;
-		else
-			WANDERmode = FLOOR;
-
-		switch (WANDERmode)
-		{
-		case WALLL:
-			setVX(2);
-			break;
-		case WALLR:
-			setVX(-2);
-			break;
-		case PLATFORMLB:
-			setVX(2);
-			break;
-		case PLATFORMRB:
-			setVX(-2);
-			break;
-		case FLOOR:
-		{
-
-		}
-		}
-		break;
-	}
-
-
-	}
-
-	move();
-
 }
 
+void MonsterB::startAI(Uint32 t)
+{
+	AIinterval = t;
+	AIID = SDL_AddTimer(AIinterval, AIState, this);
+}
 
-
-
+void MonsterB::setMchptr(AnimeObject2& mainch)
+{
+	Mchptr = &mainch;
+}
 
 
 void MonsterB::draw(SDL_Rect dst, SDL_Rect src)

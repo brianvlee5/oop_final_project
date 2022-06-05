@@ -102,6 +102,7 @@ Uint32 Monster::damaged(Uint32 interval, void* param)
 	}
 }
 
+
 Uint32 Monster::changeData(Uint32 interval, void* param)
 {
 	Monster* p = (Monster*)param;

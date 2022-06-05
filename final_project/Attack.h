@@ -40,7 +40,7 @@ public:
 	bool yDown();
 
 	void collision_mons(std::vector<MonsterA>& mv);
-
+	void collision_mons(std::vector<Monster*>& mv);
 	void setMapFlag(bool f);
 	bool getMapFlag();
 	void setMapnum(int);

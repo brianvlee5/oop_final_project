@@ -343,7 +343,7 @@ void Map::changemap(AnimeObject2& mainch, std::vector<MonsterA>& mv)
 	
 }
 
-void Map::setmap(std::vector<MonsterA> mv)
+void Map::setmap(std::vector<Monster*> mv)
 {
 	//clearing last map
 	SDL_DestroyTexture(texture);
@@ -382,10 +382,10 @@ void Map::setmap(std::vector<MonsterA> mv)
 
 	for (int i = 0; i < mv.size(); i++)
 	{
-		mv[i].setDeadFlag(false);
-		mv[i].setHP(30);
-		mv[i].setMapnum(mv[i].getMapnum() + 1);
-		mv[i].setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
+		mv[i]->setDeadFlag(false);
+		mv[i]->setHP(30);
+		mv[i]->setMapnum(mv[i]->getMapnum() + 1);
+		mv[i]->setPosition(MonstP[mapnum][i].x, MonstP[mapnum][i].y);
 	}
 }
 

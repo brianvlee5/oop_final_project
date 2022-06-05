@@ -97,53 +97,56 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 	}
 }
 
-static void poohKeyboard(SDL_Event e, AnimeObject2& pooh) {
+static void poohKeyboard(SDL_Event e, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		if (e.key.keysym.sym == SDLK_LEFT || e.key.keysym.sym == SDLK_RIGHT)
-			pooh.startFrameTimer(150);
+			p.startFrameTimer(150);
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
 			toward = -1;
-			pooh.setDir(-1);
-			pooh.setFlip(SDL_FLIP_HORIZONTAL);
-			pooh.setVx(pooh.getVx() - VELOCITY);
+			p.setDir(-1);
+			p.setFlip(SDL_FLIP_HORIZONTAL);
+			p.setVx(p.getVx() - VELOCITY);
 			break;
 		case SDLK_RIGHT:
 			toward = 1;
-			pooh.setDir(1);
-			pooh.setFlip(SDL_FLIP_NONE);
-			pooh.setVx(pooh.getVx() + VELOCITY);
+			p.setDir(1);
+			p.setFlip(SDL_FLIP_NONE);
+			p.setVx(p.getVx() + VELOCITY);
 			break;
 		case SDLK_SPACE:
-			pooh.setJumpFlag(1);
+			p.setJumpFlag(1);
 			break;
 		case SDLK_b:
-			pooh.setMapFlag(1);
+			p.setMapFlag(1);
 			break;
 		case SDLK_f:
-			pooh.startRush(20);
+			p.startRush(20);
+			break;
+		case SDLK_2:
+			p.usePotion();
 			break;
 		}
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		pooh.stopFrameTimer();
+		p.stopFrameTimer();
 		switch (e.key.keysym.sym)
 		{
 
 		case SDLK_LEFT:
-				pooh.setVx(pooh.getVx() + VELOCITY);
+				p.setVx(p.getVx() + VELOCITY);
 			break;
 		case SDLK_RIGHT:
-				pooh.setVx(pooh.getVx() - VELOCITY);
+				p.setVx(p.getVx() - VELOCITY);
 			break;
 		case SDLK_SPACE:
-			pooh.setJumpFlag(0);
+			p.setJumpFlag(0);
 			break;
 		case SDLK_b:
-			pooh.setMapFlag(0);
+			p.setMapFlag(0);
 			break;
 		}
 	}

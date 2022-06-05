@@ -19,15 +19,19 @@ public:
 	AnimeObject2(const char* path, int n, SDL_Renderer* ren);
 	AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void initialize();
-	
+
+	void setMapnum(int n);
 	void setRush(int ru);
 	void setIVT(int ivt);
 	void setHP(int hp);
 	void setDir(int d);
+	void setPotionNum(int n);
+	int getMapnum();
 	int getRush();
 	int getIVT();
 	int getHP();
 	int getDir();
+	int getPotionNum();
 
 	void draw();
 //	void draw(SDL_Rect src);
@@ -47,12 +51,13 @@ public:
 	void setMapFlag(bool f);   //flag 2 (both static and anime need it, which should be added to base class)
 	void setIVFlag(bool f);    //flag 3
 	void setDeadFlag(bool f);  //flag 4
+	void setKey(bool f);
 	bool getIVFlag();
 	bool getMapFlag();
 	bool getDeadFlag();
+	bool getKey();
 
-	void setMapnum(int n);
-	int getMapnum();
+	void usePotion();
 
 	/*****Timer*****/
 	void startFrameTimer(Uint32 t);
@@ -74,11 +79,13 @@ private:
 	bool deadFlag;
 	bool rushFlag;
 	bool gravityFlag;
+	bool key;
 
 	int dir;
 	int init_vx;
 	int Mapnum;
 	int health;
+	int num_potion;
 	SDL_TimerID timerID;
 	SDL_TimerID HurtID;
 	SDL_TimerID RushID;

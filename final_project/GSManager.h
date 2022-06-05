@@ -24,6 +24,9 @@
 #include "Image.h"
 #include "Monster.h"
 #include "MonsterA.h"
+#include "MonsterB.h"
+#include "MonsterC.h"
+#include "MonsterD.h"
 #include "MonsterP.h"
 #include "MonsterI.h"
 

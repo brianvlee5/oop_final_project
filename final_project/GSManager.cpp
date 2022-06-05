@@ -204,7 +204,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	int state=0;
 	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord, tempcord;
 	vector<MonsterA> monsv;
-	vector<MonsterC> tempmonsv;
+	vector<MonsterD> tempmonsv;
 	
 	Text fail("Game Over", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 150, WINDOWH / 2 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
 	Text resume("resume", "../fonts/akabara-cinderella.ttf", 60, TTF_STYLE_BOLD, { 0, 255, 255 }, BLENDED, { 100, 100, 100 }, window.getRenderer(), { WINDOWW / 2 - 100, WINDOWH / 2-30 }, { NULL, NULL }, NULL, SDL_FLIP_NONE, 100);
@@ -223,11 +223,11 @@ void GSManager::GamePlay(RenderWindow& window)
 	vector<Object> prop_v;
 
 
-	MonsterC a("../images/bee/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	MonsterD a("../images/bee/", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	tempmonsv.push_back(a);
 	tempmonsv[0].setMchptr(pan);
 	tempmonsv[0].setDeadFlag(false);
-	tempmonsv[0].setPosition(1 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
+	tempmonsv[0].setPosition(MDStartP.x, MDStartP.y);
 	tempmonsv[0].startAI(30);
 
 

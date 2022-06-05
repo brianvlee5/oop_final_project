@@ -38,7 +38,7 @@ public:
 	void stopTimer();
 	void startCD(Uint32);
 	//	void move();
-	void move();
+	virtual void move();
 	void setdetectCorner();
 	void moveOrNot();
 	bool xRight();
@@ -46,6 +46,7 @@ public:
 	bool yUp();
 	bool yDown();
 	void setJumpFlag(bool f);
+	bool getJumpFlag();
 	void collisionAABB(AnimeObject2&);
 	int getDPX(int a, int b);
 	int getDPY(int a, int b);

@@ -139,3 +139,7 @@ void MonsterD::setBase(int xx, int yy)
 	XBase = xx * WIDTH / MAPTILEX;
 	YBase = yy * HEIGHT / MAPTILEY;
 }
+void MonsterD::setAImode(int mode)
+{
+	AImode = mode;
+}

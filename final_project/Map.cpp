@@ -8,7 +8,7 @@ Map::Map()
 	camera.w = CAMERAW;
 	startR[0] = { 57*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
 	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
-	startR[2] = { 58 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
+	startR[2] = { 56 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[4] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
 	startR[5] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
@@ -319,7 +319,7 @@ void Map::setMonster(std::vector<Monster*>& mv, int mapnumADD)
 	FILE* fspawn;
 	char file2[100];
 	int xx, yy, Dflag;
-	sprintf_s(file2, 100, "%s%02d.txt", "../Mspawn/", mv[0]->getMapnum() + mapnumADD + 1);
+	sprintf_s(file2, 100, "../Mspawn/%02d.txt", mv[0]->getMapnum() + mapnumADD + 1);
 	fopen_s(&fspawn, file2, "r");
 	for (int i = 0; i < mv.size(); i++)
 	{

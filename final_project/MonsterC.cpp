@@ -114,6 +114,12 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 			return interval;
 			break;
 		}
+		case STOP:
+		{
+			p->setVX(0);
+			return interval;
+			break;
+		}
 	}
 }
 

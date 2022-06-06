@@ -16,7 +16,7 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 				for (int i = 0; i < atk.size(); i++)
 					atk[i].setPause(true);
 				for (int i = 0; i < mv.size(); i++)
-					mv[i]->stopAI();
+					mv[i]->setAImode(STOP);
 				state = PAUSE;
 			}
 			else if (state == PAUSE)
@@ -24,7 +24,7 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 				for (int i = 0; i < atk.size(); i++)
 					atk[i].setPause(false);
 				for (int i = 0; i < mv.size(); i++)
-					mv[i]->startAI(15);
+					mv[i]->setAImode(WAIT);
 				state = PLAY;
 			}
 			break;
@@ -56,6 +56,8 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//resume
 		{
 			state = PLAY;
+			for (int i = 0; i < mv.size(); i++)
+				mv[i]->setAImode(WAIT);
 		}
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))//menu
 		{
@@ -573,7 +575,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
-	//MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object prop("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
@@ -616,6 +618,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		Monsv.push_back(&tempd[i]);
 
 
+	InitMonsters(Monsv);
+
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
 	for (int i = 0; i < MAXHP; i++)
@@ -638,16 +642,16 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	demo1.set("../images/map/map", window.getRenderer());
 	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
-
-	//thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
-
-
+	
+	
+	thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
+	
 	for (int i = 0; i < Monsv.size(); i++)
-	{
+	{	
 		Monsv[i]->setMchptr(pan);
 		Monsv[i]->startAI(15);
 	}
-
+	
 	for (int i = 0; i < 6; i++)
 	{
 		if (i == 2 || i == 3)
@@ -667,8 +671,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	pan.setPosition(mchsave.x, mchsave.y);
 	fclose(fload);
 	demo1.setmap(Monsv);
-
-	while (!quit && GameState == GAMEPLAY)
+	printf("1pass\n");
+	while (!quit && GameState == LOADGAMEPLAY)
 	{
 
 		while (SDL_PollEvent(&ev) != 0)
@@ -698,7 +702,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			//				//monsv[i].StartWait(30);
 			//			}
 			demo1.setcamera(pan);
-
+			demo1.changemap(pan, Monsv);
 
 
 			coord.calMapCamera(demo1, pan);
@@ -790,8 +794,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					enemycord[0].calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ enemycord[0].getpCX(),enemycord[0].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 			for (int i = 0; i < fire.size(); i++)

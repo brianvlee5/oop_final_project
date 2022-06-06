@@ -57,6 +57,8 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 				p->setVY(p->YFly / 30);
 				p->move();
 				p->FlyTime++;
+				if (!p->xLeft() || !p->xRight() || !p->yUp() || !p->yDown())
+					p->AImode = FLYBACK;
 			}
 			else
 			{

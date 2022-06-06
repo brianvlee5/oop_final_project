@@ -10,6 +10,7 @@ public:
     void setMchptr(AnimeObject2& mainch);
     void startAI(Uint32 t);
     void stopAI();
+    void collisionAABB(AnimeObject2&);
 
 private:
 

@@ -52,10 +52,12 @@ public:
 	void setIVFlag(bool f);    //flag 3
 	void setDeadFlag(bool f);  //flag 4
 	void setKey(bool f);
+	void setGateFlag(bool f);
 	bool getIVFlag();
 	bool getMapFlag();
 	bool getDeadFlag();
 	bool getKey();
+	bool getGateFlag();
 
 	void usePotion();
 
@@ -79,6 +81,7 @@ private:
 	bool deadFlag;
 	bool rushFlag;
 	bool gravityFlag;
+	bool gateFlag;
 	bool key;
 
 	int dir;

@@ -241,10 +241,12 @@ void GSManager::GamePlay(RenderWindow& window)
 
 	AnimeObject2 pan("../images/panda/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	MonsterI thekey("../images/Key", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	MonsterI gate("../images/gate", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object frame("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	vector<Object> prop_v;
 	vector<Object> number;
@@ -286,6 +288,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 	InitMonsters(Monsv);
 
+	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
 	for (int i = 0; i < MAXHP; i++)
@@ -390,9 +393,13 @@ void GSManager::GamePlay(RenderWindow& window)
 				keycord.calMapCamera(demo1, thekey);
 				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
-
-
-
+			if (demo1.getmapnum() == 4)
+			{
+				keycord.calMapCamera(demo1, gate);
+				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				gate.collisionAABB(pan);
+			}
+			
 
 			for (int i = 0; i < Monsv.size(); i++)
 			{

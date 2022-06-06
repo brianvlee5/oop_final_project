@@ -33,7 +33,9 @@ void MonsterI::collisionAABB(AnimeObject2& mainch)
 			mainch.getY() < getY() + getHeight() / SHRINK)
 		{
 			if (mainch.getKey())
+			{
 				setDeadFlag(true);
+			}
 			else
 				mainch.setGateFlag(true);
 		}

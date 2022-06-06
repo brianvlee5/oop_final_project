@@ -152,6 +152,9 @@
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterA.cpp" />
+    <ClCompile Include="MonsterB.cpp" />
+    <ClCompile Include="MonsterC.cpp" />
+    <ClCompile Include="MonsterD.cpp" />
     <ClCompile Include="MonsterI.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
@@ -171,6 +174,9 @@
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterA.h" />
+    <ClInclude Include="MonsterB.h" />
+    <ClInclude Include="MonsterC.h" />
+    <ClInclude Include="MonsterD.h" />
     <ClInclude Include="MonsterI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />

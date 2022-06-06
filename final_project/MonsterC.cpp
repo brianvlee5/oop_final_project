@@ -23,10 +23,6 @@ void MonsterC::stopAI()
 Uint32 MonsterC::AIState(Uint32 interval, void* param)
 {
 	MonsterC* p = (MonsterC*)param;
-	if (fabs(p->getX() - p->Mchptr->getX()) < 500 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->TPcd<=0)
-		p->AImode = TELEPORT;
-	else
-		p->AImode = WAIT;
 
 	switch (p->AImode)
 	{
@@ -43,13 +39,78 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 				p->setVX(-dist);
 			}
 			p->move();
-			p->TPcd = 50;
+			p->WaitTime = 50;
+			p->AImode = WAIT;
 			return interval;
 			break;
 		}
 		case WAIT:
 		{
-			p->TPcd--;
+			if (fabs(p->getX() - p->Mchptr->getX()) < 400 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->WaitTime<=0)
+			{
+				p->AImode = TELEPORT;
+			}
+			else if (p->WaitTime > 0)
+			{
+				p->WaitTime--;
+			}
+			else
+			{
+				p->AImode = WANDER;
+				p->WanderTime = 50;
+
+				if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
+					p->WANDERmode = RIGHT;
+				else if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 1 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 0)
+					p->WANDERmode = LEFT;
+				else if (tile[p->getMapnum()][p->getDPX(1, 1)][p->getDPX(1, 0)] == 1 || tile[p->getMapnum()][p->getDPX(3, 1)][p->getDPX(3, 0)] == 1)
+					p->WANDERmode = LEFT;
+				else if (tile[p->getMapnum()][p->getDPX(2, 1)][p->getDPX(2, 0)] == 1 || tile[p->getMapnum()][p->getDPX(0, 1)][p->getDPX(0, 0)] == 1)
+					p->WANDERmode = RIGHT;
+				else
+					p->WANDERmode = rand() % 2;
+			}
+			return interval;
+			break;
+		}
+		case WANDER:
+		{
+			if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 1 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 0)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPX(1, 1)][p->getDPX(1, 0)] == 1 || tile[p->getMapnum()][p->getDPX(3, 1)][p->getDPX(3, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (tile[p->getMapnum()][p->getDPX(2, 1)][p->getDPX(2, 0)] == 1 || tile[p->getMapnum()][p->getDPX(0, 1)][p->getDPX(0, 0)] == 1)
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+			else if (p->WanderTime > 0)
+			{
+				if (p->WANDERmode == LEFT)
+					p->setVX(2);
+				else
+					p->setVX(-2);
+
+				p->move();
+				p->WanderTime--;
+			}
+			else
+			{
+				p->WaitTime = 50;
+				p->AImode = WAIT;
+			}
+
 			return interval;
 			break;
 		}
@@ -71,7 +132,7 @@ void MonsterC::draw(SDL_Rect dst, SDL_Rect src)
 	{
 		s = NULL;
 	}
-//	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
+	//thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
 	//thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
 	Monster::draw(dst, src);
 }

@@ -43,7 +43,7 @@ public:
 	void collision_mons(std::vector<Monster*>& mv);
 	void setMapFlag(bool f);
 	bool getMapFlag();
-	void setMapnum(int);
+	void setMapnum(int num);
 	void setPause(bool f);
 
 	void setDir(int);

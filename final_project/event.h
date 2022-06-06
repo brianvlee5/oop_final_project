@@ -88,10 +88,7 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_b:
-			for (int i = 0; i < a.size(); i++)
-			{
-				a[i].setMapnum(p.getMapnum());
-			}
+			
 			break;
 		}
 	}

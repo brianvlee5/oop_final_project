@@ -88,7 +88,10 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_b:
-			
+			for (int i = 0; i < a.size(); i++)
+			{
+				a[i].setMapnum(p.getMapnum());
+			}
 			break;
 		}
 	}
@@ -124,6 +127,9 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& p) {
 			break;
 		case SDLK_2:
 			p.usePotion();
+			break;
+		case SDLK_1:
+			p.setKey(true);
 			break;
 		}
 	}

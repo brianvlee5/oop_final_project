@@ -35,7 +35,7 @@ void AnimeObject2::initialize()
 	deadFlag = false;
 	rushFlag = true;
 	gravityFlag = true;
-	num_potion = 5;
+	num_potion = 9;
 	gateFlag = false;
 }
 
@@ -442,17 +442,17 @@ bool AnimeObject2::getGateFlag()
 
 void AnimeObject2::usePotion()
 {
-	if (health + 2 < MAXHP)
-	{
-		health += 2;
-	}
-	else
-	{
-		health = MAXHP;
-	}
 	if (num_potion > 0)
 	{
 		num_potion--;
+		if (health + 2 < MAXHP)
+		{
+			health += 2;
+		}
+		else
+		{
+			health = MAXHP;
+		}
 	}
 }
 

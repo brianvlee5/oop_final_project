@@ -14,6 +14,13 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	mapnum = 0;
 	Maxhp = 30;
 	shownFlag = true;
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 2; j++)
+			detectCornerX[i][j] = 0;
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 2; j++)
+			detectCornerY[i][j] = 0;
+
 	for (int i = 0; i < num; i++)
 	{
 
@@ -52,7 +59,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
-
+	
 
 	for (int i = 0; i < num; i++)
 	{

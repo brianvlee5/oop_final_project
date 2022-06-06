@@ -25,6 +25,7 @@
 #define TELEPORT 3
 #define FLY 4
 #define FLYBACK 5
+#define STOP 6
 
 //wander mode
 #define LEFT 0

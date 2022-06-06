@@ -49,6 +49,7 @@ Uint32 MonsterA::AIState(Uint32 interval, void* param)
 			}
 			else if(p->getX() == p->Mchptr->getX())
 				p->setVX(0);
+			
 
 			p->move();
 			return interval;
@@ -121,6 +122,12 @@ Uint32 MonsterA::AIState(Uint32 interval, void* param)
 				p->AImode = WAIT;
 			}
 
+			return interval;
+			break;
+		}
+		case STOP:
+		{
+			p->setVX(0);
 			return interval;
 			break;
 		}

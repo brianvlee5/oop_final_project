@@ -2,16 +2,23 @@
 
 MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	AImode = WAIT;
-	Flycd = 0;
-	FlyTime = 0;
+	init();
 }
 
 MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
+	init();
+}
+
+void MonsterD::init()
+{
 	AImode = WAIT;
 	Flycd = 0;
 	FlyTime = 0;
+	AIID = 0;
+	AIinterval = 0;
+	XBase = YBase = XFly = YFly = WANDERmode = 0;
+	Mchptr = nullptr;
 }
 
 void MonsterD::startAI(Uint32 t)
@@ -87,6 +94,12 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 			p->move();
 
 
+			return interval;
+			break;
+		}
+		case STOP:
+		{
+			p->setVX(0);
 			return interval;
 			break;
 		}

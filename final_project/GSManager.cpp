@@ -400,10 +400,12 @@ void GSManager::GamePlay(RenderWindow& window)
 					Monsv[i]->collisionAABB(pan);
 			}
 
+			
 
 
 			for (int i = 0; i < fire.size(); i++)
 			{
+				fire[i].setMapnum(pan.getMapnum());
 				fire[i].collision_mons(Monsv);
 			}
 

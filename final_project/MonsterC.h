@@ -21,5 +21,7 @@ private:
     int AImode;
     int WANDERmode;
     int TPcd;
+    int WaitTime;
+    int WanderTime;
 };
 

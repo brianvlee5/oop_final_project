@@ -21,6 +21,7 @@ void MonsterA::stopAI()
 	AIinterval = 0;
 }
 
+
 Uint32 MonsterA::AIState(Uint32 interval, void* param)
 {
 	MonsterA* p = (MonsterA*)param;
@@ -147,4 +148,9 @@ void MonsterA::draw(SDL_Rect dst, SDL_Rect src)
 	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
 	thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
 	Monster::draw(dst, src);
+}
+
+void MonsterA::setAImode(int mode)
+{
+	AImode = mode;
 }

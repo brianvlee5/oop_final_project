@@ -514,3 +514,7 @@ SDL_Renderer* Monster::getRenderer()
 {
 	return renderer;
 }
+void Monster::setAImode(int mode)
+{
+
+}

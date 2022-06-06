@@ -47,6 +47,7 @@ public:
 	bool yDown();
 	void setJumpFlag(bool f);
 	bool getJumpFlag();
+	virtual void setAImode(int mode);
 	void collisionAABB(AnimeObject2&);
 	int getDPX(int a, int b);
 	int getDPY(int a, int b);

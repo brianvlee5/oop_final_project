@@ -80,3 +80,7 @@ void MonsterC::setMchptr(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
 }
+void MonsterC::setAImode(int mode)
+{
+	AImode = mode;
+}

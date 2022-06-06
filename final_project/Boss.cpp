@@ -1,25 +1,16 @@
-#include "MonsterB.h"
-
-
-MonsterB::MonsterB(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
+#include "Boss.h"
+Boss::Boss(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	AImode = WANDER;
-	WANDERmode = LEFT;
-	setVY(2);
-	move();
+	setDeadFlag(false);
 }
 
-MonsterB::MonsterB(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
+Boss::Boss(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-	AImode = WANDER;
-	WANDERmode = LEFT;
-	setVY(2);
-	move();
+	setDeadFlag(false);
 }
-
-Uint32 MonsterB::AIState(Uint32 interval, void* param)
+Uint32 Boss::AIState(Uint32 interval, void* param)
 {
-	MonsterB* p = (MonsterB*)param;
+	Boss* p = (Boss*)param;
 	switch (p->AImode)
 	{
 	case TRACE:
@@ -116,30 +107,21 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 	}
 	}
 }
-
-void MonsterB::startAI(Uint32 t)
+void Boss::startAI(Uint32 t)
 {
 	AIinterval = t;
 	AImode = WANDER;
 	AIID = SDL_AddTimer(AIinterval, AIState, this);
 }
-
-void MonsterB::stopAI()
+void Boss::stopAI()
 {
 	AIinterval = 0;
 }
-
-void MonsterB::setMchptr(AnimeObject2& mainch)
+void Boss::setMchptr(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
 }
-
-void MonsterB::setAImode(int mode)
-{
-	AImode = mode;
-}
-
-void MonsterB::draw(SDL_Rect dst, SDL_Rect src)
+void Boss::draw(SDL_Rect dst, SDL_Rect src)
 {
 	SDL_Rect* d = &dst, * s = &src;
 

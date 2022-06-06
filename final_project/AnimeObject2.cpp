@@ -36,6 +36,7 @@ void AnimeObject2::initialize()
 	rushFlag = true;
 	gravityFlag = true;
 	num_potion = 5;
+	gateFlag = false;
 }
 
 void AnimeObject2::draw()
@@ -220,6 +221,7 @@ void AnimeObject2::move()
 	setdetectCorner();
 	moveOrNot();
 
+	
 	if (x + getWidth() / SHRINK >= WIDTH)
 		x = WIDTH - getWidth() / SHRINK;
 	if (y + getHeight() / SHRINK >= HEIGHT)
@@ -394,14 +396,14 @@ void AnimeObject2::moveOrNot()
 
 	if (velX > 0)
 	{
-		if (xRight())
+		if (xRight() && !getGateFlag())
 		{
 			x += velX;
 		}
 	}
 	else if (velX < 0)
 	{
-		if (xLeft())
+		if (xLeft() && !getGateFlag())
 		{
 			x += velX;
 		}
@@ -426,6 +428,16 @@ void AnimeObject2::moveOrNot()
 void AnimeObject2::setJumpFlag(bool f)
 {
 	jumpFlag = f;
+}
+
+void AnimeObject2::setGateFlag(bool f)
+{
+	gateFlag = f;
+}
+
+bool AnimeObject2::getGateFlag()
+{
+	return gateFlag;
 }
 
 void AnimeObject2::usePotion()

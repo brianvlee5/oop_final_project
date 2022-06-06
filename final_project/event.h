@@ -134,10 +134,10 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& p) {
 		{
 
 		case SDLK_LEFT:
-				p.setVx(p.getVx() + VELOCITY);
+			p.setVx(p.getVx() + VELOCITY);
 			break;
 		case SDLK_RIGHT:
-				p.setVx(p.getVx() - VELOCITY);
+			p.setVx(p.getVx() - VELOCITY);
 			break;
 		case SDLK_SPACE:
 			p.setJumpFlag(0);

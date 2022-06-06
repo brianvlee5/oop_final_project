@@ -23,6 +23,41 @@ void MonsterI::gotKey(AnimeObject2& mainch)
 		mainch.setKey(true);
 	}
 }
+void MonsterI::collisionAABB(AnimeObject2& mainch)
+{
+	if (mainch.getVx() > 0)
+	{
+		if (getX() < mainch.getX() + mainch.getVx() + mainch.getWidth() / SHRINK &&
+			mainch.getX() < getX() + getWidth() / SHRINK &&
+			getY() < mainch.getY() + mainch.getHeight() / SHRINK &&
+			mainch.getY() < getY() + getHeight() / SHRINK)
+		{
+			if (mainch.getKey())
+				setDeadFlag(true);
+			else
+				mainch.setGateFlag(true);
+		}
+		else
+			mainch.setGateFlag(false);
+	}
+	else if (mainch.getVx() < 0)
+	{
+		if (getX() < mainch.getX() + mainch.getWidth() / SHRINK &&
+			mainch.getX() + mainch.getVx() < getX() + getWidth() / SHRINK &&
+			getY() < mainch.getY() + mainch.getHeight() / SHRINK &&
+			mainch.getY() < getY() + getHeight() / SHRINK)
+		{
+			if (mainch.getKey())
+				setDeadFlag(true);
+			else
+				mainch.setGateFlag(true);
+		}
+		else
+			mainch.setGateFlag(false);
+	}
+	
+	
+}
 
 void MonsterI::setMchptr(AnimeObject2& mainch)
 {

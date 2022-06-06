@@ -11,6 +11,7 @@ public:
     void setMchptr(AnimeObject2& mainch);
     void startAI(Uint32 t);
     void stopAI();
+    void setAImode(int mode);
     void draw(SDL_Rect dst, SDL_Rect src);
 private:
     SDL_TimerID AIID;

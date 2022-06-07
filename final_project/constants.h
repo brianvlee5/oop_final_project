@@ -47,6 +47,7 @@
 #define MAINMENU 0
 #define GAMEPLAY 1
 #define LOADGAMEPLAY 2
+#define GAMECLEAR 3
 
 //for gameplay state
 #define PLAY 0

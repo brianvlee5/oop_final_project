@@ -156,6 +156,7 @@
     <ClCompile Include="MonsterC.cpp" />
     <ClCompile Include="MonsterD.cpp" />
     <ClCompile Include="MonsterI.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="System.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="MonsterC.h" />
     <ClInclude Include="MonsterD.h" />
     <ClInclude Include="MonsterI.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="System.h" />

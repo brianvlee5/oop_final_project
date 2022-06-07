@@ -2,12 +2,12 @@
 
 MonsterI::MonsterI(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-
+	winFlag = false;
 }
 
 MonsterI::MonsterI(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-
+	winFlag = false;
 }
 
 void MonsterI::gotKey(AnimeObject2& mainch)
@@ -23,7 +23,7 @@ void MonsterI::gotKey(AnimeObject2& mainch)
 		mainch.setKey(true);
 	}
 }
-void MonsterI::collisionAABB(AnimeObject2& mainch)
+void MonsterI::gateAABB(AnimeObject2& mainch)
 {
 	if (mainch.getVx() > 0)
 	{
@@ -59,6 +59,29 @@ void MonsterI::collisionAABB(AnimeObject2& mainch)
 	}
 	
 	
+}
+
+void MonsterI::princessAABB(AnimeObject2& mainch)
+{
+	if (!mainch.getIVFlag())
+	{
+		if (getX() < mainch.getX() + mainch.getWidth() / SHRINK &&
+			mainch.getX() + mainch.getVx() < getX() + getWidth() / SHRINK &&
+			getY() < mainch.getY() + mainch.getHeight() / SHRINK &&
+			mainch.getY() < getY() + getHeight() / SHRINK)
+		{
+			setWinFlag(true);
+		}
+	}
+}
+
+void MonsterI::setWinFlag(bool f)
+{
+	winFlag = f;
+}
+bool MonsterI::getWinFlag()
+{
+	return winFlag;
 }
 
 void MonsterI::setMchptr(AnimeObject2& mainch)

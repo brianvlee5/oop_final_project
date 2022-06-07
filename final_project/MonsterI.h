@@ -10,9 +10,12 @@ public:
     void setMchptr(AnimeObject2& mainch);
     void startAI(Uint32 t);
     void stopAI();
-    void collisionAABB(AnimeObject2&);
-
+    void gateAABB(AnimeObject2& mainch);
+    void princessAABB(AnimeObject2& mainch);
+    void setWinFlag(bool f);
+    bool getWinFlag();
 private:
 
+    bool winFlag;
 };
 

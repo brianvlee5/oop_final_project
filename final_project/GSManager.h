@@ -38,6 +38,7 @@ public:
 	void GamePlay(RenderWindow & window);
 	void MainMenu(RenderWindow& window);
 	void LoadGamePlay(RenderWindow& window);
+	void GameClear(RenderWindow& window);
 	void setGameState(int gs);
 	int getGameState();
 	void InitMonsters(std::vector<Monster*>& mv);

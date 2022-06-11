@@ -43,6 +43,7 @@ public:
 	void setGameState(int gs);
 	int getGameState();
 	void InitMonsters(std::vector<Monster*>& mv);
+	void drawCoinNum(std::vector<Object>& cv, RenderWindow& window, int coinn, Object& Coin);
 private:
 	
 	SDL_Event ev;

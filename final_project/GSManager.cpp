@@ -279,6 +279,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	Object coin("../images/coin.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Object> prop_v;
 	vector<Object> number;
+	vector<Object> numberc;
 
 	vector<MonsterA> tempa;
 	vector<MonsterB> tempb;
@@ -325,18 +326,20 @@ void GSManager::GamePlay(RenderWindow& window)
 	h.setPosition(0, 0);
 	for (int i = 0; i < MAXHP; i++)
 	{
-		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });
+		window.addVPregion({ {h.getWidth() / 2 * i, 0, h.getWidth() / 2, h.getHeight()} });//0~7
 	}
 	frame.setShownFlag(true);
 	frame.setPosition(0, 0);
 	for (int i = 0; i < PROPNUM; i++)
 	{
-		window.addVPregion({ {(frame.getWidth()+1) * i, h.getHeight() * 4 / 3, frame.getWidth(), frame.getHeight()} });
+		window.addVPregion({ {(frame.getWidth()+1) * i, h.getHeight() * 4 / 3, frame.getWidth(), frame.getHeight()} });//8~13
 	}
 	key.setShownFlag(true);
 	key.setPosition(0, 0);
 	potion.setShownFlag(true);
 	potion.setPosition(0, 0);
+
+	
 
 	prop_v.push_back(key);
 	prop_v.push_back(potion);
@@ -350,14 +353,29 @@ void GSManager::GamePlay(RenderWindow& window)
 		number[i].setPosition(0, 0);
 	}
 
+	for (int i = 0; i < 10; i++)
+	{
+		char file[100];
+		sprintf_s(file, "../images/number/0%d.png", i);
+		numberc.push_back(Object(file, window.getRenderer(), 32, 29, 32));
+		numberc[i].setShownFlag(true);
+		numberc[i].setPosition(0, 0);
+	}
+	
 
 	Map demo1;
 	demo1.set("../images/map/map", window.getRenderer());
-	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // VP: 
+	window.addVPregion({ {WINDOWW / 6 * 5, 0, WINDOWW / 4, WINDOWH / 4} }); // 14
 	pan.setPosition(demo1.startL[demo1.getmapnum()].x, demo1.startL[demo1.getmapnum()].y);
 
 	thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
 
+	window.addVPregion({ {0, h.getHeight() * 12 / 3, coin.getWidth()/8, coin.getHeight()/8} });//15
+	coin.setShownFlag(true);
+	coin.setPosition(0, 0);
+
+	for(int i=1; i<=3; i++)
+		window.addVPregion({ {i*coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//16~18
 
 	for (int i = 0; i < Monsv.size(); i++)
 	{
@@ -503,9 +521,14 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			}
 
+			
+			drawCoinNum(numberc, window, pan.getCoin(), coin);
+
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION } , { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8});
 			window.display();
 			break;
 		}
@@ -1052,6 +1075,24 @@ void GSManager::GameClear(RenderWindow& window)
 
 	congrats.close();
 	congratulation.close();
+}
+
+void GSManager::drawCoinNum(std::vector<Object>& cv, RenderWindow& window, int coinn, Object& Coin)
+{
+	int hun, ten, one, cointemp;
+	cointemp = coinn;
+	one = cointemp % 10;
+	cointemp /= 10;
+	ten = cointemp % 10;
+	cointemp /= 10;
+	hun = cointemp % 10;
+
+	window.setVP(MAXHP + PROPNUM + 2);
+	cv[hun].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
+	window.setVP(MAXHP + PROPNUM + 3);
+	cv[ten].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
+	window.setVP(MAXHP + PROPNUM + 4);
+	cv[one].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
 }
 
 void GSManager::setGameState(int gs)

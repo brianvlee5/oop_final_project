@@ -37,6 +37,7 @@ void AnimeObject2::initialize()
 	gravityFlag = true;
 	num_potion = 9;
 	gateFlag = false;
+	coin = 50;
 }
 
 void AnimeObject2::draw()
@@ -464,4 +465,14 @@ void AnimeObject2::setPotionNum(int n)
 int AnimeObject2::getPotionNum()
 {
 	return num_potion;
+}
+
+void AnimeObject2::setCoin(int c)
+{
+	coin = c;
+}
+
+int AnimeObject2::getCoin()
+{
+	return coin;
 }

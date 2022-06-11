@@ -59,7 +59,10 @@ public:
 	bool getKey();
 	bool getGateFlag();
 
+	/*****Item*****/
 	void usePotion();
+	void setCoin(int c);
+	int getCoin();
 
 	/*****Timer*****/
 	void startFrameTimer(Uint32 t);
@@ -84,6 +87,7 @@ private:
 	bool gateFlag;
 	bool key;
 
+	int coin;
 	int dir;
 	int init_vx;
 	int Mapnum;

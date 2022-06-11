@@ -376,7 +376,7 @@ void Attack::collision_mons(std::vector<MonsterA>& mv)
 	}
 }
 
-void Attack::collision_mons(std::vector<Monster*>& mv)
+void Attack::collision_mons(std::vector<Monster*>& mv, AnimeObject2& mainch)
 {
 	for (int i = 0; i < mv.size(); i++)
 	{
@@ -397,6 +397,8 @@ void Attack::collision_mons(std::vector<Monster*>& mv)
 				else
 				{
 					mv[i]->setDeadFlag(true);
+					mainch.setCoin(mainch.getCoin() + 1);
+					printf("coins remain: %d\n", mainch.getCoin());
 				}
 
 

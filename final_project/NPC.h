@@ -9,6 +9,7 @@ public:
     void setMchptr(AnimeObject2& mainch);
     void startAI(Uint32 t);
     void setAImode(int mode);
+    bool npcAABB(AnimeObject2& mainch);
     void stopAI();
     void draw(SDL_Rect dst, SDL_Rect src);
 private:

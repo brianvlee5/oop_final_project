@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "AnimeObject2.h"
 #include "Attack.h"
+#include "NPC.h"
 #include <math.h>
 #include "constants.h"
 #include "GSManager.h"
@@ -152,6 +153,32 @@ static void poohKeyboard(SDL_Event e, AnimeObject2& p) {
 			p.setMapFlag(0);
 			break;
 		}
+	}
+}
+
+static void npcKeyBoard(SDL_Event e, AnimeObject2& mainch, NPC& npc)
+{
+	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+	{
+		switch (e.key.keysym.sym)
+		{
+			case SDLK_b:
+			{
+				if (npc.npcAABB(mainch) && mainch.getPotionNum()<9)
+				{
+					mainch.setCoin(mainch.getCoin() - 5);
+					mainch.setPotionNum(mainch.getPotionNum() + 1);
+					printf("coins remain: %d\n", mainch.getCoin());
+
+				}	
+				break;
+			}
+				
+		}
+	}
+	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
+	{
+		
 	}
 }
 

@@ -268,12 +268,15 @@ void GSManager::GamePlay(RenderWindow& window)
 	MonsterI gate("../images/gate", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	MonsterI princess("../images/princess", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
+	NPC npcPotion("../images/npcP", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object frame("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
+	Object coin("../images/coin.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	vector<Object> prop_v;
 	vector<Object> number;
 
@@ -314,8 +317,10 @@ void GSManager::GamePlay(RenderWindow& window)
 
 	InitMonsters(Monsv);
 
+	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
 	princess.setPosition(51 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY + 5);
+
 	h.setShownFlag(true);
 	h.setPosition(0, 0);
 	for (int i = 0; i < MAXHP; i++)
@@ -379,6 +384,7 @@ void GSManager::GamePlay(RenderWindow& window)
 			{
 				poohKeyboard(ev, pan);
 				attackKeyboard(ev, fire, pan);
+				npcKeyBoard(ev, pan, npcPotion);
 			}
 		}
 
@@ -442,13 +448,20 @@ void GSManager::GamePlay(RenderWindow& window)
 				princess.princessAABB(pan);
 			}
 
+			if (demo1.getmapnum() == 0)
+			{
+				keycord.calMapCamera(demo1, npcPotion);
+				npcPotion.draw({ keycord.getpCX(),keycord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
+				npcPotion.npcAABB(pan);
+			}
+
 			if (princess.getWinFlag())
 				GameState = GAMECLEAR;
 
 			for (int i = 0; i < fire.size(); i++)
 			{
 				fire[i].setMapnum(pan.getMapnum());
-				fire[i].collision_mons(Monsv);
+				fire[i].collision_mons(Monsv, pan);
 			}
 
 			for (int i = 0; i < fire.size(); i++)
@@ -837,7 +850,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			for (int i = 0; i < fire.size(); i++)
 			{
 				fire[i].setMapnum(pan.getMapnum());
-				fire[i].collision_mons(Monsv);
+				fire[i].collision_mons(Monsv, pan);
 			}
 
 			for (int i = 0; i < fire.size(); i++)

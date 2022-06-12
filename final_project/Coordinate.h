@@ -8,7 +8,7 @@
 #include "MonsterD.h"
 #include "constants.h"
 #include <stdio.h>
-
+#include "MAttack.h"
 
 class Coordinate
 {
@@ -20,6 +20,7 @@ public:
 	void calMapCamera(Map, Attack&);
 	void calMapCamera(Map, MonsterC&);
 	void calMapCamera(Map, MonsterD&);
+	void calMapCamera(Map, MAttack&);
 	int getpCX();
 	int getpCY();
 private:

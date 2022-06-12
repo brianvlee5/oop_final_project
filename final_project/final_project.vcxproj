@@ -149,6 +149,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MAttack.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterA.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MAttack.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterA.h" />

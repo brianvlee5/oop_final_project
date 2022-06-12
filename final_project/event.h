@@ -168,7 +168,6 @@ static void npcKeyBoard(SDL_Event e, AnimeObject2& mainch, NPC& npc)
 				{
 					mainch.setCoin(mainch.getCoin() - 5);
 					mainch.setPotionNum(mainch.getPotionNum() + 1);
-					printf("coins remain: %d\n", mainch.getCoin());
 
 				}	
 				break;

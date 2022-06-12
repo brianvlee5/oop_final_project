@@ -158,6 +158,7 @@ void GSManager::InitMonsters(std::vector<Monster*>& mv)
 		mv[i]->setDeadFlag(Dflag);
 		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
 		mv[i]->setBase(xx, yy);
+
 	}
 	fclose(fspawn);
 
@@ -270,13 +271,18 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 	NPC npcPotion("../images/npcP", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
+	
+	
 	vector<Attack> fire; // (6, Attack("../images/attack/fire2.png", 1, 1, 1, window.getRenderer(), 0xFF, 0xFF, 0xFF));
+	vector<MAttack> mfire(3, MAttack("../images/fire", 1, window.getRenderer(), 0x00, 0x00, 0x00));
+
+
 	Object h("../images/heart.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object frame("../images/frame.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
-	Object coin("../images/coin.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
 	vector<Object> prop_v;
 	vector<Object> number;
 	vector<Object> numberc;
@@ -288,12 +294,12 @@ void GSManager::GamePlay(RenderWindow& window)
 	vector<Monster*> Monsv;
 	for (int i = 0; i < 3; i++)
 	{
-		MonsterA a("../images/MonsterA/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		MonsterA a("../images/MonsterA/", 5, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 		tempa.push_back(a);
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		MonsterB b("../images/MonsterB/", 5, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+		MonsterB b("../images/MonsterB/", 4, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 		tempb.push_back(b);
 	}
 	for (int i = 0; i < 2; i++)
@@ -317,6 +323,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv.push_back(&tempd[i]);
 
 	InitMonsters(Monsv);
+	
 
 	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
@@ -380,6 +387,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 	{
 		Monsv[i]->setMchptr(pan);
+		Monsv[i]->setMatkptr(mfire[i % 3]);
 		Monsv[i]->startAI(15);
 	}
 
@@ -476,6 +484,7 @@ void GSManager::GamePlay(RenderWindow& window)
 			if (princess.getWinFlag())
 				GameState = GAMECLEAR;
 
+		
 			for (int i = 0; i < fire.size(); i++)
 			{
 				fire[i].setMapnum(pan.getMapnum());
@@ -485,6 +494,12 @@ void GSManager::GamePlay(RenderWindow& window)
 			for (int i = 0; i < fire.size(); i++)
 				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
 			
+			for (int i = 0; i < mfire.size(); i++)
+			{
+				keycord.calMapCamera(demo1, mfire[i]);
+				mfire[i].collisionAABB(pan);
+				mfire[i].draw({keycord.getpCX(), keycord.getpCY(), mfire[i].getWidth(), mfire[i].getHeight()}, {ALLREGION});
+			}
 
 			window.setVP(-1);
 			if (pan.getDeadFlag())

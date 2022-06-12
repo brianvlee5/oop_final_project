@@ -1,8 +1,6 @@
-#include "Monster.h"
+#include "MAttack.h"
 
-
-
-Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
+MAttack::MAttack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 {
 	frame = 0;
 	renderer = ren;
@@ -14,6 +12,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	mapnum = 0;
 	Maxhp = 30;
 	shownFlag = true;
+	atkFly = 50;
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 2; j++)
 			detectCornerX[i][j] = 0;
@@ -44,8 +43,8 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 			{
 				printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
 			}
-			width = imgSurface->w/5;
-			height = imgSurface->h/5;
+			width = imgSurface->w / 5;
+			height = imgSurface->h / 5;
 
 			// Get rid of old loaded surface
 			SDL_FreeSurface(imgSurface);
@@ -54,12 +53,13 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 
 }
 
-Monster::Monster(const char* path, int n, SDL_Renderer* ren)
+MAttack::MAttack(const char* path, int n, SDL_Renderer* ren)
 {
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
-	
+	atkFly = 0;
+
 
 	for (int i = 0; i < num; i++)
 	{
@@ -83,8 +83,8 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 			{
 				printf("SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
 			}
-			width = imgSurface->w/5;
-			height = imgSurface->h/5;
+			width = imgSurface->w / 5;
+			height = imgSurface->h / 5;
 
 			// Get rid of old loaded surface
 			SDL_FreeSurface(imgSurface);
@@ -93,10 +93,10 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 
 }
 
-Uint32 Monster::damaged(Uint32 interval, void* param)
+Uint32 MAttack::damaged(Uint32 interval, void* param)
 {
-	Monster* p = (Monster*)param;
-	if (p->damageCD<4)
+	MAttack* p = (MAttack*)param;
+	if (p->damageCD < 4)
 	{
 		p->setShownFlag(!p->getShownFlag());
 		p->damageCD++;
@@ -110,9 +110,9 @@ Uint32 Monster::damaged(Uint32 interval, void* param)
 }
 
 
-Uint32 Monster::changeData(Uint32 interval, void* param)
+Uint32 MAttack::changeData(Uint32 interval, void* param)
 {
-	Monster* p = (Monster*)param;
+	MAttack* p = (MAttack*)param;
 	if (p->time != 0)
 	{
 		p->frame = (p->frame + 1) % p->num;
@@ -124,52 +124,63 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	}
 }
 
-void Monster::setBase(int xx, int yy)
+Uint32 MAttack::Straight(Uint32 interval, void* param)
 {
-
+	MAttack* p = (MAttack*)param;
+	if (p->STTime != 0 && p->atkFly <= 30)
+	{
+		p->atkFly++;
+		p->move();
+		return interval;
+	}
+	else
+	{
+		p->setShownFlag(false);
+		return 0;
+	}
 }
 
-void Monster::setMapnum(int mapnumm)
+void MAttack::setMapnum(int mapnumm)
 {
 	mapnum = mapnumm;
 }
 
-int Monster::getMapnum()
+int MAttack::getMapnum()
 {
 	return mapnum;
 }
 
-void Monster::setDeadFlag(bool f)
+void MAttack::setDeadFlag(bool f)
 {
 	deadFlag = f;
 }
 
-bool Monster::getDeadFlag()
+bool MAttack::getDeadFlag()
 {
 	return deadFlag;
 }
 
-void Monster::setShownFlag(bool f)
+void MAttack::setShownFlag(bool f)
 {
 	shownFlag = f;
 }
 
-bool Monster::getShownFlag()
+bool MAttack::getShownFlag()
 {
 	return shownFlag;
 }
 
-void Monster::setcdFlag(bool f)
+void MAttack::setcdFlag(bool f)
 {
 	cdFlag = f;
 }
 
-bool Monster::getcdFlag()
+bool MAttack::getcdFlag()
 {
 	return cdFlag;
 }
 
-void Monster::startCD(Uint32 t)
+void MAttack::startCD(Uint32 t)
 {
 	hurtT = t;
 	damageCD = 0;
@@ -177,18 +188,24 @@ void Monster::startCD(Uint32 t)
 	damageID = SDL_AddTimer(hurtT, damaged, this);
 }
 
-void Monster::startTimer(Uint32 t)
+void MAttack::startTimer(Uint32 t)
 {
 	time = t;
 	timerID = SDL_AddTimer(time, changeData, this);
 }
 
-void Monster::stopTimer()
+void MAttack::stopTimer()
 {
 	time = 0;
 }
 
-void Monster::close()
+void MAttack::startST(Uint32 t)
+{
+	STTime = t;
+	STID = SDL_AddTimer(STTime, Straight, this);
+}
+
+void MAttack::close()
 {
 	for (int i = 0; i < num; i++) {
 		SDL_DestroyTexture(texture[i]);
@@ -196,7 +213,7 @@ void Monster::close()
 }
 
 
-void Monster::draw(SDL_Rect dst, SDL_Rect src) {
+void MAttack::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
 
 	if (dst.x == ALLREGION)
@@ -217,7 +234,7 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	}
 }
 /*
-void Monster::draw()
+void MAttack::draw()
 {
 	SDL_Rect dst, src;
 	dst.x = x;
@@ -242,7 +259,7 @@ void Monster::draw()
 */
 
 /*
-void Monster::setdetectCorner(SDL_Rect mc)
+void MAttack::setdetectCorner(SDL_Rect mc)
 {
 	if (velX >= 0)
 	{
@@ -291,13 +308,7 @@ void Monster::setdetectCorner(SDL_Rect mc)
 	}
 }*/
 
-void Monster::AIstate(AnimeObject2& mainch)
-{
-	
-
-}
-
-void Monster::collisionAABB(AnimeObject2& mainch)
+void MAttack::collisionAABB(AnimeObject2& mainch)
 {
 	if (!mainch.getIVFlag())
 	{
@@ -317,7 +328,7 @@ void Monster::collisionAABB(AnimeObject2& mainch)
 	}
 }
 
-void Monster::setdetectCorner()
+void MAttack::setdetectCorner()
 {
 	if (velX >= 0)
 	{
@@ -366,22 +377,9 @@ void Monster::setdetectCorner()
 	}
 }
 
-void Monster::move() {
+void MAttack::move() {
 
-	if (jumpFlag)
-	{
-		velY = -20;
-	}
-	else if (yDown())
-	{
-		if (velY <= 20)
-			velY += 1;
-	}
-	else
-	{
-		velY = 0;
-	}
-	jumpFlag = 0;
+	setVY(0);
 	setdetectCorner();
 
 	moveOrNot();
@@ -398,32 +396,32 @@ void Monster::move() {
 		y = 0;
 }
 
-bool Monster::xRight()
+bool MAttack::xRight()
 {
 	if (tile[mapnum][detectCornerX[1][1]][detectCornerX[1][0]] == 0 && tile[mapnum][detectCornerX[3][1]][detectCornerX[3][0]] == 0)
 		return true;
 	return false;
 }
-bool Monster::xLeft()
+bool MAttack::xLeft()
 {
 	if (tile[mapnum][detectCornerX[2][1]][detectCornerX[2][0]] == 0 && tile[mapnum][detectCornerX[0][1]][detectCornerX[0][0]] == 0)
 		return true;
 	return false;
 }
-bool Monster::yUp()
+bool MAttack::yUp()
 {
 	if (tile[mapnum][detectCornerY[1][1]][detectCornerY[1][0]] == 0 && tile[mapnum][detectCornerY[0][1]][detectCornerY[0][0]] == 0)
 		return true;
 	return false;
 }
-bool Monster::yDown()
+bool MAttack::yDown()
 {
 	if (tile[mapnum][detectCornerY[2][1]][detectCornerY[2][0]] == 0 && tile[mapnum][detectCornerY[3][1]][detectCornerY[3][0]] == 0)
 		return true;
 	return false;
 }
 
-void Monster::moveOrNot()
+void MAttack::moveOrNot()
 {
 
 	if (velX > 0)
@@ -456,82 +454,78 @@ void Monster::moveOrNot()
 		}
 	}
 }
-void Monster::setPosition(int xx, int yy)
+void MAttack::setPosition(int xx, int yy)
 {
 	x = xx;
 	y = yy;
 }
-int Monster::getWidth()
+int MAttack::getWidth()
 {
 	return width;
 }
-int Monster::getHeight()
+int MAttack::getHeight()
 {
 	return height;
 }
-int Monster::getX() const
+int MAttack::getX() const
 {
 	return x;
 }
-int Monster::getY() const
+int MAttack::getY() const
 {
 	return y;
 }
-int Monster::getHP()
+int MAttack::getHP()
 {
 	return health;
 }
-int Monster::getVY() {
+int MAttack::getVY() {
 	return velY;
 }
-int Monster::getMaxHP()
+int MAttack::getMaxHP()
 {
 	return Maxhp;
 }
-void Monster::setHP(int hp)
+void MAttack::setHP(int hp)
 {
 	health = hp;
 }
-void Monster::setVY(int yy) {
+void MAttack::setVY(int yy) {
 	velY = yy;
 }
-int Monster::getVX() {
+int MAttack::getVX() {
 	return velX;
 }
-void Monster::setVX(int xx) {
+void MAttack::setVX(int xx) {
 	velX = xx;
 }
-void Monster::setJumpFlag(bool f)
+void MAttack::setJumpFlag(bool f)
 {
 	jumpFlag = f;
 }
-int Monster::getDPX(int a, int b)
+int MAttack::getDPX(int a, int b)
 {
 	return detectCornerX[a][b];
 }
-int Monster::getDPY(int a, int b)
+int MAttack::getDPY(int a, int b)
 {
 	return detectCornerY[a][b];
 }
-bool Monster::getJumpFlag()
+bool MAttack::getJumpFlag()
 {
 	return jumpFlag;
 }
-SDL_Renderer* Monster::getRenderer()
+SDL_Renderer* MAttack::getRenderer()
 {
 	return renderer;
 }
-void Monster::setAImode(int mode)
-{
 
+void MAttack::setAF(int af)
+{
+	atkFly = af;
 }
 
-void Monster::setMchptr(AnimeObject2& mainch)
+int MAttack::getAF()
 {
-
-}
-
-void Monster::setMatkptr(MAttack& matk)
-{
-	
+	return atkFly;
 }

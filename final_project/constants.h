@@ -26,6 +26,7 @@
 #define FLY 4
 #define FLYBACK 5
 #define STOP 6
+#define THROW 7
 
 //wander mode
 #define LEFT 0

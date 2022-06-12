@@ -32,6 +32,7 @@ public:
 	int getHP();
 	int getDir();
 	int getPotionNum();
+	int getRushCD();
 
 	void draw();
 //	void draw(SDL_Rect src);

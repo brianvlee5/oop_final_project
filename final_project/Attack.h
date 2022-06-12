@@ -28,6 +28,7 @@ public:
 	void startTimerLine(Uint32 t);
 	void startTimerParabola(Uint32 t);
 	void startTimerBounce(Uint32 t);
+	void startTimerMulti(Uint32 t, int r, double d);
 	Uint32 getTime();
 	void stopTimer();
 
@@ -48,6 +49,7 @@ public:
 	void setPause(bool f);
 
 	void setDir(int);
+	void setCharacterCenter(int x, int y);
 
 private:
 	SDL_Renderer* renderer;
@@ -56,6 +58,7 @@ private:
 	static Uint32 changeDataLine(Uint32 interval, void* param);
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
+	static Uint32 changeDataMulti(Uint32 interval, void* param);
 
 	bool pause;
 
@@ -63,6 +66,9 @@ private:
 	int Mapnum;
 	int ii;
 	int dir;
+	SDL_Point center;
+	int radius;
+	double phase_angle;
 
 	int detectCornerX[4][2];
 	int detectCornerY[4][2];

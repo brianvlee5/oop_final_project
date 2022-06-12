@@ -10,7 +10,7 @@ Object::Object(const char* path, SDL_Renderer* ren)
 	image->setRenderer(ren);
 	image->setColorKey(NO_TRANSPARENT_BG);
 	image->setCenterAngle({ 0,0 }, 0);
-	image->setFlip(SDL_FLIP_VERTICAL);
+	image->setFlip(SDL_FLIP_NONE);
 	image->setAlpha(255);
 
 	image->generateTexture();

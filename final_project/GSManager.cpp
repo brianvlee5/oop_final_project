@@ -283,6 +283,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
+	Object flash("../images/flash.png", window.getRenderer());
 	vector<Object> prop_v;
 	vector<Object> number;
 	vector<Object> numberc;
@@ -381,6 +382,10 @@ void GSManager::GamePlay(RenderWindow& window)
 	coin.setShownFlag(true);
 	coin.setPosition(0, 0);
 
+	window.addVPregion({ {WINDOWW - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
+	flash.setShownFlag(true);
+	flash.setPosition(0, 0);
+
 	for(int i=1; i<=3; i++)
 		window.addVPregion({ {i*coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//16~18
 
@@ -391,13 +396,14 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv[i]->startAI(15);
 	}
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		if (i == 2 || i == 3)
+		if (i > 3)
 			fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
 		else
 			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
 	}
+
 	while (!quit && GameState == GAMEPLAY)
 	{
 
@@ -428,6 +434,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			coord.calMapCamera(demo1, pan);
 			for (int i = 0; i < fire.size(); i++)
+
 				coo[i].calMapCamera(demo1, fire[i]);
 
 
@@ -487,6 +494,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		
 			for (int i = 0; i < fire.size(); i++)
 			{
+				fire[i].setCharacterCenter(pan.getX() + pan.getWidth() / 3, pan.getY() + pan.getHeight() / 4);
 				fire[i].setMapnum(pan.getMapnum());
 				fire[i].collision_mons(Monsv, pan);
 			}
@@ -544,6 +552,10 @@ void GSManager::GamePlay(RenderWindow& window)
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 			window.setVP(MAXHP + PROPNUM + 1);
 			coin.draw({ ALLREGION } , { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8});
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+
 			window.display();
 			break;
 		}
@@ -669,7 +681,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 		Monsv[i]->close();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 10; i++)
 		fire[i].close();
 }
 
@@ -786,7 +798,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		Monsv[i]->startAI(15);
 	}
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (i == 2 || i == 3)
 			fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
@@ -1058,7 +1070,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 		Monsv[i]->close();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 10; i++)
 		fire[i].close();
 }
 

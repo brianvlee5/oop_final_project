@@ -28,6 +28,7 @@ AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, 
 
 void AnimeObject2::initialize()
 {
+	cd_count = 30;
 	dir = 1;
 	Mapnum = 0;
 	shownFlag = true;
@@ -68,9 +69,14 @@ void AnimeObject2::draw(SDL_Rect dst)
 */
 void AnimeObject2::draw(SDL_Rect src, SDL_Rect dst)
 {
+	SDL_Rect* d = &dst, * s = &src;
+
 	if (shownFlag)
 	{
 		Object::draw(src, dst);
+
+		thickLineRGBA(renderer, d->x, d->y-5, d->x + d->w, d->y-5, 2, 0x65, 0x43, 0x21, 0xFF);
+		thickLineRGBA(renderer, d->x, d->y-5, d->x + d->w*cd_count / (RUSHCD / RUSHTIMER), d->y-5, 2, 0xFF, 0xFF, 0xFF, 0xFF);
 	}
 }
 
@@ -143,7 +149,7 @@ void AnimeObject2::startRush(Uint32 t)
 		rush_count = 0;
 		invinceFlag = true;
 		gravityFlag = false;
-		startRushCD(300);
+		startRushCD(50);
 		RushID = SDL_AddTimer(rush, rushing, this);
 	}
 }
@@ -190,7 +196,22 @@ void AnimeObject2::startRushCD(Uint32 t)
 Uint32 AnimeObject2::rushCD(Uint32 interval, void* param)
 {
 	AnimeObject2* p = (AnimeObject2*)param;
-	if (p->cd_count <1) 
+
+	static int lasttime = SDL_GetTicks64();
+	static int curtime = SDL_GetTicks64();
+	int timediv;
+	static int timeacc=0;
+
+	lasttime = curtime;
+	curtime = SDL_GetTicks64();
+	timediv = curtime - lasttime;
+	timeacc += timediv;
+	if (p->cd_count)
+	{
+		printf("time: %d\n", timeacc);
+	}
+		
+	if (p->cd_count < RUSHCD/50) 
 	{
 		p->cd_count++;
 		return interval;
@@ -390,6 +411,11 @@ void AnimeObject2::setDir(int d)
 int AnimeObject2::getDir()
 {
 	return dir;
+}
+
+int AnimeObject2::getRushCD()
+{
+	return cd_count;
 }
 
 void AnimeObject2::moveOrNot()

@@ -2,15 +2,16 @@
 #include <SDL.h>
 #include "AnimeObject2.h"
 #include "Attack.h"
-#include "NPC.h"
 #include <math.h>
+#include <stdlib.h>
 #include "constants.h"
 #include "GSManager.h"
+#include "NPC.h"
 
-static int toward=1;
+static int toward = 1;
 
 
-static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p) {
+static void attackKeyboard(SDL_Event e, std::vector<Attack>& a, AnimeObject2& p) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)
@@ -28,7 +29,7 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 				a[0].setVx(2 * VELOCITY);
 				a[0].startTimerLine(25);
 			}
-			else if(!a[1].getShownFlag())
+			else if (!a[1].getShownFlag())
 			{
 				if (toward == 1)
 					a[1].setFlip(SDL_FLIP_NONE);
@@ -42,34 +43,14 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 			}
 			break;
 		case SDLK_w:
-			if (!a[4].getShownFlag())
-			{
-				a[4].setDir(toward);
-				a[4].setShownFlag(true);
-				a[4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[4].setVx(2 * VELOCITY);
-				a[4].setVy(-4 * VELOCITY);
-				a[4].startTimerParabola(25);
-			}
-			else if (!a[5].getShownFlag())
-			{
-				a[5].setDir(toward);
-				a[5].setShownFlag(true);
-				a[5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
-				a[5].setVx(2 * VELOCITY);
-				a[5].setVy(-4 * VELOCITY);
-				a[5].startTimerParabola(25);
-			}
-			break;
-		case SDLK_e:
 			if (!a[2].getShownFlag())
 			{
 				a[2].setDir(toward);
 				a[2].setShownFlag(true);
 				a[2].setPosition(p.getX() + p.getWidth() / 2, p.getY());
 				a[2].setVx(2 * VELOCITY);
-				a[2].setVy(1 * VELOCITY);
-				a[2].startTimerBounce(25);
+				a[2].setVy(-4 * VELOCITY);
+				a[2].startTimerParabola(25);
 			}
 			else if (!a[3].getShownFlag())
 			{
@@ -77,10 +58,39 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack> &a, AnimeObject2& p)
 				a[3].setShownFlag(true);
 				a[3].setPosition(p.getX() + p.getWidth() / 2, p.getY());
 				a[3].setVx(2 * VELOCITY);
-				a[3].setVy(1 * VELOCITY);
-				a[3].startTimerBounce(25);
+				a[3].setVy(-4 * VELOCITY);
+				a[3].startTimerParabola(25);
 			}
 			break;
+		case SDLK_e:
+			if (!a[4].getShownFlag())
+			{
+				a[4].setDir(toward);
+				a[4].setShownFlag(true);
+				a[4].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[4].setVx(2 * VELOCITY);
+				a[4].setVy(1 * VELOCITY);
+				a[4].startTimerBounce(25);
+			}
+			else if (!a[5].getShownFlag())
+			{
+				a[5].setDir(toward);
+				a[5].setShownFlag(true);
+				a[5].setPosition(p.getX() + p.getWidth() / 2, p.getY());
+				a[5].setVx(2 * VELOCITY);
+				a[5].setVy(1 * VELOCITY);
+				a[5].startTimerBounce(25);
+			}
+			break;
+		case SDLK_r:
+			int angle = rand() % 360;
+			int r = sqrt((p.getHeight()/2) * (p.getHeight() / 2) + (p.getWidth()/2)* (p.getWidth() / 2)) * 6 / 4;
+			for (int i = 6; i < 10; i++)
+			{
+				angle = (angle + 90) % 360;
+				a[i].setShownFlag(true);
+				a[i].startTimerMulti(20, r, angle);
+			}
 		}
 
 	}

@@ -66,6 +66,15 @@ void Attack::startTimerBounce(Uint32 t) {
 	timerID = SDL_AddTimer(time, changeDataBounce, this);
 }
 
+void Attack::startTimerMulti(Uint32 t, int r, double d)
+{
+	ii = 0;
+	phase_angle = d;
+	radius = r;
+	time = t;
+	timerID = SDL_AddTimer(time, changeDataMulti, this);
+}
+
 Uint32 Attack::getTime() {
 	return time;
 }
@@ -123,6 +132,29 @@ Uint32 Attack::changeDataBounce(Uint32 interval, void* param)
 			p->velY += 1;
 			p->setdetectCorner();
 			p->moveWithBounce();
+		}
+		return interval;
+	}
+	else
+	{
+		p->setShownFlag(false);
+		return 0;
+	}
+}
+
+Uint32 Attack::changeDataMulti(Uint32 interval, void* param)
+{
+	Attack* p = (Attack*)param;
+	if (p->time != 0)
+	{
+		if (p->pause == false)
+		{
+			p->ii++;
+
+			p->phase_angle = fmod(p->phase_angle + 5, 360);
+			p->setCenterAngle({ p->getWidth() / 2, p->getHeight() / 2 }, p->phase_angle * M_PI / 180);
+			p->setPosition(p->center.x + p->radius * cos(p->phase_angle * M_PI / 180), p->center.y + p->radius * sin(p->phase_angle * M_PI / 180));
+
 		}
 		return interval;
 	}
@@ -343,6 +375,12 @@ void Attack::setDir(int d)
 void Attack::setPause(bool f)
 {
 	pause = f;
+}
+
+void Attack::setCharacterCenter(int x, int y)
+{
+	center.x = x;
+	center.y = y;
 }
 
 

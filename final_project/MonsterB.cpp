@@ -50,7 +50,7 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 	}
 	case WAIT:
 	{
-		printf("in wait %d\n", p->WaitTime);
+//		printf("in wait %d\n", p->WaitTime);
 		if (fabs(p->getX() - p->Mchptr->getX()) < 400 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->WaitTime <= 0)
 		{
 			p->AImode = THROW;

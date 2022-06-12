@@ -37,6 +37,13 @@
 #define PLATFORMRB 3
 #define FLOOR 4
 
+//for character
+#define RUSHCD 1500  //milisecond
+#define RUSHTIMER 50
+
+//for attack
+#define ATTACKNUM 10
+
 //for music
 #define MUSIC 10
 #define EFFECT 11

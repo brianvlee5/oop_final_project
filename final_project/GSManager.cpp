@@ -10,35 +10,35 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_ESCAPE:
-			if (state == PLAY)
-			{
-				for (int i = 0; i < atk.size(); i++)
-					atk[i].setPause(true);
-				for (int i = 0; i < mv.size(); i++)
-					mv[i]->setAImode(STOP);
-				state = PAUSE;
-			}
-			else if (state == PAUSE)
-			{
-				for (int i = 0; i < atk.size(); i++)
-					atk[i].setPause(false);
-				for (int i = 0; i < mv.size(); i++)
-					mv[i]->setAImode(WAIT);
-				state = PLAY;
-			}
-			break;
-			/*
-		case SDLK_p:
-			if (state == PLAY)
-			{
-				state = BACKPACK;
-			}
-			else if (state == BACKPACK)
-			{
-				state = PLAY;
-			}
-			*/
+			case SDLK_ESCAPE:
+				if (state == PLAY)
+				{
+					for (int i = 0; i < atk.size(); i++)
+						atk[i].setPause(true);
+					for (int i = 0; i < mv.size(); i++)
+						mv[i]->setAImode(STOP);
+					state = PAUSE;
+				}
+				else if (state == PAUSE)
+				{
+					for (int i = 0; i < atk.size(); i++)
+						atk[i].setPause(false);
+					for (int i = 0; i < mv.size(); i++)
+						mv[i]->setAImode(WAIT);
+					state = PLAY;
+				}
+				break;
+				/*
+			case SDLK_p:
+				if (state == PLAY)
+				{
+					state = BACKPACK;
+				}
+				else if (state == BACKPACK)
+				{
+					state = PLAY;
+				}
+				*/
 		}
 
 	}
@@ -95,30 +95,30 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int& state)
 		SDL_GetMouseState(&x, &y);
 		switch (state)
 		{
-		case MENU:
-		{
-			if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//new game
+			case MENU:
 			{
-				gsm->setGameState(GAMEPLAY);
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//new game
+				{
+					gsm->setGameState(GAMEPLAY);
+				}
+				else if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2 + 55) && y <= (WINDOWH / 2 + 105))//load
+				{
+					state = LOAD;
+				}
+				break;
 			}
-			else if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2 + 55) && y <= (WINDOWH / 2 + 105))//load
+			case LOAD:
 			{
-				state = LOAD;
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2 + 110) && y <= (WINDOWH / 2 + 150))//back
+				{
+					state = MENU;
+				}
+				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 40))//slot1
+				{
+					gsm->setGameState(LOADGAMEPLAY);
+				}
+				break;
 			}
-			break;
-		}
-		case LOAD:
-		{
-			if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2 + 110) && y <= (WINDOWH / 2 + 150))//back
-			{
-				state = MENU;
-			}
-			if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 40))//slot1
-			{
-				gsm->setGameState(LOADGAMEPLAY);
-			}
-			break;
-		}
 		}
 	}
 }
@@ -223,18 +223,18 @@ void GSManager::MainMenu(RenderWindow& window)
 
 		switch (state)
 		{
-		case MENU:
-		{
-			NewGame.draw();
-			Load.draw();
-			break;
-		}
-		case LOAD:
-		{
-			Slot1.draw();
-			Back.draw();
-			break;
-		}
+			case MENU:
+			{
+				NewGame.draw();
+				Load.draw();
+				break;
+			}
+			case LOAD:
+			{
+				Slot1.draw();
+				Back.draw();
+				break;
+			}
 		}
 
 
@@ -283,6 +283,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
+	Object flash("../images/flash.png", window.getRenderer());
 	vector<Object> prop_v;
 	vector<Object> number;
 	vector<Object> numberc;
@@ -381,6 +382,10 @@ void GSManager::GamePlay(RenderWindow& window)
 	coin.setShownFlag(true);
 	coin.setPosition(0, 0);
 
+	window.addVPregion({ {WINDOWW - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
+	flash.setShownFlag(true);
+	flash.setPosition(0, 0);
+
 	for(int i=1; i<=3; i++)
 		window.addVPregion({ {i*coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//16~18
 
@@ -391,13 +396,14 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv[i]->startAI(15);
 	}
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < ATTACKNUM; i++)
 	{
-		if (i == 2 || i == 3)
+		if (i > 3)
 			fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
 		else
 			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
 	}
+
 	while (!quit && GameState == GAMEPLAY)
 	{
 
@@ -428,6 +434,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			coord.calMapCamera(demo1, pan);
 			for (int i = 0; i < fire.size(); i++)
+
 				coo[i].calMapCamera(demo1, fire[i]);
 
 
@@ -487,6 +494,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		
 			for (int i = 0; i < fire.size(); i++)
 			{
+				fire[i].setCharacterCenter(pan.getX() + pan.getWidth() / 3, pan.getY() + pan.getHeight() / 4);
 				fire[i].setMapnum(pan.getMapnum());
 				fire[i].collision_mons(Monsv, pan);
 			}
@@ -544,6 +552,10 @@ void GSManager::GamePlay(RenderWindow& window)
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
 			window.setVP(MAXHP + PROPNUM + 1);
 			coin.draw({ ALLREGION } , { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8});
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+
 			window.display();
 			break;
 		}
@@ -617,6 +629,11 @@ void GSManager::GamePlay(RenderWindow& window)
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			resume.draw();
@@ -651,6 +668,11 @@ void GSManager::GamePlay(RenderWindow& window)
 			window.setVP(MAXHP + 0);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			slot1.draw();
@@ -669,7 +691,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 		Monsv[i]->close();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < ATTACKNUM; i++)
 		fire[i].close();
 }
 
@@ -700,6 +722,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	Object key("../images/key.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
 
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
+	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
+	Object flash("../images/flash.png", window.getRenderer());
 	vector<Object> prop_v;
 	vector<Object> number;
 
@@ -779,6 +803,13 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 	thekey.setPosition(21 * WIDTH / MAPTILEX, 31 * HEIGHT / MAPTILEY);
 
+	window.addVPregion({ {0, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//15
+	coin.setShownFlag(true);
+	coin.setPosition(0, 0);
+
+	window.addVPregion({ {WINDOWW - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
+	flash.setShownFlag(true);
+	flash.setPosition(0, 0);
 
 	for (int i = 0; i < Monsv.size(); i++)
 	{
@@ -786,9 +817,9 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		Monsv[i]->startAI(15);
 	}
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < ATTACKNUM; i++)
 	{
-		if (i == 2 || i == 3)
+		if (i > 3)
 			fire.push_back(Attack("../images/fire2.png", window.getRenderer(), 0x00, 0x00, 0x00));
 		else
 			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
@@ -933,6 +964,12 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+
 			window.display();
 			break;
 		}
@@ -1006,6 +1043,11 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			resume.draw();
@@ -1040,6 +1082,11 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			window.setVP(MAXHP + 0);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			slot1.draw();
@@ -1058,7 +1105,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 		Monsv[i]->close();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < ATTACKNUM; i++)
 		fire[i].close();
 }
 

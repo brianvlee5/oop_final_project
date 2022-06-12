@@ -5,6 +5,7 @@
 #include <math.h>
 #include "tile.h"
 #include "MonsterA.h"
+#include "MAttack.h"
 #include <vector>
 //#include "Coordinate.h"
 
@@ -57,6 +58,7 @@ private:
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
 
 	bool pause;
+
 	bool mapFlag;
 	int Mapnum;
 	int ii;

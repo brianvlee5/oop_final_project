@@ -22,33 +22,39 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 	MonsterB* p = (MonsterB*)param;
 	switch (p->AImode)
 	{
-	case TRACE:
+	case THROW:
 	{
-		if (fabs(p->getX() - p->Mchptr->getX()) > 400 || fabs(p->getY() - p->Mchptr->getY()) > 75)
+		printf("in throw, af: %d\n", p->MonsFire->getAF());
+		if (p->getX() - p->Mchptr->getX() > 0)
 		{
-			p->AImode = WAIT;
-			p->WaitTime = 50;
+			p->MonsFire->setVX(-2 * VELOCITY);
+			p->MonsFire->setPosition(p->getX(), p->getY()+7);
+			p->MonsFire->setShownFlag(true);
+			p->MonsFire->startST(30);
 		}
-		else if (p->getX() - p->Mchptr->getX() < 0)
+		else if (p->getX() - p->Mchptr->getX() <= 0)
 		{
-			p->setVX(2);
+			p->MonsFire->setVX(2 * VELOCITY);
+			p->MonsFire->setPosition(p->getX(), p->getY()+7);
+			p->MonsFire->setShownFlag(true);
+			p->MonsFire->startST(30);
 		}
-		else if (p->getX() - p->Mchptr->getX() > 0)
-		{
-			p->setVX(-2);
-		}
-		else if (p->getX() == p->Mchptr->getX())
-			p->setVX(0);
 
-		p->move();
+		p->WaitTime = 50;
+		p->AImode = WAIT;
+		
+			
+			
 		return interval;
 		break;
 	}
 	case WAIT:
 	{
-		if (fabs(p->getX() - p->Mchptr->getX()) < 400 && fabs(p->getY() - p->Mchptr->getY()) < 75)
+		printf("in wait %d\n", p->WaitTime);
+		if (fabs(p->getX() - p->Mchptr->getX()) < 400 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->WaitTime <= 0)
 		{
-			p->AImode = TRACE;
+			p->AImode = THROW;
+			p->MonsFire->setAF(0);
 		}
 		else if (p->WaitTime > 0)
 		{
@@ -139,6 +145,12 @@ void MonsterB::stopAI()
 void MonsterB::setMchptr(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
+}
+
+void MonsterB::setMatkptr(MAttack &matk)
+{
+	printf("set atk\n");
+	MonsFire = &matk;
 }
 
 void MonsterB::setAImode(int mode)

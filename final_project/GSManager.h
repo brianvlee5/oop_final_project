@@ -29,6 +29,7 @@
 #include "MonsterD.h"
 #include "MonsterP.h"
 #include "MonsterI.h"
+#include "MAttack.h"
 #include "NPC.h"
 
 class GSManager

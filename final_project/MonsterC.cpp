@@ -39,7 +39,7 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 				p->setVX(-dist);
 			}
 			p->move();
-			p->WaitTime = 50;
+			p->WaitTime = rand() % 50 + 50;
 			p->AImode = WAIT;
 			return interval;
 			break;
@@ -57,7 +57,7 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 			else
 			{
 				p->AImode = WANDER;
-				p->WanderTime = 50;
+				p->WanderTime = rand() % 50 + 50;
 
 				if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
 					p->WANDERmode = RIGHT;
@@ -75,28 +75,19 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 		}
 		case WANDER:
 		{
+
 			if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 0 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 1)
-			{
-				p->WaitTime = 50;
-				p->AImode = WAIT;
-			}
+				p->WANDERmode = LEFT;
 			else if (tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)] == 1 && tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)] == 0)
-			{
-				p->WaitTime = 50;
-				p->AImode = WAIT;
-			}
+				p->WANDERmode = RIGHT;
 			else if (tile[p->getMapnum()][p->getDPX(1, 1)][p->getDPX(1, 0)] == 1 || tile[p->getMapnum()][p->getDPX(3, 1)][p->getDPX(3, 0)] == 1)
-			{
-				p->WaitTime = 50;
-				p->AImode = WAIT;
-			}
+				p->WANDERmode = RIGHT;
 			else if (tile[p->getMapnum()][p->getDPX(2, 1)][p->getDPX(2, 0)] == 1 || tile[p->getMapnum()][p->getDPX(0, 1)][p->getDPX(0, 0)] == 1)
+				p->WANDERmode = LEFT;
+
+			if (p->WanderTime > 0)
 			{
-				p->WaitTime = 50;
-				p->AImode = WAIT;
-			}
-			else if (p->WanderTime > 0)
-			{
+
 				if (p->WANDERmode == LEFT)
 					p->setVX(2);
 				else
@@ -107,7 +98,8 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 			}
 			else
 			{
-				p->WaitTime = 50;
+				printf("5\n");
+				p->WaitTime = rand() % 50 + 50;
 				p->AImode = WAIT;
 			}
 

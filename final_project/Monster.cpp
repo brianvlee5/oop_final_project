@@ -498,6 +498,15 @@ void Monster::setVY(int yy) {
 int Monster::getVX() {
 	return velX;
 }
+
+void Monster::setX(int xx)
+{
+	x = xx;
+}
+void Monster::setY(int yy)
+{
+	y = yy;
+}
 void Monster::setVX(int xx) {
 	velX = xx;
 }

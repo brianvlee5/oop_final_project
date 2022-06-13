@@ -41,12 +41,10 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 		{
 			if (sqrt((p->XBase - p->Mchptr->getX()) * (p->XBase - p->Mchptr->getX()) + (p->YBase - p->Mchptr->getY()) * (p->YBase - p->Mchptr->getY())) <= 150 && p->Flycd==0)
 			{
-				printf("to fly\n");
 				p->FlyTime = 0;
 				p->AImode = FLY;
 				p->XFly = p->Mchptr->getX() - p->XBase;
 				p->YFly = p->Mchptr->getY() - p->YBase;
-				printf("x:%d y:%d\n", p->XFly, p->YFly);
 			}
 			else if(p->Flycd>0)
 			{
@@ -69,7 +67,6 @@ Uint32 MonsterD::AIState(Uint32 interval, void* param)
 			}
 			else
 			{
-				printf("to flyback\n");
 				p->AImode = FLYBACK;
 			}
 			return interval;

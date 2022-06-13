@@ -20,7 +20,6 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 	{
 	case THROW:
 	{
-		printf("in throw, af: %d\n", p->MonsFire->getAF());
 		if (p->getX() - p->Mchptr->getX() > 0)
 		{
 			p->setFlip(SDL_FLIP_NONE);
@@ -74,7 +73,6 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 			else
 				p->WANDERmode = rand() % 2;
 
-			printf("wander mode:%d\n", p->WANDERmode);
 		}
 		return interval;
 		break;
@@ -103,7 +101,6 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 		}
 		else
 		{
-			printf("5\n");
 			p->WaitTime = rand() % 50 + 100;
 			p->AImode = WAIT;
 		}
@@ -140,7 +137,6 @@ void MonsterB::setMchptr(AnimeObject2& mainch)
 
 void MonsterB::setMatkptr(MAttack &matk)
 {
-	printf("set atk\n");
 	MonsFire = &matk;
 }
 

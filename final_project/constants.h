@@ -57,10 +57,12 @@
 #define LOADGAMEPLAY 2
 #define GAMECLEAR 3
 
+
 //for gameplay state
 #define PLAY 0
 #define PAUSE 1
 #define SAVE 2
+#define OVER 3
 
 //for menu states
 #define MENU 0

@@ -137,6 +137,20 @@ static void ClearEvents(SDL_Event e, GSManager* gsm)
 	}
 }
 
+static void OverEvents(SDL_Event e, GSManager* gsm)
+{
+	int x, y;
+	if (e.type == SDL_MOUSEBUTTONUP)
+	{
+		SDL_GetMouseState(&x, &y);
+		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 150) && y >= (WINDOWH / 2 -40) && y <= (WINDOWH / 2 + 70))//back
+		{
+			printf("in\n");
+			gsm->setGameState(MAINMENU);
+		}
+	}
+}
+
 //class GSManager
 
 GSManager::GSManager()
@@ -251,8 +265,8 @@ void GSManager::MainMenu(RenderWindow& window)
 
 void GSManager::GamePlay(RenderWindow& window)
 {
-	int state = 0;
-	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord, tempcord;
+	int state = PLAY;
+	Coordinate cord;
 
 
 
@@ -407,12 +421,17 @@ void GSManager::GamePlay(RenderWindow& window)
 
 	while (!quit && GameState == GAMEPLAY)
 	{
-
+		
 		while (SDL_PollEvent(&ev) != 0)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			pauseEvents(ev, this, state, pan, fire, Monsv);
+
+			if(state==PLAY || state==PAUSE)
+				pauseEvents(ev, this, state, pan, fire, Monsv);
+
+			if (state == OVER)
+				OverEvents(ev, this);
 			if (state == PLAY)
 			{
 				poohKeyboard(ev, pan);
@@ -433,15 +452,13 @@ void GSManager::GamePlay(RenderWindow& window)
 			demo1.changemap(pan, Monsv);
 
 
-			coord.calMapCamera(demo1, pan);
-			for (int i = 0; i < fire.size(); i++)
-
-				coo[i].calMapCamera(demo1, fire[i]);
+			cord.calMapCamera(demo1, pan);
+				
 
 
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 
 
 
@@ -449,21 +466,21 @@ void GSManager::GamePlay(RenderWindow& window)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[0].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[0].getpCX(),enemycord[0].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 
 			thekey.gotKey(pan);
 			if (demo1.getmapnum() == 3)
 			{
-				keycord.calMapCamera(demo1, thekey);
-				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
 			if (demo1.getmapnum() == 4)
 			{
-				keycord.calMapCamera(demo1, gate);
-				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
 				gate.gateAABB(pan);
 			}
 			
@@ -477,15 +494,15 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			if (demo1.getmapnum() == 6)
 			{
-				keycord.calMapCamera(demo1, princess);
-				princess.draw({ keycord.getpCX(),keycord.getpCY(),princess.getWidth() / SHRINK,princess.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, princess);
+				princess.draw({ cord.getpCX(),cord.getpCY(),princess.getWidth() / SHRINK,princess.getHeight() / SHRINK }, { ALLREGION });
 				princess.princessAABB(pan);
 			}
 
 			if (demo1.getmapnum() == 0)
 			{
-				keycord.calMapCamera(demo1, npcPotion);
-				npcPotion.draw({ keycord.getpCX(),keycord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, npcPotion);
+				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
 			}
 
@@ -501,25 +518,25 @@ void GSManager::GamePlay(RenderWindow& window)
 			}
 
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
-			
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
+
 			for (int i = 0; i < mfire.size(); i++)
 			{
-				keycord.calMapCamera(demo1, mfire[i]);
+				cord.calMapCamera(demo1, mfire[i]);
 				mfire[i].collisionAABB(pan);
-				mfire[i].draw({keycord.getpCX(), keycord.getpCY(), mfire[i].getWidth(), mfire[i].getHeight()}, {ALLREGION});
+				mfire[i].draw({ cord.getpCX(), cord.getpCY(), mfire[i].getWidth(), mfire[i].getHeight()}, {ALLREGION});
 			}
 
 			window.setVP(-1);
 			if (pan.getDeadFlag())
 			{
-				fail.draw();
-				window.display();
-				system("pause");
-
-				break;
+				for (int i = 0; i < Monsv.size(); i++)
+					Monsv[i]->setAImode(STOP);
+				state = OVER;
 			}
-
 
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
@@ -564,32 +581,33 @@ void GSManager::GamePlay(RenderWindow& window)
 		{
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 			for (int i = 0; i < Monsv.size(); i++)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 
 			thekey.gotKey(pan);
 			if (demo1.getmapnum() == 3)
 			{
-				keycord.calMapCamera(demo1, thekey);
-				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
 			if (demo1.getmapnum() == 4)
 			{
-				keycord.calMapCamera(demo1, gate);
-				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
 				gate.collisionAABB(pan);
 			}
 			if (demo1.getmapnum() == 0)
 			{
-				keycord.calMapCamera(demo1, npcPotion);
-				npcPotion.draw({ keycord.getpCX(),keycord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, npcPotion);
+				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
 			}
 			for (int i = 0; i < PROPNUM; i++)
@@ -609,7 +627,10 @@ void GSManager::GamePlay(RenderWindow& window)
 			}
 			window.setVP(-1);
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
 				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
@@ -654,17 +675,21 @@ void GSManager::GamePlay(RenderWindow& window)
 		case SAVE:
 		{
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 			for (int i = 0; i < Monsv.size(); i++)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}	
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
 				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
@@ -685,6 +710,95 @@ void GSManager::GamePlay(RenderWindow& window)
 			window.setVP(-1);
 			slot1.draw();
 			back.draw();
+			window.display();
+			break;
+		}
+		case OVER:
+		{
+
+			demo1.draw({ ALLREGION }, demo1.getcamera());
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			
+			for (int i = 0; i < Monsv.size(); i++)
+			{
+				if (!Monsv[i]->getDeadFlag())
+				{
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+				}
+			}
+
+			thekey.gotKey(pan);
+			if (demo1.getmapnum() == 3)
+			{
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+			}
+			if (demo1.getmapnum() == 4)
+			{
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				gate.collisionAABB(pan);
+			}
+			for (int i = 0; i < PROPNUM; i++)
+			{
+				window.setVP(MAXHP + i);
+				if (pan.getKey() == true && i == 0) //key
+				{
+					prop_v[0].draw();
+				}
+				if (i == 1) //potion
+				{
+					prop_v[1].draw();
+					number[pan.getPotionNum()].draw();
+				}
+				frame.draw();
+
+			}
+			window.setVP(-1);
+			for (int i = 0; i < fire.size(); i++)
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
+
+			for (int i = 0; i < MAXHP; i++) 
+			{
+				window.setVP(i);
+				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+			}
+			for (int i = 0; i < pan.getHP(); i++) {
+				window.setVP(i);
+				h.draw();
+			}
+			for (int i = 0; i < PROPNUM; i++)
+			{
+				window.setVP(MAXHP + i);
+				if (pan.getKey() == true && i == 0) //key
+				{
+					prop_v[0].draw();
+				}
+				if (i == 1) //potion
+				{
+					prop_v[1].draw();
+					number[pan.getPotionNum()].draw();
+				}
+				frame.draw();
+
+			}
+			drawCoinNum(numberc, window, pan.getCoin(), coin);
+			window.setVP(MAXHP + PROPNUM);
+			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+
+			window.setVP(-1);
+			fail.draw();
 			window.display();
 			break;
 		}
@@ -858,7 +972,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		else
 			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
 	}
-
+	
 	MainchSave mchsave;
 	MapSave mapsave;
 	FILE* fload;
@@ -874,7 +988,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	demo1.setmap(Monsv);
 	printf("1pass\n");
 
-	while (!quit && GameState == GAMEPLAY)
+	while (!quit && GameState == LOADGAMEPLAY)
 	{
 
 		while (SDL_PollEvent(&ev) != 0)
@@ -982,11 +1096,9 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			window.setVP(-1);
 			if (pan.getDeadFlag())
 			{
-				fail.draw();
-				window.display();
-				system("pause");
-
-				break;
+				for (int i = 0; i < Monsv.size(); i++)
+					Monsv[i]->setAImode(STOP);
+				state = OVER;
 			}
 
 
@@ -1147,6 +1259,87 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			window.setVP(-1);
 			slot1.draw();
 			back.draw();
+			window.display();
+			break;
+		}
+		case OVER:
+		{
+
+			demo1.draw({ ALLREGION }, demo1.getcamera());
+			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			fail.draw();
+			for (int i = 0; i < Monsv.size(); i++)
+			{
+				if (!Monsv[i]->getDeadFlag())
+				{
+					enemycord[i].calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+				}
+			}
+
+			thekey.gotKey(pan);
+			if (demo1.getmapnum() == 3)
+			{
+				keycord.calMapCamera(demo1, thekey);
+				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+			}
+			if (demo1.getmapnum() == 4)
+			{
+				keycord.calMapCamera(demo1, gate);
+				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				gate.collisionAABB(pan);
+			}
+			for (int i = 0; i < PROPNUM; i++)
+			{
+				window.setVP(MAXHP + i);
+				if (pan.getKey() == true && i == 0) //key
+				{
+					prop_v[0].draw();
+				}
+				if (i == 1) //potion
+				{
+					prop_v[1].draw();
+					number[pan.getPotionNum()].draw();
+				}
+				frame.draw();
+
+			}
+			window.setVP(-1);
+			for (int i = 0; i < fire.size(); i++)
+				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			for (int i = 0; i < MAXHP; i++) {
+				window.setVP(i);
+				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
+			}
+			for (int i = 0; i < pan.getHP(); i++) {
+				window.setVP(i);
+				h.draw();
+			}
+			for (int i = 0; i < PROPNUM; i++)
+			{
+				window.setVP(MAXHP + i);
+				if (pan.getKey() == true && i == 0) //key
+				{
+					prop_v[0].draw();
+				}
+				if (i == 1) //potion
+				{
+					prop_v[1].draw();
+					number[pan.getPotionNum()].draw();
+				}
+				frame.draw();
+
+			}
+			window.setVP(MAXHP + PROPNUM);
+			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
+			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
+			window.setVP(MAXHP + PROPNUM + 1);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(MAXHP + PROPNUM + 2);
+			flash.draw();
+			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+
+			window.setVP(-1);
 			window.display();
 			break;
 		}

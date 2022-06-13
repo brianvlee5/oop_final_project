@@ -68,6 +68,7 @@ public:
 	virtual void stopAI()=0;
 	virtual void setBase(int xx, int yy);
 	void setFlip(SDL_RendererFlip f);
+	SDL_TimerID AIID;
 private:
 	char path[100];
 	int num;

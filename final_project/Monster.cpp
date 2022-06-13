@@ -1,28 +1,21 @@
 #include "Monster.h"
 
 
+Monster::Monster()
+{
+	initialize();
+}
 
 Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b)
 {
-	frame = 0;
+	initialize();
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
 	setVX(2);
 	health = 30;
-	deadFlag = false;
-	mapnum = 0;
 	Maxhp = 30;
-	shownFlag = true;
-	center = { 0, 0 };
-	angle = 0;
-	flip = SDL_FLIP_NONE;
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 2; j++)
-			detectCornerX[i][j] = 0;
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 2; j++)
-			detectCornerY[i][j] = 0;
+
 
 	for (int i = 0; i < num; i++)
 	{
@@ -59,6 +52,7 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 
 Monster::Monster(const char* path, int n, SDL_Renderer* ren)
 {
+	initialize();
 	renderer = ren;
 	num = n;
 	texture = new SDL_Texture * [num];
@@ -541,6 +535,34 @@ bool Monster::getJumpFlag()
 SDL_Renderer* Monster::getRenderer()
 {
 	return renderer;
+}
+
+void Monster::initialize()
+{
+	num = 0;
+	frame = 0;
+	width = 0;
+	height = 0;
+	x = 0;
+	y = 0;
+	velX = 0;
+	velY = 0;
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 2; j++)
+			detectCornerX[i][j] = 0;
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 2; j++)
+			detectCornerY[i][j] = 0;
+	jumpFlag = false;
+	cdFlag = false;
+	deadFlag = false;
+	shownFlag = true;
+	mapnum = 0;
+	health = 30;
+	Maxhp = 30;
+	center = { 0, 0 };
+	angle = 0;
+	flip = SDL_FLIP_NONE;
 }
 
 void Monster::setAImode(int mode)

@@ -155,8 +155,7 @@ static void OverEvents(SDL_Event e, GSManager* gsm)
 
 GSManager::GSManager()
 {
-	quit = false;
-	GameState = MAINMENU;
+	initialize();
 }
 
 void GSManager::InitMonsters(std::vector<Monster*>& mv)
@@ -1530,3 +1529,8 @@ int GSManager::getGameState()
 	return GameState;
 }
 
+void GSManager::initialize()
+{
+	quit = false;
+	GameState = MAINMENU;
+}

@@ -1,16 +1,19 @@
 #include "MonsterB.h"
 
 
+MonsterB::MonsterB()
+	: Monster()
+{
+	initialize();
+}
 MonsterB::MonsterB(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	AImode = WANDER;
-	WANDERmode = LEFT;
+	initialize();
 }
 
 MonsterB::MonsterB(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-	AImode = WANDER;
-	WANDERmode = LEFT;
+	initialize();
 }
 
 Uint32 MonsterB::AIState(Uint32 interval, void* param)
@@ -160,4 +163,15 @@ void MonsterB::draw(SDL_Rect dst, SDL_Rect src)
 	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
 	thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
 	Monster::draw(dst, src);
+}
+
+void MonsterB::initialize()
+{
+	MonsFire = nullptr;
+	AIinterval = 0;
+	Mchptr = nullptr;
+	AImode = WANDER;
+	WANDERmode = LEFT;
+	WaitTime = 0;
+	WanderTime = 0;
 }

@@ -16,6 +16,7 @@ class MAttack;
 class Monster
 {
 public:
+	Monster();
 	Monster(const char* path, int n, SDL_Renderer* ren);
 	Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	void close();
@@ -69,6 +70,7 @@ public:
 	virtual void setBase(int xx, int yy);
 	void setFlip(SDL_RendererFlip f);
 	SDL_TimerID AIID;
+	void initialize();
 private:
 	char path[100];
 	int num;

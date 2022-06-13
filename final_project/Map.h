@@ -27,6 +27,7 @@ class Map
 		void setMonster(std::vector<Monster*>& mv, int mapnumADD);
 		void setmapnum(int);
 		int getmapnum();
+		void initialize();
 
 		SDL_Point startR[7];
 		SDL_Point startL[7];

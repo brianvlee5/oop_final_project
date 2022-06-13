@@ -1,15 +1,20 @@
 #include "MAttack.h"
 
+MAttack::MAttack()
+	:Monster()
+{
+	initialize();
+}
 MAttack::MAttack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b):
 	Monster(path, n, ren, r, g, b)
 {
-	atkFly = 50;
+	initialize();
 }
 
 MAttack::MAttack(const char* path, int n, SDL_Renderer* ren):
 	Monster(path, n ,ren)
 {	
-	atkFly = 50;
+	initialize();
 }
 
 Uint32 MAttack::Straight(Uint32 interval, void* param)
@@ -148,4 +153,10 @@ void MAttack::startAI(Uint32 t)
 void MAttack::stopAI()
 {
 
+}
+
+void MAttack::initialize()
+{
+	STTime = 0;
+	atkFly = 50;
 }

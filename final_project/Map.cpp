@@ -3,28 +3,13 @@
 
 Map::Map()
 {
-	mapnum = 0;
-	camera.h = CAMERAH;
-	camera.w = CAMERAW;
-	startR[0] = { 57*WIDTH/MAPTILEX, 36*HEIGHT/MAPTILEY };
-	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
-	startR[2] = { 56 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
-	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
-	startR[4] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
-	startR[5] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
-	startR[6] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
-
-	startL[0] = { 5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
-	startL[1] = { 2 * WIDTH / MAPTILEX, 35 * HEIGHT / MAPTILEY };
-	startL[2] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
-	startL[3] = { 1 * WIDTH / MAPTILEX, 12 * HEIGHT / MAPTILEY };
-	startL[4] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
-	startL[5] = { 3 * WIDTH / MAPTILEX, 2 * HEIGHT / MAPTILEY };
-	startL[6] = { 2 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY };
+	initialize();
 }
 
 Map::Map(const char* path, SDL_Renderer* ren)
 {
+	initialize();
+
 	renderer = ren;
 	// Load a surface from a PNG file.	
 	SDL_Surface* imgSurface = IMG_Load(path);
@@ -53,9 +38,6 @@ Map::Map(const char* path, SDL_Renderer* ren)
 		// Get rid of old loaded surface
 		SDL_FreeSurface(imgSurface);
 	}
-	camera.h = CAMERAH;
-	camera.w = CAMERAW;
-	mapnum = 0;
 }
 
 void Map::set(const char* pth, SDL_Renderer* ren)
@@ -431,4 +413,28 @@ int Map::getWidth()
 int Map::getHeight()
 {
 	return height;
+}
+
+void Map::initialize()
+{
+	mapnum = 0;
+	camera.h = CAMERAH;
+	camera.w = CAMERAW;
+	startR[0] = { 57 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
+	startR[2] = { 56 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
+	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
+	startR[4] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
+	startR[5] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
+	startR[6] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
+
+	startL[0] = { 5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startL[1] = { 2 * WIDTH / MAPTILEX, 35 * HEIGHT / MAPTILEY };
+	startL[2] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startL[3] = { 1 * WIDTH / MAPTILEX, 12 * HEIGHT / MAPTILEY };
+	startL[4] = { 2 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
+	startL[5] = { 3 * WIDTH / MAPTILEX, 2 * HEIGHT / MAPTILEY };
+	startL[6] = { 2 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY };
+	width = 0;
+	height = 0;
 }

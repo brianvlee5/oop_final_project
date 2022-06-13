@@ -1,22 +1,26 @@
 #include "MonsterD.h"
 
+MonsterD::MonsterD()
+	:Monster()
+{
+	initialize();
+}
 MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	init();
+	initialize();
 }
 
 MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-	init();
+	initialize();
 }
 
-void MonsterD::init()
+void MonsterD::initialize()
 {
 	AImode = WAIT;
 	Flycd = 0;
 	FlyTime = 0;
-	AIID = 0;
-	AIinterval = 0;
+	AIinterval = 0;	
 	XBase = YBase = XFly = YFly = WANDERmode = 0;
 	Mchptr = nullptr;
 }

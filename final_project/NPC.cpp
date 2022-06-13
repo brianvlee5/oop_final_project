@@ -1,12 +1,18 @@
 #include "NPC.h"
+
+NPC::NPC()
+	:Monster()
+{
+	initialize();
+}
 NPC::NPC(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-
+	initialize();
 }
 
 NPC::NPC(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-
+	initialize();
 }
 
 bool NPC::npcAABB(AnimeObject2& mainch)
@@ -65,4 +71,13 @@ void NPC::setMchptr(AnimeObject2& mainch)
 void NPC::setAImode(int mode)
 {
 	AImode = mode;
+}
+void NPC::initialize()
+{
+	AIinterval = 0;
+	Mchptr = nullptr;
+	AImode = WANDER;
+	WANDERmode = LEFT;
+	WaitTime = 0;
+	WanderTime = 0;
 }

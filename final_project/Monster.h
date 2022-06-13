@@ -43,7 +43,7 @@ public:
 	//	void move();
 	virtual void move();
 	void setdetectCorner();
-	void moveOrNot();
+	virtual void moveOrNot();
 	bool xRight();
 	bool xLeft();
 	bool yUp();
@@ -67,6 +67,7 @@ public:
 	virtual void startAI(Uint32 t)=0;
 	virtual void stopAI()=0;
 	virtual void setBase(int xx, int yy);
+	void setFlip(SDL_RendererFlip f);
 private:
 	char path[100];
 	int num;
@@ -97,4 +98,9 @@ private:
 	int health;
 	int damageCD;
 	int Maxhp;
+
+	SDL_Point center;
+	double angle;
+	SDL_RendererFlip flip;
+
 };

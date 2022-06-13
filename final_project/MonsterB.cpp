@@ -23,6 +23,7 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 		printf("in throw, af: %d\n", p->MonsFire->getAF());
 		if (p->getX() - p->Mchptr->getX() > 0)
 		{
+			p->setFlip(SDL_FLIP_NONE);
 			p->MonsFire->setVX(-2 * VELOCITY);
 			p->MonsFire->setPosition(p->getX(), p->getY()+7);
 			p->MonsFire->setShownFlag(true);
@@ -30,6 +31,7 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 		}
 		else if (p->getX() - p->Mchptr->getX() <= 0)
 		{
+			p->setFlip(SDL_FLIP_HORIZONTAL);
 			p->MonsFire->setVX(2 * VELOCITY);
 			p->MonsFire->setPosition(p->getX(), p->getY()+7);
 			p->MonsFire->setShownFlag(true);
@@ -46,10 +48,8 @@ Uint32 MonsterB::AIState(Uint32 interval, void* param)
 	}
 	case WAIT:
 	{
-		printf("%d %d\n", tile[p->getMapnum()][p->getDPY(2, 1)][p->getDPY(2, 0)], tile[p->getMapnum()][p->getDPY(3, 1)][p->getDPY(3, 0)]);
-		printf("in wait %d\n", p->WaitTime);
 
-		if (fabs(p->getX() - p->Mchptr->getX()) < 300 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->WaitTime <= 0)
+		if (fabs(p->getX() - p->Mchptr->getX()) < 300 && fabs(p->getY() - p->Mchptr->getY()) < 75 && p->WaitTime <= 0 && !p->getDeadFlag())
 		{
 			p->AImode = THROW;
 			p->MonsFire->setAF(0);

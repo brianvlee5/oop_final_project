@@ -14,6 +14,9 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	mapnum = 0;
 	Maxhp = 30;
 	shownFlag = true;
+	center = { 0, 0 };
+	angle = 0;
+	flip = SDL_FLIP_NONE;
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 2; j++)
 			detectCornerX[i][j] = 0;
@@ -195,6 +198,10 @@ void Monster::close()
 	}
 }
 
+void Monster::setFlip(SDL_RendererFlip f)
+{
+	flip = f;
+}
 
 void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
@@ -208,9 +215,14 @@ void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 		s = NULL;
 	}
 
+	if (getVX() < 0)
+		setFlip(SDL_FLIP_HORIZONTAL);
+	else if(getVX()>0)
+		setFlip(SDL_FLIP_NONE);
+
 	if (shownFlag && !getDeadFlag())
 	{
-		if (SDL_RenderCopy(renderer, texture[frame], s, d) == -1)
+		if (SDL_RenderCopyEx(renderer, texture[frame], s, d, angle, &center, flip) == -1)
 		{
 			printf("%s\n", SDL_GetError());
 		}
@@ -304,7 +316,7 @@ void Monster::collisionAABB(AnimeObject2& mainch)
 		if (getX() < mainch.getX() + mainch.getWidth() / SHRINK &&
 			mainch.getX() < x + width / SHRINK &&
 			y < mainch.getY() + mainch.getHeight() / SHRINK &&
-			mainch.getY() < y + height / SHRINK)
+			mainch.getY() < y + height / SHRINK && getShownFlag())
 		{
 			mainch.setHP(mainch.getHP() - 1);
 			if (mainch.getHP() <= 0)

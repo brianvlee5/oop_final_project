@@ -12,10 +12,12 @@ public:
 	void setAF(int af);
 	void draw(SDL_Rect dst, SDL_Rect src);
 	void move();
+	void moveOrNot();
 	void setMchptr(AnimeObject2& mainch);
 	void startST(Uint32 t);
 	void startAI(Uint32 t);
 	void stopAI();
+	void stopST();
 
 private:
 	

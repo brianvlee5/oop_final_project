@@ -17,6 +17,7 @@ Uint32 MAttack::Straight(Uint32 interval, void* param)
 	MAttack* p = (MAttack*)param;
 	if (p->STTime != 0 && p->atkFly <= 30)
 	{
+
 		p->atkFly++;
 		p->move();
 		return interval;
@@ -32,6 +33,11 @@ void MAttack::startST(Uint32 t)
 {
 	STTime = t;
 	STID = SDL_AddTimer(STTime, Straight, this);
+}
+
+void MAttack::stopST()
+{
+	STTime = 0;
 }
 
 
@@ -67,6 +73,56 @@ void MAttack::move() {
 		setPosition(0, getY());
 	if (getY() < 0)
 		setPosition(getX(), 0);
+}
+
+void MAttack::moveOrNot()
+{
+
+	if (getVX() > 0)
+	{
+		if (xRight())
+		{
+			setX(getX() + getVX());
+		}
+		else
+		{
+			stopST();
+		}
+	}
+	else if (getVX() < 0)
+	{
+		if (xLeft())
+		{
+			setX(getX() + getVX());
+		}
+		else
+		{
+			stopST();
+		}
+	}
+
+	if (getVY() < 0)
+	{
+		if (yUp())
+		{
+			setY(getY() + getVY());
+		}
+		else
+		{
+			stopST();
+		}
+	}
+	else if (getVY() > 0)
+	{
+		if (yDown())
+		{
+			setY(getY() + getVY());
+		}
+		else
+		{
+			stopST();
+		}
+	}
 }
 
 void MAttack::setMchptr(AnimeObject2& mainch)

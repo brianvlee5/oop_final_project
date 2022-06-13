@@ -75,6 +75,7 @@ struct MainchSave {
 	int mapnum;
 	int health;
 	int x, y;
+	int c;
 };
 
 

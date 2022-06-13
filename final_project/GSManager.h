@@ -36,6 +36,7 @@ class GSManager
 {
 public:
 	GSManager();
+	void initialize();
 	void startGame(RenderWindow& window);
 	void GamePlay(RenderWindow & window);
 	void MainMenu(RenderWindow& window);

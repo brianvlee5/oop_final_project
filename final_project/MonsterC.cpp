@@ -1,12 +1,19 @@
 #include "MonsterC.h"
+
+MonsterC::MonsterC()
+	:Monster()
+{
+	initialize();
+}
+
 MonsterC::MonsterC(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	TPcd = 0;
+	initialize();
 }
 
 MonsterC::MonsterC(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-	TPcd = 0;
+	initialize();
 }
 
 
@@ -144,4 +151,14 @@ void MonsterC::setMchptr(AnimeObject2& mainch)
 void MonsterC::setAImode(int mode)
 {
 	AImode = mode;
+}
+void MonsterC::initialize()
+{
+	TPcd = 0;
+	AIinterval = 0;
+	Mchptr = nullptr;
+	AImode = WANDER;
+	WANDERmode = LEFT;
+	WaitTime = 0;
+	WanderTime = 0;
 }

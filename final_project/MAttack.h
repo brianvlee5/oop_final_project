@@ -5,6 +5,7 @@ class MAttack :
 	public Monster
 {
 public:
+	MAttack();
 	MAttack(const char* path, int n, SDL_Renderer* ren);
 	MAttack(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
 	
@@ -18,6 +19,7 @@ public:
 	void startAI(Uint32 t);
 	void stopAI();
 	void stopST();
+	void initialize();
 
 private:
 	

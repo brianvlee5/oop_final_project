@@ -1,13 +1,18 @@
 #include "MonsterI.h"
 
+MonsterI::MonsterI()
+	:Monster()
+{
+	initialize();
+}
 MonsterI::MonsterI(const char* path, int n, SDL_Renderer* ren) :Monster(path, n, ren)
 {
-	winFlag = false;
+	initialize();
 }
 
 MonsterI::MonsterI(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b) : Monster(path, n, ren, r, g, b)
 {
-	winFlag = false;
+	initialize();
 }
 
 void MonsterI::gotKey(AnimeObject2& mainch)
@@ -99,3 +104,7 @@ void MonsterI::stopAI()
 
 }
 
+void MonsterI::initialize()
+{
+	winFlag = false;
+}

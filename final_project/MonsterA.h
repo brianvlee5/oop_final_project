@@ -4,6 +4,7 @@ class MonsterA :
     public Monster
 {
 public:
+    MonsterA();
     MonsterA(const char* path, int n, SDL_Renderer* ren);
     MonsterA(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b);
     void setMchptr(AnimeObject2& mainch);
@@ -11,6 +12,7 @@ public:
     void setAImode(int mode);
     void stopAI();
     void draw(SDL_Rect dst, SDL_Rect src);
+    void initialize();
 
 private:
    

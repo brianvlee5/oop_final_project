@@ -4,10 +4,14 @@
 
 Coordinate::Coordinate()
 {
+	initialize();
+}
+
+void Coordinate::initialize()
+{
 	printCamX = 0;
 	printCamY = 0;
 }
-
 
 void Coordinate::calMapCamera(Map m, AnimeObject2& mainch)
 {

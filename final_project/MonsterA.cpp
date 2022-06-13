@@ -1,13 +1,19 @@
 #include "MonsterA.h"
 
+MonsterA::MonsterA()
+	:Monster()
+{
+	initialize();
+}
+
 MonsterA::MonsterA(const char* path, int n, SDL_Renderer* ren):Monster(path, n, ren)
 {
-	setDeadFlag(false);
+	initialize();
 }
 
 MonsterA::MonsterA(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, Uint8 b):Monster(path, n, ren, r, g, b)
 {
-	setDeadFlag(false);
+	initialize();
 }
 
 void MonsterA::startAI(Uint32 t)
@@ -152,4 +158,13 @@ void MonsterA::draw(SDL_Rect dst, SDL_Rect src)
 void MonsterA::setAImode(int mode)
 {
 	AImode = mode;
+}
+
+void MonsterA::initialize()
+{
+	Mchptr = nullptr;
+	AImode = WANDER;
+	WANDERmode = LEFT;
+	WaitTime = 0;
+	WanderTime = 0;
 }

@@ -14,7 +14,7 @@ public:
     void setAImode(int mode);
     void draw(SDL_Rect dst, SDL_Rect src);
 private:
-    SDL_TimerID AIID;
+
     Uint32 AIinterval;
     static Uint32 AIState(Uint32 interval, void* param);
     AnimeObject2* Mchptr;

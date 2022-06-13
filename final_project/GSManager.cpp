@@ -329,6 +329,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		tempd.push_back(d);
 	}		
 	
+	printf("1\n");
 	for (int i = 0; i < tempa.size(); i++)
 		Monsv.push_back(&tempa[i]);
 	for (int i = 0; i < tempb.size(); i++)
@@ -339,7 +340,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv.push_back(&tempd[i]);
 
 	InitMonsters(Monsv);
-	
+	printf("2\n");
 
 	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
@@ -410,7 +411,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv[i]->setMatkptr(mfire[i % 3]);
 		Monsv[i]->startAI(15);
 	}
-
+	printf("3\n");
 	for (int i = 0; i < ATTACKNUM; i++)
 	{
 		if (i > 3)
@@ -810,17 +811,59 @@ void GSManager::GamePlay(RenderWindow& window)
 	resume.close();
 	menu.close();
 
+	save.close();
+	slot1.close();
+	back.close();
+
 	for (int i = 0; i < Monsv.size(); i++)
+	{
 		Monsv[i]->close();
+		SDL_RemoveTimer(Monsv[i]->AIID);
+	}
+		
+	Monsv.clear();
+
+	for (int i = 0; i < tempa.size(); i++)
+		tempa[i].close();
+	tempa.clear();
+	for (int i = 0; i < tempb.size(); i++)
+		tempb[i].close();
+	tempb.clear();
+	for (int i = 0; i < tempc.size(); i++)
+		tempc[i].close();
+	tempc.clear();
+	for (int i = 0; i < tempd.size(); i++)
+		tempd[i].close();
+	tempd.clear();
+
+	for (int i = 0; i < mfire.size(); i++)
+		mfire[i].close();
 
 	for (int i = 0; i < ATTACKNUM; i++)
 		fire[i].close();
+
+	gate.close();
+	thekey.close();
+	for (int i = 0; i < prop_v.size(); i++)
+		prop_v[i].close();
+
+	princess.close();
+	npcPotion.close();
+	h.close();
+	potion.close();
+	frame.close();
+	flash.close();
+
+	for (int i = 0; i < number.size(); i++)
+		number[i].close();
+	for (int i = 0; i < numberc.size(); i++)
+		numberc[i].close();
 }
 
 void GSManager::LoadGamePlay(RenderWindow& window)
 {
-	int state = 0;
-	Coordinate coord, coo[6], enemycord[3], enemyhp[3], keycord, tempcord;
+	int state = PLAY;
+	Coordinate cord;
 
 
 
@@ -883,6 +926,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		tempd.push_back(d);
 	}
 
+	printf("1\n");
 	for (int i = 0; i < tempa.size(); i++)
 		Monsv.push_back(&tempa[i]);
 	for (int i = 0; i < tempb.size(); i++)
@@ -893,7 +937,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		Monsv.push_back(&tempd[i]);
 
 	InitMonsters(Monsv);
-
+	printf("2\n");
 
 	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
@@ -964,7 +1008,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		Monsv[i]->setMatkptr(mfire[i % 3]);
 		Monsv[i]->startAI(15);
 	}
-
+	printf("3\n");
 	for (int i = 0; i < ATTACKNUM; i++)
 	{
 		if (i > 3)
@@ -972,7 +1016,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		else
 			fire.push_back(Attack("../images/fire1.png", window.getRenderer(), 0x00, 0x00, 0x00));
 	}
-	
+
 	MainchSave mchsave;
 	MapSave mapsave;
 	FILE* fload;
@@ -986,7 +1030,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	pan.setCoin(mchsave.c);
 	fclose(fload);
 	demo1.setmap(Monsv);
-	printf("1pass\n");
+
 
 	while (!quit && GameState == LOADGAMEPLAY)
 	{
@@ -995,7 +1039,12 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		{
 			if (ev.type == SDL_QUIT)
 				quit = true;
-			pauseEvents(ev, this, state, pan, fire, Monsv);
+
+			if (state == PLAY || state == PAUSE)
+				pauseEvents(ev, this, state, pan, fire, Monsv);
+
+			if (state == OVER)
+				OverEvents(ev, this);
 			if (state == PLAY)
 			{
 				poohKeyboard(ev, pan);
@@ -1016,15 +1065,13 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			demo1.changemap(pan, Monsv);
 
 
-			coord.calMapCamera(demo1, pan);
-			for (int i = 0; i < fire.size(); i++)
+			cord.calMapCamera(demo1, pan);
 
-				coo[i].calMapCamera(demo1, fire[i]);
 
 
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 
 
 
@@ -1032,21 +1079,21 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[0].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[0].getpCX(),enemycord[0].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 
 			thekey.gotKey(pan);
 			if (demo1.getmapnum() == 3)
 			{
-				keycord.calMapCamera(demo1, thekey);
-				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
 			if (demo1.getmapnum() == 4)
 			{
-				keycord.calMapCamera(demo1, gate);
-				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
 				gate.gateAABB(pan);
 			}
 
@@ -1060,15 +1107,15 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 			if (demo1.getmapnum() == 6)
 			{
-				keycord.calMapCamera(demo1, princess);
-				princess.draw({ keycord.getpCX(),keycord.getpCY(),princess.getWidth() / SHRINK,princess.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, princess);
+				princess.draw({ cord.getpCX(),cord.getpCY(),princess.getWidth() / SHRINK,princess.getHeight() / SHRINK }, { ALLREGION });
 				princess.princessAABB(pan);
 			}
 
 			if (demo1.getmapnum() == 0)
 			{
-				keycord.calMapCamera(demo1, npcPotion);
-				npcPotion.draw({ keycord.getpCX(),keycord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, npcPotion);
+				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
 			}
 
@@ -1084,13 +1131,16 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			}
 
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
 
 			for (int i = 0; i < mfire.size(); i++)
 			{
-				keycord.calMapCamera(demo1, mfire[i]);
+				cord.calMapCamera(demo1, mfire[i]);
 				mfire[i].collisionAABB(pan);
-				mfire[i].draw({ keycord.getpCX(), keycord.getpCY(), mfire[i].getWidth(), mfire[i].getHeight() }, { ALLREGION });
+				mfire[i].draw({ cord.getpCX(), cord.getpCY(), mfire[i].getWidth(), mfire[i].getHeight() }, { ALLREGION });
 			}
 
 			window.setVP(-1);
@@ -1100,7 +1150,6 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 					Monsv[i]->setAImode(STOP);
 				state = OVER;
 			}
-
 
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
@@ -1145,27 +1194,34 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		{
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 			for (int i = 0; i < Monsv.size(); i++)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 
 			thekey.gotKey(pan);
 			if (demo1.getmapnum() == 3)
 			{
-				keycord.calMapCamera(demo1, thekey);
-				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
 			if (demo1.getmapnum() == 4)
 			{
-				keycord.calMapCamera(demo1, gate);
-				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
 				gate.collisionAABB(pan);
+			}
+			if (demo1.getmapnum() == 0)
+			{
+				cord.calMapCamera(demo1, npcPotion);
+				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
+				npcPotion.npcAABB(pan);
 			}
 			for (int i = 0; i < PROPNUM; i++)
 			{
@@ -1184,7 +1240,10 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			}
 			window.setVP(-1);
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
 				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
@@ -1208,6 +1267,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				frame.draw();
 
 			}
+			drawCoinNum(numberc, window, pan.getCoin(), coin);
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
@@ -1228,17 +1288,21 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		case SAVE:
 		{
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 			for (int i = 0; i < Monsv.size(); i++)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
 			for (int i = 0; i < MAXHP; i++) {
 				window.setVP(i);
 				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
@@ -1266,27 +1330,28 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 		{
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { coord.getpCX(), coord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
-			fail.draw();
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
+
 			for (int i = 0; i < Monsv.size(); i++)
 			{
 				if (!Monsv[i]->getDeadFlag())
 				{
-					enemycord[i].calMapCamera(demo1, *Monsv[i]);
-					Monsv[i]->draw({ enemycord[i].getpCX(),enemycord[i].getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
+					cord.calMapCamera(demo1, *Monsv[i]);
+					Monsv[i]->draw({ cord.getpCX(),cord.getpCY(),Monsv[i]->getWidth() / SHRINK,Monsv[i]->getHeight() / SHRINK }, { ALLREGION });
 				}
 			}
 
 			thekey.gotKey(pan);
 			if (demo1.getmapnum() == 3)
 			{
-				keycord.calMapCamera(demo1, thekey);
-				thekey.draw({ keycord.getpCX(),keycord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, thekey);
+				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
 			if (demo1.getmapnum() == 4)
 			{
-				keycord.calMapCamera(demo1, gate);
-				gate.draw({ keycord.getpCX(), keycord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
+				cord.calMapCamera(demo1, gate);
+				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
 				gate.collisionAABB(pan);
 			}
 			for (int i = 0; i < PROPNUM; i++)
@@ -1306,8 +1371,13 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			}
 			window.setVP(-1);
 			for (int i = 0; i < fire.size(); i++)
-				fire[i].draw({ ALLREGION }, { coo[i].getpCX(), coo[i].getpCY(), fire[i].getWidth(), fire[i].getHeight() });
-			for (int i = 0; i < MAXHP; i++) {
+			{
+				cord.calMapCamera(demo1, fire[i]);
+				fire[i].draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), fire[i].getWidth(), fire[i].getHeight() });
+			}
+
+			for (int i = 0; i < MAXHP; i++)
+			{
 				window.setVP(i);
 				h.draw({ h.getWidth() / 2, 0, h.getWidth() , h.getHeight() }, { 0, 0,h.getWidth() / 2, h.getHeight() });
 			}
@@ -1330,6 +1400,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				frame.draw();
 
 			}
+			drawCoinNum(numberc, window, pan.getCoin(), coin);
 			window.setVP(MAXHP + PROPNUM);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
 			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
@@ -1340,6 +1411,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
+			fail.draw();
 			window.display();
 			break;
 		}
@@ -1351,11 +1423,53 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	resume.close();
 	menu.close();
 
+	save.close();
+	slot1.close();
+	back.close();
+
 	for (int i = 0; i < Monsv.size(); i++)
+	{
 		Monsv[i]->close();
+		SDL_RemoveTimer(Monsv[i]->AIID);
+	}
+
+	Monsv.clear();
+
+	for (int i = 0; i < tempa.size(); i++)
+		tempa[i].close();
+	tempa.clear();
+	for (int i = 0; i < tempb.size(); i++)
+		tempb[i].close();
+	tempb.clear();
+	for (int i = 0; i < tempc.size(); i++)
+		tempc[i].close();
+	tempc.clear();
+	for (int i = 0; i < tempd.size(); i++)
+		tempd[i].close();
+	tempd.clear();
+
+	for (int i = 0; i < mfire.size(); i++)
+		mfire[i].close();
 
 	for (int i = 0; i < ATTACKNUM; i++)
 		fire[i].close();
+
+	gate.close();
+	thekey.close();
+	for (int i = 0; i < prop_v.size(); i++)
+		prop_v[i].close();
+
+	princess.close();
+	npcPotion.close();
+	h.close();
+	potion.close();
+	frame.close();
+	flash.close();
+
+	for (int i = 0; i < number.size(); i++)
+		number[i].close();
+	for (int i = 0; i < numberc.size(); i++)
+		numberc[i].close();
 }
 
 

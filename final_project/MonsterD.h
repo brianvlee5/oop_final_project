@@ -14,8 +14,9 @@ public:
     void setAImode(int mode);
     void move();
     void setBase(int xx, int yy);
+    
 private:
-    SDL_TimerID AIID;
+    
     Uint32 AIinterval;
     static Uint32 AIState(Uint32 interval, void* param);
     AnimeObject2* Mchptr;

@@ -1,4 +1,5 @@
 #pragma once
+class MAttack;
 #include <SDL.h>
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
@@ -8,7 +9,6 @@
 #include "tile.h"
 #include "MonsterAI.h"
 #include "AnimeObject2.h"
-#include "MAttack.h"
 #include <stdlib.h>
 
 
@@ -30,6 +30,8 @@ public:
 	void setHP(int hp);
 	void setVX(int x);
 	void setVY(int y);
+	void setY(int yy);
+	void setX(int xx);
 	void setMapnum(int mapnumm);
 	int getVX();
 	int getVY();

@@ -175,3 +175,7 @@ void MonsterB::initialize()
 	WaitTime = 0;
 	WanderTime = 0;
 }
+void MonsterB::operator<<(AnimeObject2& mainch)
+{
+	Mchptr = &mainch;
+}

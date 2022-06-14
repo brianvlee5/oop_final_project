@@ -1,5 +1,6 @@
 #pragma once
 class MAttack;
+
 #include <SDL.h>
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
@@ -11,6 +12,7 @@ class MAttack;
 #include "AnimeObject2.h"
 #include <stdlib.h>
 
+class Attack;
 
 
 class Monster
@@ -69,9 +71,16 @@ public:
 	virtual void stopAI()=0;
 	virtual void setBase(int xx, int yy);
 	void setFlip(SDL_RendererFlip f);
-	SDL_TimerID AIID;
+	
 	void initialize();
+
+	SDL_TimerID AIID;
+
+	void operator<<(SDL_Point& p);
+	virtual void operator<<(AnimeObject2& mainch);
+
 private:
+	
 	char path[100];
 	int num;
 	SDL_Texture** texture;

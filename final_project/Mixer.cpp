@@ -3,6 +3,7 @@
 
 Mixer::Mixer()
 {
+	initialize();
 }
 
 Mixer::Mixer(const char *p, int t)
@@ -141,4 +142,12 @@ void Mixer::stopEffect(int n)
 	// halt playback on channel n
 	// if n=-1, halt playback on all channels
 	Mix_HaltChannel(n);
+}
+
+void Mixer::initialize()
+{
+	music = nullptr;
+	effect = nullptr;
+	path = nullptr;
+	type = 0;
 }

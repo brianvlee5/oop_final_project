@@ -7,6 +7,7 @@ using namespace std;
 class RenderWindow
 {
 public:
+	RenderWindow();
 	RenderWindow(const char* caption, int winx, int winy, int width, int height);
 	void close();
 	void clear();
@@ -21,6 +22,8 @@ public:
 	void clearVP();
 	void clearVP(Uint32 color);
 	void clearVP(Uint32 color, int n);
+
+	void initialize();
 
 private:
 	SDL_Window* window; // The window we'll be rendering to

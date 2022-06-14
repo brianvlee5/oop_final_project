@@ -8,10 +8,12 @@
 
 Image::Image()
 {
+	initialize();
 }
 
 Image::Image(const char* path, SDL_Renderer* renderer)
 {
+	initialize();
 	setPath(path);
 	setColorKey(NO_TRANSPARENT_BG);
 	setRenderer(renderer);
@@ -21,6 +23,7 @@ Image::Image(const char* path, SDL_Renderer* renderer)
 
 Image::Image(const char* path, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b)
 {
+	initialize();
 	setPath(path);
 	setColorKey({ r, g, b, 255 });
 	setRenderer(renderer);
@@ -196,4 +199,15 @@ double Image::getAngle() {
 }
 int Image::getAlpha() {
 	return alpha;
+}
+
+void Image::initialize()
+{
+	width = height = 0;
+	setColorKey({0, 0, 0});
+	srcRegion = dstRegion = { 0, 0, 0, 0 };
+	center = { 0, 0 };
+	angle = 0;
+	flip = SDL_FLIP_NONE;
+	alpha = 0;
 }

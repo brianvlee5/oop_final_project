@@ -14,6 +14,7 @@ class Coordinate
 {
 public:
 	Coordinate();
+	Coordinate(int cx, int cy);
 	void initialize();
 	void calMapCamera(Map, AnimeObject2&);
 	void calMapCamera(Map, Monster&);

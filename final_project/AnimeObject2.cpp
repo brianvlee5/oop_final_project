@@ -483,6 +483,13 @@ void AnimeObject2::usePotion()
 	}
 }
 
+void AnimeObject2::operator-(int minus)
+{
+	health -= minus;
+}
+
+
+
 void AnimeObject2::setPotionNum(int n)
 {
 	num_potion = n;

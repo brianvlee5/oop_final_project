@@ -312,7 +312,8 @@ void Monster::collisionAABB(AnimeObject2& mainch)
 			y < mainch.getY() + mainch.getHeight() / SHRINK &&
 			mainch.getY() < y + height / SHRINK && getShownFlag())
 		{
-			mainch.setHP(mainch.getHP() - 1);
+			mainch - 1;
+			//mainch.setHP(mainch.getHP() - 1);
 			if (mainch.getHP() <= 0)
 			{
 				mainch.setDeadFlag(true);
@@ -467,6 +468,12 @@ void Monster::setPosition(int xx, int yy)
 	x = xx;
 	y = yy;
 }
+//setPosition
+void Monster::operator<<(SDL_Point& p)
+{
+	x = p.x;
+	y = p.y;
+}
 int Monster::getWidth()
 {
 	return width;
@@ -578,4 +585,9 @@ void Monster::setMchptr(AnimeObject2& mainch)
 void Monster::setMatkptr(MAttack& matk)
 {
 	
+}
+
+void Monster::operator<<(AnimeObject2& mainch)
+{
+
 }

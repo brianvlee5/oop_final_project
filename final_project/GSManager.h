@@ -36,6 +36,7 @@ class GSManager
 {
 public:
 	GSManager();
+	GSManager(bool q, int gs);
 	void initialize();
 	void startGame(RenderWindow& window);
 	void GamePlay(RenderWindow & window);
@@ -46,6 +47,11 @@ public:
 	int getGameState();
 	void InitMonsters(std::vector<Monster*>& mv);
 	void drawCoinNum(std::vector<Object>& cv, RenderWindow& window, int coinn, Object& Coin);
+
+	friend void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& mch, vector<Attack>& atk, vector<Monster*>& mv);
+	friend void MenuEvents(SDL_Event e, GSManager* gsm, int& state);
+	friend void ClearEvents(SDL_Event e, GSManager* gsm);
+	friend void OverEvents(SDL_Event e, GSManager* gsm);
 private:
 	
 	SDL_Event ev;

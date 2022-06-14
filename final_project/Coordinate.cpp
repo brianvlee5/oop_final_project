@@ -7,6 +7,12 @@ Coordinate::Coordinate()
 	initialize();
 }
 
+Coordinate::Coordinate(int cx, int cy)
+{
+	printCamX = cx;
+	printCamY = cy;
+}
+
 void Coordinate::initialize()
 {
 	printCamX = 0;

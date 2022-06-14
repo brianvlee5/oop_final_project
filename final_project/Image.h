@@ -32,6 +32,8 @@ public:
 	void setFlip(SDL_RendererFlip f);
 	void setAlpha(int a);
 
+	void initialize();
+
 
 private:
 	char* path;

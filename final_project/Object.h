@@ -45,6 +45,8 @@ public:
 	void setShownFlag(bool f); //flag 2
 	bool getShownFlag();
 
+	void initialize();
+
 protected:
 	SDL_Renderer* renderer; 
 

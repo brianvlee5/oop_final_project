@@ -16,6 +16,8 @@ public:
     void setAImode(int mode);
     void draw(SDL_Rect dst, SDL_Rect src);
     void initialize();
+
+    void operator<<(AnimeObject2& mainch);
 private:
     MAttack* MonsFire;
     

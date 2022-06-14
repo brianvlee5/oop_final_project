@@ -159,3 +159,7 @@ void MonsterD::setAImode(int mode)
 {
 	AImode = mode;
 }
+void MonsterD::operator<<(AnimeObject2& mainch)
+{
+	Mchptr = &mainch;
+}

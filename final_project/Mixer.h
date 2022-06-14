@@ -24,6 +24,7 @@ class Mixer
 		void playEffect(int n, int c);
 		void stopEffect(int n);
 
+		void initialize();
 	private:
 		// The SDL_mixer data type for music is Mix_Music
 		// https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer_86.html

@@ -61,7 +61,7 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 		}
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 + 45) && y <= (WINDOWH / 2 + 95))//menu
 		{
-			gsm->setGameState(MAINMENU);
+			gsm->GameState=MAINMENU;
 		}
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2 - 80) && y <= (WINDOWH / 2 - 30))//save
 		{
@@ -100,7 +100,7 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int& state)
 			{
 				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//new game
 				{
-					gsm->setGameState(GAMEPLAY);
+					gsm->GameState = GAMEPLAY;
 				}
 				else if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2 + 55) && y <= (WINDOWH / 2 + 105))//load
 				{
@@ -116,7 +116,7 @@ static void MenuEvents(SDL_Event e, GSManager* gsm, int& state)
 				}
 				if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 70) && x <= (WINDOWW / 2 + 130) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 40))//slot1
 				{
-					gsm->setGameState(LOADGAMEPLAY);
+					gsm->GameState = LOADGAMEPLAY;
 				}
 				break;
 			}
@@ -132,7 +132,7 @@ static void ClearEvents(SDL_Event e, GSManager* gsm)
 		SDL_GetMouseState(&x, &y);
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 50) && x <= (WINDOWW / 2 + 50) && y >= (WINDOWH / 2+30) && y <= (WINDOWH / 2 + 70))//back
 		{
-			gsm->setGameState(MAINMENU);
+			gsm->GameState = MAINMENU;
 		}
 	}
 }
@@ -145,8 +145,7 @@ static void OverEvents(SDL_Event e, GSManager* gsm)
 		SDL_GetMouseState(&x, &y);
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 150) && y >= (WINDOWH / 2 -40) && y <= (WINDOWH / 2 + 70))//back
 		{
-			printf("in\n");
-			gsm->setGameState(MAINMENU);
+			gsm->GameState = MAINMENU;
 		}
 	}
 }
@@ -156,6 +155,12 @@ static void OverEvents(SDL_Event e, GSManager* gsm)
 GSManager::GSManager()
 {
 	initialize();
+}
+
+GSManager::GSManager(bool q, int gs)
+{
+	quit = q;
+	GameState = gs;
 }
 
 void GSManager::InitMonsters(std::vector<Monster*>& mv)
@@ -170,7 +175,9 @@ void GSManager::InitMonsters(std::vector<Monster*>& mv)
 	{
 		fscanf_s(fspawn, "%d %d %d", &Dflag, &xx, &yy);
 		mv[i]->setDeadFlag(Dflag);
-		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
+		SDL_Point poi={xx, yy};
+		*mv[i] << poi;
+		//mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
 		mv[i]->setBase(xx, yy);
 
 	}
@@ -406,7 +413,7 @@ void GSManager::GamePlay(RenderWindow& window)
 
 	for (int i = 0; i < Monsv.size(); i++)
 	{
-		Monsv[i]->setMchptr(pan);
+		(*Monsv[i]) << pan;
 		Monsv[i]->setMatkptr(mfire[i % 3]);
 		Monsv[i]->startAI(15);
 	}
@@ -1429,8 +1436,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	for (int i = 0; i < Monsv.size(); i++)
 	{
 		Monsv[i]->close();
-		SDL_RemoveTimer(Monsv[i]->AIID);
 	}
+
 
 	Monsv.clear();
 
@@ -1528,6 +1535,8 @@ int GSManager::getGameState()
 {
 	return GameState;
 }
+
+
 
 void GSManager::initialize()
 {

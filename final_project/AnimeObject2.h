@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "SDL2_gfxPrimitives.h"
 #include <stdio.h>
+#include <vector>
 
 #include "constants.h"
 #include "SDL_image.h"
@@ -73,6 +74,10 @@ public:
 	void startRush(Uint32 t);
 	void stopRushTimer();
 	void startRushCD(Uint32 t);
+
+	/*****Operator*****/
+	void operator-(int minus);
+
 
 private:
 

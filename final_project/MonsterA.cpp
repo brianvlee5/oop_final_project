@@ -138,6 +138,11 @@ void MonsterA::setMchptr(AnimeObject2& mainch)
 	Mchptr = &mainch;
 }
 
+void MonsterA::operator<<(AnimeObject2& mainch)
+{
+	Mchptr = &mainch;
+}
+
 void MonsterA::draw(SDL_Rect dst, SDL_Rect src) 
 {
 	SDL_Rect* d = &dst, * s = &src;

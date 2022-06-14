@@ -3,6 +3,7 @@
 
 Text::Text()
 {
+	initialize();
 }
 
 
@@ -234,4 +235,20 @@ void Text::setAlpha(int a)
 char* Text::getString()
 {
 	return str;
+}
+
+void Text::initialize()
+{
+	texture = nullptr;
+	width = height = 0;
+	str = fontPath = nullptr;
+	fontSize = style = textType = 0;
+	fgColor = { 0, 0, 0 };
+	bgColor = { 0, 0, 0 };
+	renderer = nullptr;
+	pos = { 0, 0 };
+	center = { 0, 0 };
+	angle = 0;
+	flip = SDL_FLIP_NONE;
+	alpha = 0;
 }

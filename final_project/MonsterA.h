@@ -14,6 +14,8 @@ public:
     void draw(SDL_Rect dst, SDL_Rect src);
     void initialize();
 
+    void operator<<(AnimeObject2& mainch);
+
 private:
    
     Uint32 AIinterval;

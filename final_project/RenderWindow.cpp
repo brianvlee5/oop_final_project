@@ -1,6 +1,11 @@
 #include "RenderWindow.h"
 #include <stdio.h>
 
+RenderWindow::RenderWindow()
+{
+	initialize();
+}
+
 RenderWindow::RenderWindow(const char* caption, int winx, int winy, int width, int height)
 {
 	// Create window	
@@ -112,4 +117,10 @@ void RenderWindow::clearVP(Uint32 color, int n)
 
 	SDL_SetRenderDrawColor(renderer, color / 0x1000000, (color / 0x10000) % 0x100, (color / 0x100) % 0x100, color % 0x100);
 	SDL_RenderFillRect(renderer, &fullViewport);
+}
+
+void RenderWindow::initialize()
+{
+	window = nullptr;
+	renderer = nullptr;
 }

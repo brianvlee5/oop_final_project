@@ -1,7 +1,7 @@
 #include "Object.h"
 
 Object::Object() {
-
+	initialize();
 }
 Object::Object(const char* path, SDL_Renderer* ren)
 {
@@ -241,4 +241,11 @@ int Object::getAlpha()
 double Object::getAngle()
 {
 	return image[0].getAngle();
+}
+
+void Object::initialize()
+{
+	shownFlag = true;
+	frame = num = x = y = velX = velY = 0;
+	image = nullptr;
 }

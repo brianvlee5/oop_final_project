@@ -34,6 +34,7 @@ class Text
 		void setAlpha(int a);
 
 		char* getString();
+		void initialize();
 
 	private:
 		// texture data member

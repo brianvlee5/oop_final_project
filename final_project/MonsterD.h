@@ -15,6 +15,7 @@ public:
     void setAImode(int mode);
     void move();
     void setBase(int xx, int yy);
+    void operator<<(AnimeObject2& mainch);
     
 private:
     

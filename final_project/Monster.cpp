@@ -199,11 +199,12 @@ void Monster::setFlip(SDL_RendererFlip f)
 
 void Monster::draw(SDL_Rect dst, SDL_Rect src) {
 	SDL_Rect* d = &dst, * s = &src;
-
+/*
 	if (dst.x == ALLREGION)
 	{
 		d = NULL;
 	}
+*/
 	if (src.x == ALLREGION)
 	{
 		s = NULL;

@@ -83,13 +83,19 @@ static void attackKeyboard(SDL_Event e, std::vector<Attack>& a, AnimeObject2& p)
 				}
 				break;
 			case SDLK_r:
+				for (int i = 6; i < ATTACKNUM; i++)
+				{
+					if (a[i].getRotateFlag() == true)
+						a[i].removeTimerID();
+				}
+
 				int angle = rand() % 360;
 				int r = sqrt((p.getHeight()/2) * (p.getHeight() / 2) + (p.getWidth()/2)* (p.getWidth() / 2)) * 6 / 4;
-				for (int i = 6; i < 10; i++)
+				for (int i = 6; i < ATTACKNUM; i++)
 				{
-					angle = (angle + 90) % 360;
+					angle = (angle + (360 / (ATTACKNUM - 6))) % 360;
 					a[i].setShownFlag(true);
-					a[i].startTimerMulti(20, r, angle);
+					a[i].startTimerRotate(20, r, angle);
 				}
 				break;
 		}

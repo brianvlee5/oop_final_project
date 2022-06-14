@@ -348,7 +348,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	InitMonsters(Monsv);
 	printf("2\n");
 
-	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
+	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY+15);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
 	princess.setPosition(51 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY + 5);
 

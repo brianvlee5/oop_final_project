@@ -99,6 +99,8 @@ private:
 	int Mapnum;
 	int health;
 	int num_potion;
+	int jump_count;
+
 	SDL_TimerID timerID;
 	SDL_TimerID HurtID;
 	SDL_TimerID RushID;

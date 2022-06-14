@@ -16,7 +16,7 @@
 #define SOLID 100
 #define SHADED 101
 #define BLENDED 102
-#define PROPNUM 6
+#define PROPNUM 3
 
 //AImode
 #define WANDER 0
@@ -38,25 +38,28 @@
 #define FLOOR 4
 
 //for character
-#define RUSHCD 1500  //milisecond
-#define RUSHTIMER 50
+#define RUSHCD 1250  //milisecond
+#define RUSHTIMER 50 //milisecond
+#define POTIONNUM 3
+#define COINNUM 50
 
 //for attack
-#define ATTACKNUM 10
+#define ATTACKNUM 12
+#define ROTATECD 8000  //milisecond
+#define ROTATETIMER 100 //milisecond
 
-//for music
-#define MUSIC 10
-#define EFFECT 11
-#define FOREVER -1
-#define ONE 0
-#define ALLCHANNEL -1
+//for VP
+#define VP_MAP 11
+#define VP_COINICON 12
+#define VP_FLASH 13
+#define VP_RFIRE 14
+#define VP_COIN 15 // 15~17
 
 //for GSM
 #define MAINMENU 0
 #define GAMEPLAY 1
 #define LOADGAMEPLAY 2
 #define GAMECLEAR 3
-
 
 //for gameplay state
 #define PLAY 0
@@ -67,6 +70,13 @@
 //for menu states
 #define MENU 0
 #define LOAD 1
+
+//for music
+#define MUSIC 10
+#define EFFECT 11
+#define FOREVER -1
+#define ONE 0
+#define ALLCHANNEL -1
 
 //for saves
 struct MapSave {

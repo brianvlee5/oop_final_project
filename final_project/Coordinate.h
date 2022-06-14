@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Map.h"
+#include "Object.h"
 #include "AnimeObject2.h"
 #include "Attack.h"
 #include "Monster.h"
@@ -17,6 +18,7 @@ public:
 	Coordinate(int cx, int cy);
 	void initialize();
 	void calMapCamera(Map, AnimeObject2&);
+	void calMapCamera(Map, Object&);
 	void calMapCamera(Map, Monster&);
 	void calMapCamera(Map, Attack&);
 	void calMapCamera(Map, MonsterC&);

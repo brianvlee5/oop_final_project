@@ -28,9 +28,11 @@ public:
 	void startTimerLine(Uint32 t);
 	void startTimerParabola(Uint32 t);
 	void startTimerBounce(Uint32 t);
-	void startTimerMulti(Uint32 t, int r, double d);
+	void startTimerRotate(Uint32 t, int r, double d);
 	Uint32 getTime();
 	void stopTimer();
+	void removeTimerID();
+	void startRotateCoolDown(Uint32 t);
 
 	void move();
 	void setdetectCorner();
@@ -43,22 +45,29 @@ public:
 
 	void collision_mons(std::vector<MonsterA>& mv);
 	void collision_mons(std::vector<Monster*>& mv, AnimeObject2& mainch);
+
 	void setMapFlag(bool f);
 	bool getMapFlag();
 	void setMapnum(int num);
 	void setPause(bool f);
-
 	void setDir(int);
 	void setCharacterCenter(int x, int y);
+	int getRushCD();
+	bool getRotateFlag();
 
 private:
 	SDL_Renderer* renderer;
 	SDL_TimerID timerID;
+	SDL_TimerID cd_ID;
 	Uint32 time;
+	Uint32 cd;
+	int cd_count;
+	bool rotateFlag;
 	static Uint32 changeDataLine(Uint32 interval, void* param);
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
-	static Uint32 changeDataMulti(Uint32 interval, void* param);
+	static Uint32 changeDataRotate(Uint32 interval, void* param);
+	static Uint32 rotateCD(Uint32 intercal, void* param);
 
 	bool pause;
 

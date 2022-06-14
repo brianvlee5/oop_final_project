@@ -13,6 +13,8 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 			case SDLK_ESCAPE:
 				if (state == PLAY)
 				{
+					mch.setVx(0);
+					mch.stopFrameTimer();
 					for (int i = 0; i < atk.size(); i++)
 						atk[i].setPause(true);
 					for (int i = 0; i < mv.size(); i++)
@@ -290,7 +292,7 @@ void GSManager::GamePlay(RenderWindow& window)
 	MonsterI gate("../images/gate", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	MonsterI princess("../images/princess", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
-	NPC npcPotion("../images/npcP", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
+	NPC npcPotion("../images/npcPP", 1, window.getRenderer(), 0xFF, 0xFF, 0xFF);
 	
 	
 	
@@ -305,6 +307,9 @@ void GSManager::GamePlay(RenderWindow& window)
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
 	Object flash("../images/flash.png", window.getRenderer());
+	Object rfire("../images/rfire.png", window.getRenderer());
+	Object B("../images/B.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+
 	vector<Object> prop_v;
 	vector<Object> number;
 	vector<Object> numberc;
@@ -335,7 +340,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		tempd.push_back(d);
 	}		
 	
-	printf("1\n");
+//	printf("1\n");
 	for (int i = 0; i < tempa.size(); i++)
 		Monsv.push_back(&tempa[i]);
 	for (int i = 0; i < tempb.size(); i++)
@@ -346,9 +351,11 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv.push_back(&tempd[i]);
 
 	InitMonsters(Monsv);
-	printf("2\n");
+//	printf("2\n");
 
-	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY+15);
+	npcPotion.setPosition(30 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY+15);
+	B.setShownFlag(true);
+	B.setPosition(30 * WIDTH / MAPTILEX + 6, 36 * HEIGHT / MAPTILEY - B.getHeight() / 2);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
 	princess.setPosition(51 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY + 5);
 
@@ -404,12 +411,17 @@ void GSManager::GamePlay(RenderWindow& window)
 	coin.setShownFlag(true);
 	coin.setPosition(0, 0);
 
-	window.addVPregion({ {WINDOWW - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
+	window.addVPregion({ {WINDOWW / 6 * 5 - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
 	flash.setShownFlag(true);
 	flash.setPosition(0, 0);
 
-	for(int i=1; i<=3; i++)
-		window.addVPregion({ {i*coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//16~18
+	window.addVPregion({ {WINDOWW / 6 * 5 - 2*rfire.getWidth(), 0, rfire.getWidth(), rfire.getHeight()} });
+	rfire.setShownFlag(true);
+	rfire.setPosition(0, 0);
+
+
+	for (int i = 1; i <= 3; i++)
+		window.addVPregion({ {i * coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//15~17
 
 	for (int i = 0; i < Monsv.size(); i++)
 	{
@@ -417,7 +429,7 @@ void GSManager::GamePlay(RenderWindow& window)
 		Monsv[i]->setMatkptr(mfire[i % 3]);
 		Monsv[i]->startAI(15);
 	}
-	printf("3\n");
+//	printf("3\n");
 	for (int i = 0; i < ATTACKNUM; i++)
 	{
 		if (i > 3)
@@ -459,13 +471,9 @@ void GSManager::GamePlay(RenderWindow& window)
 			demo1.changemap(pan, Monsv);
 
 
-			cord.calMapCamera(demo1, pan);
-				
-
 
 
 			demo1.draw({ ALLREGION }, demo1.getcamera());
-			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 
 
 
@@ -508,10 +516,15 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			if (demo1.getmapnum() == 0)
 			{
+				cord.calMapCamera(demo1, B);
+				B.draw({ ALLREGION }, { cord.getpCX(),cord.getpCY(),B.getWidth() / SHRINK,B.getHeight() / SHRINK });
 				cord.calMapCamera(demo1, npcPotion);
 				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
 			}
+
+			cord.calMapCamera(demo1, pan);
+			pan.draw({ ALLREGION }, { cord.getpCX(), cord.getpCY(), pan.getWidth() / SHRINK, pan.getHeight() / SHRINK });
 
 			if (princess.getWinFlag())
 				GameState = GAMECLEAR;
@@ -572,14 +585,22 @@ void GSManager::GamePlay(RenderWindow& window)
 			
 			drawCoinNum(numberc, window, pan.getCoin(), coin);
 
-			window.setVP(MAXHP + PROPNUM);
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
-			coin.draw({ ALLREGION } , { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8});
-			window.setVP(MAXHP + PROPNUM + 2);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			window.setVP(VP_COINICON);
+			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.display();
 			break;
@@ -613,6 +634,8 @@ void GSManager::GamePlay(RenderWindow& window)
 			}
 			if (demo1.getmapnum() == 0)
 			{
+				cord.calMapCamera(demo1, B);
+				B.draw({ ALLREGION }, { cord.getpCX(),cord.getpCY(),B.getWidth() / SHRINK,B.getHeight() / SHRINK });
 				cord.calMapCamera(demo1, npcPotion);
 				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
@@ -661,15 +684,24 @@ void GSManager::GamePlay(RenderWindow& window)
 				frame.draw();
 
 			}
-			drawCoinNum(numberc, window, pan.getCoin(), coin);
-			window.setVP(MAXHP + PROPNUM);
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			drawCoinNum(numberc, window, pan.getCoin(), coin);
+
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			resume.draw();
@@ -705,14 +737,21 @@ void GSManager::GamePlay(RenderWindow& window)
 				window.setVP(i);
 				h.draw();
 			}
-			window.setVP(MAXHP + 0);
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			slot1.draw();
@@ -795,14 +834,22 @@ void GSManager::GamePlay(RenderWindow& window)
 
 			}
 			drawCoinNum(numberc, window, pan.getCoin(), coin);
-			window.setVP(MAXHP + PROPNUM);
+
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			fail.draw();
@@ -902,6 +949,9 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	Object potion("../images/potion.png", window.getRenderer(), 32, 29, 32);
 	Object coin("../images/coin.png", window.getRenderer(), 32, 29, 32);
 	Object flash("../images/flash.png", window.getRenderer());
+	Object rfire("../images/rfire.png", window.getRenderer());
+	Object B("../images/B.png", window.getRenderer(), 0xFF, 0xFF, 0xFF);
+
 	vector<Object> prop_v;
 	vector<Object> number;
 	vector<Object> numberc;
@@ -945,7 +995,9 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	InitMonsters(Monsv);
 	printf("2\n");
 
-	npcPotion.setPosition(5 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY);
+	npcPotion.setPosition(25 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY + 15);
+	B.setShownFlag(true);
+	B.setPosition(25 * WIDTH / MAPTILEX + 6, 36 * HEIGHT / MAPTILEY - B.getHeight() / 2);
 	gate.setPosition(45 * WIDTH / MAPTILEX, 6 * HEIGHT / MAPTILEY);
 	princess.setPosition(51 * WIDTH / MAPTILEX, 24 * HEIGHT / MAPTILEY + 5);
 
@@ -1004,6 +1056,10 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 	window.addVPregion({ {WINDOWW - flash.getWidth(), 0, flash.getWidth(), flash.getHeight()} });
 	flash.setShownFlag(true);
 	flash.setPosition(0, 0);
+
+	window.addVPregion({ {WINDOWW - 2 * rfire.getWidth(), 0, rfire.getWidth(), rfire.getHeight()} });
+	rfire.setShownFlag(true);
+	rfire.setPosition(0, 0);
 
 	for (int i = 1; i <= 3; i++)
 		window.addVPregion({ {i * coin.getWidth() / 8, h.getHeight() * 12 / 3, coin.getWidth() / 8, coin.getHeight() / 8} });//16~18
@@ -1120,6 +1176,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 			if (demo1.getmapnum() == 0)
 			{
+				cord.calMapCamera(demo1, B);
+				B.draw({ ALLREGION }, { cord.getpCX(),cord.getpCY(),B.getWidth() / SHRINK,B.getHeight() / SHRINK });
 				cord.calMapCamera(demo1, npcPotion);
 				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
@@ -1184,14 +1242,22 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 			drawCoinNum(numberc, window, pan.getCoin(), coin);
 
-			window.setVP(MAXHP + PROPNUM);
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.display();
 			break;
@@ -1225,6 +1291,8 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 			}
 			if (demo1.getmapnum() == 0)
 			{
+				cord.calMapCamera(demo1, B);
+				B.draw({ ALLREGION }, { cord.getpCX(),cord.getpCY(),B.getWidth() / SHRINK,B.getHeight() / SHRINK });
 				cord.calMapCamera(demo1, npcPotion);
 				npcPotion.draw({ cord.getpCX(),cord.getpCY(),npcPotion.getWidth() / SHRINK,npcPotion.getHeight() / SHRINK }, { ALLREGION });
 				npcPotion.npcAABB(pan);
@@ -1274,14 +1342,23 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 			}
 			drawCoinNum(numberc, window, pan.getCoin(), coin);
-			window.setVP(MAXHP + PROPNUM);
+
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			resume.draw();
@@ -1317,14 +1394,23 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				window.setVP(i);
 				h.draw();
 			}
-			window.setVP(MAXHP + 0);
+
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			slot1.draw();
@@ -1407,14 +1493,23 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 			}
 			drawCoinNum(numberc, window, pan.getCoin(), coin);
-			window.setVP(MAXHP + PROPNUM);
+
+			window.setVP(VP_MAP);
 			demo1.draw({ 0, 0, WINDOWW / 6 , WINDOWW / 6 }, { ALLREGION });
-			filledCircleColor(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF0000FF);
-			window.setVP(MAXHP + PROPNUM + 1);
+			filledCircleRGBA(window.getRenderer(), (pan.getX() + pan.getWidth() / 2) / 12, (pan.getY() + pan.getHeight() / 2) / 8, 2, 0xFF, 0, 0, 0xFF);
+			if (demo1.getmapnum() == 0)
+			{
+				filledCircleRGBA(window.getRenderer(), (npcPotion.getX() + npcPotion.getWidth() / 2) / 12, (npcPotion.getY() + npcPotion.getHeight() / 2) / 8, 2, 0, 0xFF, 0, 0xFF);
+			}
+
+			window.setVP(VP_COINICON);
 			coin.draw({ ALLREGION }, { 0, 0, coin.getWidth() / 8 , coin.getHeight() / 8 });
-			window.setVP(MAXHP + PROPNUM + 2);
+			window.setVP(VP_FLASH);
 			flash.draw();
 			boxRGBA(window.getRenderer(), 0, 0, flash.getWidth(), 0 + (flash.getHeight() - flash.getHeight() * pan.getRushCD() / (RUSHCD / RUSHTIMER)), 0x9E, 0x9E, 0x9E, 0x99);
+			window.setVP(VP_RFIRE);
+			rfire.draw();
+			boxRGBA(window.getRenderer(), 0, 0, rfire.getWidth(), 0 + (rfire.getHeight() - rfire.getHeight() * fire[6].getRushCD() / (ROTATECD / ROTATETIMER)), 0x9E, 0x9E, 0x9E, 0x99);
 
 			window.setVP(-1);
 			fail.draw();
@@ -1518,11 +1613,11 @@ void GSManager::drawCoinNum(std::vector<Object>& cv, RenderWindow& window, int c
 	cointemp /= 10;
 	hun = cointemp % 10;
 
-	window.setVP(MAXHP + PROPNUM + 2);
+	window.setVP(VP_COIN);
 	cv[hun].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
-	window.setVP(MAXHP + PROPNUM + 3);
+	window.setVP(VP_COIN + 1);
 	cv[ten].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
-	window.setVP(MAXHP + PROPNUM + 4);
+	window.setVP(VP_COIN + 2);
 	cv[one].draw({ ALLREGION }, { 0, 0, Coin.getWidth() / 8 , Coin.getHeight() / 8 });
 }
 

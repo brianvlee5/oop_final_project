@@ -77,11 +77,12 @@ void Image::close()
 void Image::draw()
 {
 	SDL_Rect* d = &dstRegion, * s = &srcRegion;
-
+/*
 	if (dstRegion.x == ALLREGION)
 	{
 		d = NULL;
 	}
+*/
 	if (srcRegion.x == ALLREGION)
 	{
 		s = NULL;

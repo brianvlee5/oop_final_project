@@ -28,17 +28,17 @@ AnimeObject2::AnimeObject2(const char* path, int n, SDL_Renderer* ren, Uint8 r, 
 
 void AnimeObject2::initialize()
 {
-	cd_count = 30;
+	shownFlag = true;
+	cd_count = RUSHCD / RUSHTIMER;
+	rushFlag = true;
 	dir = 1;
 	Mapnum = 0;
-	shownFlag = true;
 	health = MAXHP;
+	num_potion = POTIONNUM;
+	coin = COINNUM;
 	deadFlag = false;
-	rushFlag = true;
 	gravityFlag = true;
-	num_potion = 7;
 	gateFlag = false;
-	coin = 50;
 }
 
 void AnimeObject2::draw()
@@ -74,9 +74,10 @@ void AnimeObject2::draw(SDL_Rect src, SDL_Rect dst)
 	if (shownFlag)
 	{
 		Object::draw(src, dst);
-
+/*
 		thickLineRGBA(renderer, d->x, d->y-5, d->x + d->w, d->y-5, 2, 0x65, 0x43, 0x21, 0xFF);
 		thickLineRGBA(renderer, d->x, d->y-5, d->x + d->w*cd_count / (RUSHCD / RUSHTIMER), d->y-5, 2, 0xFF, 0xFF, 0xFF, 0xFF);
+*/
 	}
 }
 
@@ -95,6 +96,7 @@ void AnimeObject2::startFrameTimer(Uint32 t)
 void AnimeObject2::stopFrameTimer()
 {
 	time = 0;
+	SDL_RemoveTimer(timerID);
 }
 
 Uint32 AnimeObject2::changeFrame(Uint32 interval, void* param)
@@ -123,6 +125,7 @@ void AnimeObject2::startHurt(Uint32 t)
 void AnimeObject2::stopHurtTimer()
 {
 	hurtt = 0;
+	SDL_RemoveTimer(HurtID);
 }
 
 Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
@@ -157,6 +160,7 @@ void AnimeObject2::startRush(Uint32 t)
 void AnimeObject2::stopRushTimer()
 {
 	rush = 0;
+	SDL_RemoveTimer(RushID);
 }
 
 Uint32 AnimeObject2::rushing(Uint32 interval, void* param)
@@ -196,21 +200,7 @@ void AnimeObject2::startRushCD(Uint32 t)
 Uint32 AnimeObject2::rushCD(Uint32 interval, void* param)
 {
 	AnimeObject2* p = (AnimeObject2*)param;
-/*
-	static int lasttime = SDL_GetTicks64();
-	static int curtime = SDL_GetTicks64();
-	int timediv;
-	static int timeacc=0;
 
-	lasttime = curtime;
-	curtime = SDL_GetTicks64();
-	timediv = curtime - lasttime;
-	timeacc += timediv;
-	if (p->cd_count)
-	{
-		printf("time: %d\n", timeacc);
-	}
-*/		
 	if (p->cd_count < RUSHCD/RUSHTIMER) 
 	{
 		p->cd_count++;
@@ -226,9 +216,10 @@ Uint32 AnimeObject2::rushCD(Uint32 interval, void* param)
 void AnimeObject2::move() 
 {
 
-	if (jumpFlag)
+	if (jumpFlag && jump_count<2)
 	{
 		velY = -12;
+		jump_count++;
 	}
 	else if (yDown()&& gravityFlag)
 	{
@@ -238,6 +229,7 @@ void AnimeObject2::move()
 	else
 	{
 		velY = 0;
+		jump_count = 0;
 	}
 	jumpFlag = 0;
 	setdetectCorner();

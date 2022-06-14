@@ -32,6 +32,8 @@ void Attack::initialize()
 	velX = velY = 0;
 	Mapnum = 0;
 	pause = false;
+	cd_count = ROTATECD / ROTATETIMER;
+	rotateFlag = true;
 }
 /************************/
 
@@ -66,13 +68,24 @@ void Attack::startTimerBounce(Uint32 t) {
 	timerID = SDL_AddTimer(time, changeDataBounce, this);
 }
 
-void Attack::startTimerMulti(Uint32 t, int r, double d)
+void Attack::startTimerRotate(Uint32 t, int r, double d)
 {
-	ii = 0;
-	phase_angle = d;
-	radius = r;
-	time = t;
-	timerID = SDL_AddTimer(time, changeDataMulti, this);
+	if (rotateFlag) {
+		ii = 0;
+		phase_angle = d;
+		radius = r;
+		time = t;
+		startRotateCoolDown(ROTATETIMER);
+		timerID = SDL_AddTimer(time, changeDataRotate, this);
+	}
+}
+
+void Attack::startRotateCoolDown(Uint32 t)
+{
+	cd = t;
+	cd_count = 0;
+	rotateFlag = false;
+	cd_ID = SDL_AddTimer(cd, rotateCD, this);
 }
 
 Uint32 Attack::getTime() {
@@ -142,7 +155,7 @@ Uint32 Attack::changeDataBounce(Uint32 interval, void* param)
 	}
 }
 
-Uint32 Attack::changeDataMulti(Uint32 interval, void* param)
+Uint32 Attack::changeDataRotate(Uint32 interval, void* param)
 {
 	Attack* p = (Attack*)param;
 	if (p->time != 0)
@@ -165,10 +178,32 @@ Uint32 Attack::changeDataMulti(Uint32 interval, void* param)
 	}
 }
 
+Uint32 Attack::rotateCD(Uint32 interval, void* param)
+{
+	Attack* p = (Attack*)param;
+
+	if (p->cd_count < ROTATECD / ROTATETIMER)
+	{
+		p->cd_count++;
+		return interval;
+	}
+	else
+	{
+		p->rotateFlag = true;
+		return 0;
+	}
+}
+
 void Attack::stopTimer()
 {
 	time = 0;
 }
+
+void Attack::removeTimerID()
+{
+	SDL_RemoveTimer(timerID);
+}
+
 
 void Attack::move() 
 {
@@ -381,6 +416,17 @@ void Attack::setCharacterCenter(int x, int y)
 {
 	center.x = x;
 	center.y = y;
+}
+
+int Attack::getRushCD()
+{
+	return cd_count;
+	
+}
+
+bool Attack::getRotateFlag()
+{
+	return rotateFlag;
 }
 
 

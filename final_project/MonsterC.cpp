@@ -105,7 +105,6 @@ Uint32 MonsterC::AIState(Uint32 interval, void* param)
 			}
 			else
 			{
-				printf("5\n");
 				p->WaitTime = rand() % 50 + 50;
 				p->AImode = WAIT;
 			}

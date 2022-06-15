@@ -87,9 +87,14 @@ struct MainchSave {
 	int mapnum;
 	int health;
 	int x, y;
-	int c;
+	int c;//coin
+	int p;//potion
+	bool k;//key
 };
 
+struct GateSave {
+	bool opened;
+};
 
 //monster start points
 const SDL_Point MDStartP = { 57 * WIDTH / MAPTILEX, 25 * HEIGHT / MAPTILEY };

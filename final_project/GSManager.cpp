@@ -1,10 +1,11 @@
 #include "GSManager.h"
 
 //global functions
-static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& mch, vector<Attack>& atk, vector<Monster*>&mv)
+static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& mch, vector<Attack>& atk, vector<Monster*>&mv, MonsterI& gate)
 {
 	MainchSave mchsave;
 	MapSave mapsave;
+	GateSave gatesave;
 	int x, y;
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -58,6 +59,8 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 		if (e.button.button == SDL_BUTTON_LEFT && x >= (WINDOWW / 2 - 150) && x <= (WINDOWW / 2 + 100) && y >= (WINDOWH / 2) && y <= (WINDOWH / 2 + 50))//resume
 		{
 			state = PLAY;
+			for (int i = 0; i < atk.size(); i++)
+				atk[i].setPause(false);
 			for (int i = 0; i < mv.size(); i++)
 				mv[i]->setAImode(WAIT);
 		}
@@ -77,11 +80,20 @@ static void pauseEvents(SDL_Event e, GSManager* gsm, int& state, AnimeObject2& m
 			mchsave.x = mch.getX();
 			mchsave.y = mch.getY();
 			mchsave.c = mch.getCoin();
+			mchsave.p = mch.getPotionNum();
+			mchsave.k = mch.getKey();
 			mapsave.mapnum = mch.getMapnum();
+			gatesave.opened = gate.getDeadFlag();
+
 
 			fwrite(&mchsave, sizeof(MainchSave), 1, fsave);
 			fwrite(&mapsave, sizeof(mapsave), 1, fsave);
+			fwrite(&gatesave, sizeof(gatesave), 1, fsave);
 			fclose(fsave);
+			for (int i = 0; i < atk.size(); i++)
+				atk[i].setPause(false);
+			for (int i = 0; i < mv.size(); i++)
+				mv[i]->setAImode(WAIT);
 			state = PLAY;
 
 		}
@@ -447,7 +459,7 @@ void GSManager::GamePlay(RenderWindow& window)
 				quit = true;
 
 			if(state==PLAY || state==PAUSE)
-				pauseEvents(ev, this, state, pan, fire, Monsv);
+				pauseEvents(ev, this, state, pan, fire, Monsv, gate);
 
 			if (state == OVER)
 				OverEvents(ev, this);
@@ -626,7 +638,7 @@ void GSManager::GamePlay(RenderWindow& window)
 				cord.calMapCamera(demo1, thekey);
 				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
-			if (demo1.getmapnum() == 4)
+			if (demo1.getmapnum() == 4 && !gate.getDeadFlag())
 			{
 				cord.calMapCamera(demo1, gate);
 				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });
@@ -1082,15 +1094,20 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 
 	MainchSave mchsave;
 	MapSave mapsave;
+	GateSave gatesave;
 	FILE* fload;
 	fopen_s(&fload, "../saves/slot1.dat", "rb");
 	fread(&mchsave, sizeof(mchsave), 1, fload);
 	fread(&mapsave, sizeof(mapsave), 1, fload);
+	fread(&gatesave, sizeof(gatesave), 1, fload);
 	demo1.setmapnum(mapsave.mapnum);
 	pan.setMapnum(mchsave.mapnum);
 	pan.setHP(mchsave.health);
 	pan.setPosition(mchsave.x, mchsave.y);
 	pan.setCoin(mchsave.c);
+	pan.setPotionNum(mchsave.p);
+	pan.setKey(mchsave.k);
+	gate.setDeadFlag(gatesave.opened);
 	fclose(fload);
 	demo1.setmap(Monsv);
 
@@ -1104,7 +1121,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				quit = true;
 
 			if (state == PLAY || state == PAUSE)
-				pauseEvents(ev, this, state, pan, fire, Monsv);
+				pauseEvents(ev, this, state, pan, fire, Monsv, gate);
 
 			if (state == OVER)
 				OverEvents(ev, this);
@@ -1149,7 +1166,7 @@ void GSManager::LoadGamePlay(RenderWindow& window)
 				cord.calMapCamera(demo1, thekey);
 				thekey.draw({ cord.getpCX(),cord.getpCY(),thekey.getWidth() / SHRINK,thekey.getHeight() / SHRINK }, { ALLREGION });
 			}
-			if (demo1.getmapnum() == 4)
+			if (demo1.getmapnum() == 4 && !gate.getDeadFlag())
 			{
 				cord.calMapCamera(demo1, gate);
 				gate.draw({ cord.getpCX(), cord.getpCY(), gate.getWidth() / SHRINK, gate.getHeight() / SHRINK }, { ALLREGION });

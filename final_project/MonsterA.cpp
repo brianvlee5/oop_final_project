@@ -69,6 +69,8 @@ Uint32 MonsterA::AIState(Uint32 interval, void* param)
 			}
 			else if (p->WaitTime > 0)
 			{
+				p->setVX(0);
+				p->move();
 				p->WaitTime--;
 			}
 			else

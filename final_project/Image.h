@@ -13,8 +13,6 @@ public:
 	void generateTexture();
 	void close();
 	void draw();
-	void draw_src(SDL_Rect src);
-	void draw_dst(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 	void draw(SDL_Renderer* renderer, SDL_Rect src, SDL_Rect dst, SDL_Point center, double angle, SDL_RendererFlip flip, int alpha);
 

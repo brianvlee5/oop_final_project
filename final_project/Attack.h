@@ -29,7 +29,6 @@ public:
 	void startTimerParabola(Uint32 t);
 	void startTimerBounce(Uint32 t);
 	void startTimerRotate(Uint32 t, int r, double d);
-	Uint32 getTime();
 	void stopTimer();
 	void removeTimerID();
 	void startRotateCoolDown(Uint32 t);
@@ -48,7 +47,7 @@ public:
 
 	void setMapFlag(bool f);
 	bool getMapFlag();
-	void setMapnum(int num);
+	void setMapnum(int n);
 	void setPause(bool f);
 	void setDir(int);
 	void setCharacterCenter(int x, int y);
@@ -67,7 +66,7 @@ private:
 	static Uint32 changeDataParabola(Uint32 interval, void* param);
 	static Uint32 changeDataBounce(Uint32 interval, void* param);
 	static Uint32 changeDataRotate(Uint32 interval, void* param);
-	static Uint32 rotateCD(Uint32 intercal, void* param);
+	static Uint32 rotateCD(Uint32 interval, void* param);
 
 	bool pause;
 

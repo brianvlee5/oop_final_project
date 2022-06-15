@@ -36,8 +36,6 @@ public:
 	int getRushCD();
 
 	void draw();
-//	void draw(SDL_Rect src);
-//	void draw(SDL_Rect dst);
 	void draw(SDL_Rect src, SDL_Rect dst);
 
 	void move();
@@ -95,7 +93,6 @@ private:
 
 	int coin;
 	int dir;
-	int init_vx;
 	int Mapnum;
 	int health;
 	int num_potion;

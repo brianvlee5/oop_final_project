@@ -88,10 +88,6 @@ void Attack::startRotateCoolDown(Uint32 t)
 	cd_ID = SDL_AddTimer(cd, rotateCD, this);
 }
 
-Uint32 Attack::getTime() {
-	return time;
-}
-
 Uint32 Attack::changeDataLine(Uint32 interval, void* param)
 {
 	Attack* p = (Attack*)param;

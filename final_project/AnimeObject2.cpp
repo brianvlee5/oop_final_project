@@ -147,7 +147,6 @@ Uint32 AnimeObject2::invincible(Uint32 interval, void* param)
 void AnimeObject2::startRush(Uint32 t)
 {
 	if (rushFlag) {
-		init_vx = getVx();
 		rush = t;
 		rush_count = 0;
 		invinceFlag = true;

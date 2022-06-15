@@ -110,20 +110,6 @@ void Image::draw()
 	//SDL_RenderCopy(renderer, texture, s, d);
 }
 
-void Image::draw_src(SDL_Rect src)
-{
-	setSrcRegion(src);
-
-	draw();
-}
-
-void Image::draw_dst(SDL_Rect dst)
-{
-	setDstRegion(dst);
-
-	draw();
-}
-
 void Image::draw(SDL_Rect src, SDL_Rect dst)
 {
 	setSrcRegion(src);

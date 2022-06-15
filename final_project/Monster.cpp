@@ -13,8 +13,6 @@ Monster::Monster(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g, U
 	num = n;
 	texture = new SDL_Texture * [num];
 	setVX(2);
-	health = 30;
-	Maxhp = 30;
 
 
 	for (int i = 0; i < num; i++)
@@ -119,6 +117,11 @@ Uint32 Monster::changeData(Uint32 interval, void* param)
 	{
 		return 0;
 	}
+}
+
+void Monster::setHPP()
+{
+
 }
 
 void Monster::setBase(int xx, int yy)
@@ -566,7 +569,6 @@ void Monster::initialize()
 	deadFlag = false;
 	shownFlag = true;
 	mapnum = 0;
-	health = 30;
 	Maxhp = 30;
 	center = { 0, 0 };
 	angle = 0;

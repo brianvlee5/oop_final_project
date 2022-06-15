@@ -154,6 +154,7 @@ void MonsterC::setAImode(int mode)
 }
 void MonsterC::initialize()
 {
+	setHP(10);
 	TPcd = 0;
 	AIinterval = 0;
 	Mchptr = nullptr;
@@ -166,4 +167,8 @@ void MonsterC::initialize()
 void MonsterC::operator<<(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
+}
+void MonsterC::setHPP()
+{
+	setHP(10);
 }

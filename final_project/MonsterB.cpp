@@ -167,6 +167,7 @@ void MonsterB::draw(SDL_Rect dst, SDL_Rect src)
 
 void MonsterB::initialize()
 {
+	setHP(30);
 	MonsFire = nullptr;
 	AIinterval = 0;
 	Mchptr = nullptr;
@@ -178,4 +179,8 @@ void MonsterB::initialize()
 void MonsterB::operator<<(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
+}
+void MonsterB::setHPP()
+{
+	setHP(30);
 }

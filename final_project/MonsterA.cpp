@@ -167,9 +167,14 @@ void MonsterA::setAImode(int mode)
 
 void MonsterA::initialize()
 {
+	setHP(30);
 	Mchptr = nullptr;
 	AImode = WANDER;
 	WANDERmode = LEFT;
 	WaitTime = 0;
 	WanderTime = 0;
+}
+void MonsterA::setHPP()
+{
+	setHP(30);
 }

@@ -17,6 +17,7 @@ MonsterD::MonsterD(const char* path, int n, SDL_Renderer* ren, Uint8 r, Uint8 g,
 
 void MonsterD::initialize()
 {
+	setHP(30);
 	AImode = WAIT;
 	Flycd = 0;
 	FlyTime = 0;
@@ -140,8 +141,8 @@ void MonsterD::draw(SDL_Rect dst, SDL_Rect src)
 	{
 		s = NULL;
 	}
-	thickLineColor(getRenderer(), d->x, d->y, d->x + d->w, d->y, 3, 0x987654FF);
-	thickLineRGBA(getRenderer(), d->x, d->y, d->x + d->w * getHP() / getMaxHP(), d->y, 3, 0x00, 0x80, 0x00, 0xff);
+	thickLineColor(getRenderer(), dst.x, dst.y, dst.x + dst.w, dst.y, 3, 0x987654FF);
+	thickLineRGBA(getRenderer(), dst.x, dst.y, dst.x + dst.w * getHP() / getMaxHP(), dst.y, 3, 0x00, 0x80, 0x00, 0xff);
 	Monster::draw(dst, src);
 }
 
@@ -162,4 +163,8 @@ void MonsterD::setAImode(int mode)
 void MonsterD::operator<<(AnimeObject2& mainch)
 {
 	Mchptr = &mainch;
+}
+void MonsterD::setHPP()
+{
+	setHP(30);
 }

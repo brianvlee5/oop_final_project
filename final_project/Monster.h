@@ -70,6 +70,7 @@ public:
 	virtual void startAI(Uint32 t)=0;
 	virtual void stopAI()=0;
 	virtual void setBase(int xx, int yy);
+	virtual void setHPP();
 	void setFlip(SDL_RendererFlip f);
 	
 	void initialize();

@@ -310,7 +310,7 @@ void Map::setMonster(std::vector<Monster*>& mv, int mapnumADD)
 		mv[i]->setDeadFlag(Dflag);
 		mv[i]->setPosition(xx * WIDTH / MAPTILEX, yy * HEIGHT / MAPTILEY);
 		mv[i]->setBase(xx, yy);
-		mv[i]->setHP(30);
+		mv[i]->setHPP();
 	}
 }
 void Map::setmap(std::vector<Monster*> &mv)
@@ -422,7 +422,7 @@ void Map::initialize()
 	camera.w = CAMERAW;
 	startR[0] = { 57 * WIDTH / MAPTILEX, 36 * HEIGHT / MAPTILEY };
 	startR[1] = { 59 * WIDTH / MAPTILEX, 4 * HEIGHT / MAPTILEY };
-	startR[2] = { 56 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
+	startR[2] = { 55 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[3] = { 59 * WIDTH / MAPTILEX, 19 * HEIGHT / MAPTILEY };
 	startR[4] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };
 	startR[5] = { 40 * WIDTH / MAPTILEX, 20 * HEIGHT / MAPTILEY };

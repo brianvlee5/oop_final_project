@@ -13,6 +13,7 @@ public:
     void stopAI();
     void draw(SDL_Rect dst, SDL_Rect src);
     void initialize();
+    void setHPP();
 
     void operator<<(AnimeObject2& mainch);
 
